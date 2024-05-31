@@ -14,5 +14,5 @@ export const TestComponent: React.FC<{ state?: GameState }> = ({ state }) => {
       });
     }
   }, [state]);
-  return <div>qwe{data.join("\n")}</div>;
+  return <div>{data.join("\n")}</div>;
 };

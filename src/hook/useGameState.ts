@@ -1,9 +1,20 @@
 import { useEffect, useState } from "react";
 import { registerListenLcuEvent } from "../utils";
 import { SubcriptionType, GameState } from "../constant";
+import { useToast } from "@chakra-ui/react";
 
 export const useGameState = () => {
-  const [state, setState] = useState<GameState>();
+  const toast = useToast();
+  const [state, setState] = useState<GameState>(GameState.GameStateNone);
+
+  useEffect(() => {
+    toast({
+      title: "Game State",
+      description: `LOL client state change to ${state}`,
+      status: "info",
+      duration: 3000,
+    });
+  }, [state]);
 
   useEffect(() => {
     const unregister = registerListenLcuEvent((event) => {
@@ -22,7 +33,7 @@ export const useGameState = () => {
     return () => {
       unregister.then((r) => r());
     };
-  }, []);
+  }, [toast]);
 
   return [state];
 };

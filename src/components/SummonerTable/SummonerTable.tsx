@@ -1,19 +1,35 @@
-import { Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  SimpleGrid,
+  Spacer,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import React from "react";
+import { GameState } from "../../constant/game.ts";
+import { useSummoners } from "../../hook/useSummoners.ts";
+import { RecordTable } from "./components/RecordTable.tsx";
 
-export const SummonerTable: React.FC = () => {
+export interface SummonerTableProps {
+  state: GameState;
+}
+
+export const SummonerTable: React.FC<SummonerTableProps> = ({ state }) => {
+  const { teams, enemies } = useSummoners(state);
   return (
-    <TableContainer>
-      <Table size="sm">
-        <Thead>
-          <Tr>
-            <Th>Player</Th>
-            <Th>Reccent record</Th>
-            <Th>KDA</Th>
-          </Tr>
-        </Thead>
-        <Tbody></Tbody>
-      </Table>
-    </TableContainer>
+    <SimpleGrid columns={2} spacing={10}>
+      <Box>
+        <RecordTable data={teams} />
+      </Box>
+      <Box>
+        <RecordTable data={enemies} />
+      </Box>
+    </SimpleGrid>
   );
 };

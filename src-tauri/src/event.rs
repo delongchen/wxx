@@ -3,7 +3,7 @@ use futures_util::stream::StreamExt;
 use serde_json::Value;
 use shaco::{model::ws::LcuSubscriptionType, ws};
 
-use tauri::{App, Manager};
+use tauri::Manager;
 
 #[derive(Clone, serde::Serialize)]
 struct Payload {

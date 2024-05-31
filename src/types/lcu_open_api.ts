@@ -9,6 +9,8 @@
  * ---------------------------------------------------------------
  */
 
+import { LolGameSessionTeam } from "./data.ts";
+
 export interface ActiveBoostsLcdsStoreFulfillmentNotification {
   data?: Record<string, any>;
   inventoryType?: string;
@@ -7356,6 +7358,8 @@ export interface LolGameflowGameflowGameClient {
   visible?: boolean;
 }
 
+
+
 export interface LolGameflowGameflowGameData {
   /** @format int64 */
   gameId?: number;
@@ -7365,8 +7369,8 @@ export interface LolGameflowGameflowGameData {
   playerChampionSelections?: Record<string, any>[];
   queue?: LolGameflowQueue;
   spectatorsAllowed?: boolean;
-  teamOne?: Record<string, any>[];
-  teamTwo?: Record<string, any>[];
+  teamOne?: LolGameSessionTeam[];
+  teamTwo?: LolGameSessionTeam[];
 }
 
 export interface LolGameflowGameflowGameDodge {
@@ -11774,6 +11778,7 @@ export interface LolMatchHistoryMatchHistoryEvent {
 }
 
 export interface LolMatchHistoryMatchHistoryGame {
+  endOfGameResult: string;
   /** @format int64 */
   gameCreation?: number;
   gameCreationDate?: string;
