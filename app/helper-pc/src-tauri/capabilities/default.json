@@ -1,0 +1,23 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capability for the main window",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "path:default",
+    "event:default",
+    "window:default",
+    "app:default",
+    "image:default",
+    "resources:default",
+    "menu:default",
+    "tray:default",
+    "shell:allow-open",
+    "lcu-client:allow-connect-lcu-client",
+    "lcu-client:allow-handle-get-request",
+    "lcu-client:allow-handle-post-request",
+    "lcu-client:allow-start-listen-lcu-event"
+  ]
+}

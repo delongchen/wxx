@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-handle-post-request"
+description = "Enables the handle_post_request command without any pre-configured scope."
+commands.allow = ["handle_post_request"]
+
+[[permission]]
+identifier = "deny-handle-post-request"
+description = "Denies the handle_post_request command without any pre-configured scope."
+commands.deny = ["handle_post_request"]

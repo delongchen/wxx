@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-start-listen-lcu-event"
+description = "Enables the start_listen_lcu_event command without any pre-configured scope."
+commands.allow = ["start_listen_lcu_event"]
+
+[[permission]]
+identifier = "deny-start-listen-lcu-event"
+description = "Denies the start_listen_lcu_event command without any pre-configured scope."
+commands.deny = ["start_listen_lcu_event"]

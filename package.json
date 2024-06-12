@@ -1,39 +1,16 @@
 {
   "name": "lol_helper",
+  "version": "1.0.0",
+  "description": "",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "tauri": "tauri"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "@chakra-ui/react": "^2.8.2",
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.0",
-    "@tanstack/react-query": "^5.28.6",
-    "@tauri-apps/api": "^1",
-    "@tauri-apps/plugin-websocket": "2.0.0-beta.2",
-    "framer-motion": "^11.0.20",
-    "qs": "^6.12.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "devDependencies": {
-    "@tauri-apps/cli": "^1",
-    "@types/qs": "^6.9.14",
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "@typescript-eslint/parser": "^7.3.1",
-    "@vitejs/plugin-react": "^4.2.1",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react": "^7.34.1",
-    "sass": "^1.72.0",
-    "swagger-typescript-api": "^13.0.3",
-    "typescript": "^5.0.2",
-    "vite": "^5.0.0"
+    "@tauri-apps/cli": "2.0.0-beta.20"
   }
 }

@@ -1,0 +1,41 @@
+{
+  "name": "lol-helper-pc",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@tanstack/react-query": "^5.28.6",
+    "@tauri-apps/api": "^2.0.0-beta.13",
+    "@tauri-apps/plugin-shell": "2.0.0-beta.6",
+    "@tauri-apps/plugin-websocket": "2.0.0-beta.2",
+    "tauri-plugin-lcu-client-api": "workspace:*",
+    "framer-motion": "^11.0.20",
+    "qs": "^6.12.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.0.0-beta.20",
+    "@types/qs": "^6.9.14",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
+    "sass": "^1.72.0",
+    "swagger-typescript-api": "^13.0.3",
+    "typescript": "^5.0.2",
+    "vite": "^5.0.0"
+  }
+}

@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-handle-get-request"
+description = "Enables the handle_get_request command without any pre-configured scope."
+commands.allow = ["handle_get_request"]
+
+[[permission]]
+identifier = "deny-handle-get-request"
+description = "Denies the handle_get_request command without any pre-configured scope."
+commands.deny = ["handle_get_request"]

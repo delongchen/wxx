@@ -4,133 +4,81 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-importers:
+dependencies:
+  '@chakra-ui/react':
+    specifier: ^2.8.2
+    version: 2.8.2(@emotion/react@11.11.4)(@emotion/styled@11.11.0)(@types/react@18.2.67)(framer-motion@11.0.20)(react-dom@18.2.0)(react@18.2.0)
+  '@emotion/react':
+    specifier: ^11.11.4
+    version: 11.11.4(@types/react@18.2.67)(react@18.2.0)
+  '@emotion/styled':
+    specifier: ^11.11.0
+    version: 11.11.0(@emotion/react@11.11.4)(@types/react@18.2.67)(react@18.2.0)
+  '@tanstack/react-query':
+    specifier: ^5.28.6
+    version: 5.28.6(react@18.2.0)
+  '@tauri-apps/api':
+    specifier: ^2.0.0-beta.13
+    version: 2.0.0-beta.13
+  '@tauri-apps/plugin-shell':
+    specifier: 2.0.0-beta.6
+    version: 2.0.0-beta.6
+  '@tauri-apps/plugin-websocket':
+    specifier: 2.0.0-beta.2
+    version: 2.0.0-beta.2
+  framer-motion:
+    specifier: ^11.0.20
+    version: 11.0.20(react-dom@18.2.0)(react@18.2.0)
+  qs:
+    specifier: ^6.12.0
+    version: 6.12.0
+  react:
+    specifier: ^18.2.0
+    version: 18.2.0
+  react-dom:
+    specifier: ^18.2.0
+    version: 18.2.0(react@18.2.0)
 
-  .:
-    dependencies:
-      '@tauri-apps/cli':
-        specifier: 2.0.0-beta.20
-        version: 2.0.0-beta.20
-
-  app/helper-pc:
-    dependencies:
-      '@chakra-ui/react':
-        specifier: ^2.8.2
-        version: 2.8.2(@emotion/react@11.11.4)(@emotion/styled@11.11.0)(@types/react@18.2.67)(framer-motion@11.0.20)(react-dom@18.2.0)(react@18.2.0)
-      '@emotion/react':
-        specifier: ^11.11.4
-        version: 11.11.4(@types/react@18.2.67)(react@18.2.0)
-      '@emotion/styled':
-        specifier: ^11.11.0
-        version: 11.11.0(@emotion/react@11.11.4)(@types/react@18.2.67)(react@18.2.0)
-      '@tanstack/react-query':
-        specifier: ^5.28.6
-        version: 5.28.6(react@18.2.0)
-      '@tauri-apps/api':
-        specifier: ^2.0.0-beta.13
-        version: 2.0.0-beta.13
-      '@tauri-apps/plugin-shell':
-        specifier: 2.0.0-beta.6
-        version: 2.0.0-beta.6
-      '@tauri-apps/plugin-websocket':
-        specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2
-      framer-motion:
-        specifier: ^11.0.20
-        version: 11.0.20(react-dom@18.2.0)(react@18.2.0)
-      qs:
-        specifier: ^6.12.0
-        version: 6.12.0
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-      tauri-plugin-lcu-client-api:
-        specifier: workspace:*
-        version: link:../../plugins/lcu-client
-    devDependencies:
-      '@tauri-apps/cli':
-        specifier: 2.0.0-beta.20
-        version: 2.0.0-beta.20
-      '@types/qs':
-        specifier: ^6.9.14
-        version: 6.9.14
-      '@types/react':
-        specifier: ^18.2.15
-        version: 18.2.67
-      '@types/react-dom':
-        specifier: ^18.2.7
-        version: 18.2.22
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^7.3.1
-        version: 7.3.1(@typescript-eslint/parser@7.3.1)(eslint@8.57.0)(typescript@5.4.2)
-      '@typescript-eslint/parser':
-        specifier: ^7.3.1
-        version: 7.3.1(eslint@8.57.0)(typescript@5.4.2)
-      '@vitejs/plugin-react':
-        specifier: ^4.2.1
-        version: 4.2.1(vite@5.1.6)
-      eslint:
-        specifier: ^8.57.0
-        version: 8.57.0
-      eslint-plugin-react:
-        specifier: ^7.34.1
-        version: 7.34.1(eslint@8.57.0)
-      sass:
-        specifier: ^1.72.0
-        version: 1.72.0
-      swagger-typescript-api:
-        specifier: ^13.0.3
-        version: 13.0.3
-      typescript:
-        specifier: ^5.0.2
-        version: 5.4.2
-      vite:
-        specifier: ^5.0.0
-        version: 5.1.6(sass@1.72.0)
-
-  plugins/example:
-    dependencies:
-      '@tauri-apps/api':
-        specifier: '>=2.0.0-beta.6'
-        version: 2.0.0-beta.13
-    devDependencies:
-      '@rollup/plugin-typescript':
-        specifier: ^11.1.6
-        version: 11.1.6(rollup@4.13.0)(tslib@2.6.2)(typescript@5.4.2)
-      rollup:
-        specifier: ^4.9.6
-        version: 4.13.0
-      tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
-      typescript:
-        specifier: ^5.3.3
-        version: 5.4.2
-
-  plugins/lcu-client:
-    dependencies:
-      '@tauri-apps/api':
-        specifier: '>=2.0.0-beta.6'
-        version: 2.0.0-beta.13
-      qs:
-        specifier: ^6.12.0
-        version: 6.12.0
-    devDependencies:
-      '@rollup/plugin-typescript':
-        specifier: ^11.1.6
-        version: 11.1.6(rollup@4.13.0)(tslib@2.6.2)(typescript@5.4.2)
-      rollup:
-        specifier: ^4.9.6
-        version: 4.13.0
-      tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
-      typescript:
-        specifier: ^5.3.3
-        version: 5.4.2
+devDependencies:
+  '@tauri-apps/cli':
+    specifier: 2.0.0-beta.20
+    version: 2.0.0-beta.20
+  '@types/qs':
+    specifier: ^6.9.14
+    version: 6.9.14
+  '@types/react':
+    specifier: ^18.2.15
+    version: 18.2.67
+  '@types/react-dom':
+    specifier: ^18.2.7
+    version: 18.2.22
+  '@typescript-eslint/eslint-plugin':
+    specifier: ^7.3.1
+    version: 7.3.1(@typescript-eslint/parser@7.3.1)(eslint@8.57.0)(typescript@5.4.2)
+  '@typescript-eslint/parser':
+    specifier: ^7.3.1
+    version: 7.3.1(eslint@8.57.0)(typescript@5.4.2)
+  '@vitejs/plugin-react':
+    specifier: ^4.2.1
+    version: 4.2.1(vite@5.1.6)
+  eslint:
+    specifier: ^8.57.0
+    version: 8.57.0
+  eslint-plugin-react:
+    specifier: ^7.34.1
+    version: 7.34.1(eslint@8.57.0)
+  sass:
+    specifier: ^1.72.0
+    version: 1.72.0
+  swagger-typescript-api:
+    specifier: ^13.0.3
+    version: 13.0.3
+  typescript:
+    specifier: ^5.0.2
+    version: 5.4.2
+  vite:
+    specifier: ^5.0.0
+    version: 5.1.6(sass@1.72.0)
 
 packages:
 
@@ -1818,7 +1766,6 @@ packages:
   /@humanwhocodes/config-array@0.11.14:
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
     engines: {node: '>=10.10.0'}
-    deprecated: Use @eslint/config-array instead
     dependencies:
       '@humanwhocodes/object-schema': 2.0.2
       debug: 4.3.4
@@ -1834,7 +1781,6 @@ packages:
 
   /@humanwhocodes/object-schema@2.0.2:
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
-    deprecated: Use @eslint/object-schema instead
     dev: true
 
   /@jridgewell/gen-mapping@0.3.5:
@@ -1891,41 +1837,6 @@ packages:
   /@popperjs/core@2.11.8:
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
     dev: false
-
-  /@rollup/plugin-typescript@11.1.6(rollup@4.13.0)(tslib@2.6.2)(typescript@5.4.2):
-    resolution: {integrity: sha512-R92yOmIACgYdJ7dJ97p4K69I8gg6IEHt8M7dUBxN3W6nrO8uUxX5ixl0yU/N3aZTi8WhPuICvOHXQvF6FaykAA==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^2.14.0||^3.0.0||^4.0.0
-      tslib: '*'
-      typescript: '>=3.7.0'
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-      tslib:
-        optional: true
-    dependencies:
-      '@rollup/pluginutils': 5.1.0(rollup@4.13.0)
-      resolve: 1.22.8
-      rollup: 4.13.0
-      tslib: 2.6.2
-      typescript: 5.4.2
-    dev: true
-
-  /@rollup/pluginutils@5.1.0(rollup@4.13.0):
-    resolution: {integrity: sha512-XTIWOPPcpvyKI6L1NHo0lFlCyznUEyPmPY1mc3KpPVDYulHSTvyeLNVW00QTLIAFNhR3kYnJTQHeGqU4M3n09g==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-    dependencies:
-      '@types/estree': 1.0.5
-      estree-walker: 2.0.2
-      picomatch: 2.3.1
-      rollup: 4.13.0
-    dev: true
 
   /@rollup/rollup-android-arm-eabi@4.13.0:
     resolution: {integrity: sha512-5ZYPOuaAqEH/W3gYsRkxQATBW3Ii1MfaT4EQstTnLKViLi2gLSQmlmtTpGucNP3sXEpOiI5tdGhjdE111ekyEg==}
@@ -2065,6 +1976,7 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@tauri-apps/cli-darwin-x64@2.0.0-beta.20:
@@ -2073,6 +1985,7 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@tauri-apps/cli-linux-arm-gnueabihf@2.0.0-beta.20:
@@ -2081,6 +1994,7 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@tauri-apps/cli-linux-arm64-gnu@2.0.0-beta.20:
@@ -2089,6 +2003,7 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@tauri-apps/cli-linux-arm64-musl@2.0.0-beta.20:
@@ -2097,6 +2012,7 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@tauri-apps/cli-linux-x64-gnu@2.0.0-beta.20:
@@ -2105,6 +2021,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@tauri-apps/cli-linux-x64-musl@2.0.0-beta.20:
@@ -2113,6 +2030,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@tauri-apps/cli-win32-arm64-msvc@2.0.0-beta.20:
@@ -2121,6 +2039,7 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@tauri-apps/cli-win32-ia32-msvc@2.0.0-beta.20:
@@ -2129,6 +2048,7 @@ packages:
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@tauri-apps/cli-win32-x64-msvc@2.0.0-beta.20:
@@ -2137,6 +2057,7 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@tauri-apps/cli@2.0.0-beta.20:
@@ -2154,6 +2075,7 @@ packages:
       '@tauri-apps/cli-win32-arm64-msvc': 2.0.0-beta.20
       '@tauri-apps/cli-win32-ia32-msvc': 2.0.0-beta.20
       '@tauri-apps/cli-win32-x64-msvc': 2.0.0-beta.20
+    dev: true
 
   /@tauri-apps/plugin-shell@2.0.0-beta.6:
     resolution: {integrity: sha512-g3nM9cQQGl7Iv4MvyFuco/aPTiwOI/MixcoKso3VQIg5Aqd64NqR0r+GfsB0qx52txItqzSXwmeaj1eZjO9Q6Q==}
@@ -3159,10 +3081,6 @@ packages:
     engines: {node: '>=4.0'}
     dev: true
 
-  /estree-walker@2.0.2:
-    resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
-    dev: true
-
   /esutils@2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
@@ -3377,7 +3295,6 @@ packages:
 
   /glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6
@@ -3499,7 +3416,6 @@ packages:
 
   /inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
-    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
     dependencies:
       once: 1.4.0
       wrappy: 1.0.2
@@ -4324,6 +4240,7 @@ packages:
       is-core-module: 2.13.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
+    dev: false
 
   /resolve@2.0.0-next.5:
     resolution: {integrity: sha512-U7WjGVG9sH8tvjW5SmGbQuui75FiyjAX72HX15DwBBwF9dNiQZRQAg9nnPhYy+TUnE0+VcrttuvNI8oSxZcocA==}
@@ -4341,7 +4258,6 @@ packages:
 
   /rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
-    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
     dependencies:
       glob: 7.2.3
@@ -4700,6 +4616,7 @@ packages:
 
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
+    dev: false
 
   /type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
