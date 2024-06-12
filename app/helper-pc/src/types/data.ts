@@ -1,7 +1,7 @@
 import {
   LolMatchHistoryMatchHistoryList,
   LolSummonerSummoner,
-} from "./lcu_open_api.ts";
+} from "./lcu-open-api.ts";
 
 export interface EnhanceLolSummonerSummoner extends LolSummonerSummoner {
   matchHistory?: LolMatchHistoryMatchHistoryList;
