@@ -22,7 +22,7 @@
     "qs": "^6.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tauri-plugin-lcu-client-api": "workspace:*",
+    "tauri-plugin-wxx-core": "workspace:*",
     "ts-pattern": "^5.1.2",
     "zustand": "^4.5.2"
   },

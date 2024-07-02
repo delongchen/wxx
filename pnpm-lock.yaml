@@ -50,9 +50,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
-      tauri-plugin-lcu-client-api:
+      tauri-plugin-wxx-core:
         specifier: workspace:*
-        version: link:../../plugins/lcu-client
+        version: link:../../plugins/wxx-core
       ts-pattern:
         specifier: ^5.1.2
         version: 5.1.2
@@ -100,26 +100,7 @@ importers:
         specifier: ^5.0.0
         version: 5.1.6(sass@1.72.0)
 
-  plugins/example:
-    dependencies:
-      '@tauri-apps/api':
-        specifier: '>=2.0.0-beta.6'
-        version: 2.0.0-beta.13
-    devDependencies:
-      '@rollup/plugin-typescript':
-        specifier: ^11.1.6
-        version: 11.1.6(rollup@4.13.0)(tslib@2.6.2)(typescript@5.4.2)
-      rollup:
-        specifier: ^4.9.6
-        version: 4.13.0
-      tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
-      typescript:
-        specifier: ^5.3.3
-        version: 5.4.2
-
-  plugins/lcu-client:
+  plugins/wxx-core:
     dependencies:
       '@tauri-apps/api':
         specifier: '>=2.0.0-beta.6'

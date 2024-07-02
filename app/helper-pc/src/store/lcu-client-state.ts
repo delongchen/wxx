@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { LcuClientStateType } from '../constant';
-import { LcuClient, SubcriptionType } from 'tauri-plugin-lcu-client-api';
+import { LcuClient, SubcriptionType } from '../../../../plugins/wxx-core/dist-js';
 
 export type LcuClientStatus = {
   lcuClientState: LcuClientStateType;

@@ -1,4 +1,4 @@
-import { SubcriptionType } from 'tauri-plugin-lcu-client-api';
+import { SubcriptionType } from '../../../../plugins/wxx-core/dist-js';
 
 export { SubcriptionType };
 

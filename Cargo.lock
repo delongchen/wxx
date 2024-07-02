@@ -1904,8 +1904,8 @@ dependencies = [
  "serde_json",
  "tauri",
  "tauri-build",
- "tauri-plugin-lcu-client",
  "tauri-plugin-shell",
+ "tauri-plugin-wxx-core",
  "tokio",
 ]
 
@@ -3346,7 +3346,7 @@ dependencies = [
  "serde-single-key-map",
  "serde_json",
  "serde_with 2.3.3",
- "sysinfo",
+ "sysinfo 0.28.4",
  "tokio",
  "tokio-tungstenite",
 ]
@@ -3579,6 +3579,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "sysinfo"
+version = "0.30.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "732ffa00f53e6b2af46208fba5718d9662a421049204e156328b66791ffa15ae"
+dependencies = [
+ "cfg-if",
+ "core-foundation-sys",
+ "libc",
+ "ntapi",
+ "once_cell",
+ "rayon",
+ "windows 0.52.0",
+]
+
+[[package]]
 name = "system-configuration"
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3798,20 +3813,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "tauri-plugin-lcu-client"
-version = "0.0.0"
-dependencies = [
- "futures-util",
- "serde",
- "serde_json",
- "shaco",
- "tauri",
- "tauri-plugin",
- "thiserror",
- "tokio",
-]
-
-[[package]]
 name = "tauri-plugin-shell"
 version = "2.0.0-beta.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3826,6 +3827,21 @@ dependencies = [
  "serde",
  "serde_json",
  "shared_child",
+ "tauri",
+ "tauri-plugin",
+ "thiserror",
+ "tokio",
+]
+
+[[package]]
+name = "tauri-plugin-wxx-core"
+version = "0.0.0"
+dependencies = [
+ "futures-util",
+ "serde",
+ "serde_json",
+ "shaco",
+ "sysinfo 0.30.12",
  "tauri",
  "tauri-plugin",
  "thiserror",
@@ -4696,6 +4712,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e686886bc078bc1b0b600cac0147aadb815089b6e4da64016cbd754b6342700f"
 dependencies = [
  "windows-targets 0.48.5",
+]
+
+[[package]]
+name = "windows"
+version = "0.52.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e48a53791691ab099e5e2ad123536d0fff50652600abaf43bbf952894110d0be"
+dependencies = [
+ "windows-core 0.52.0",
+ "windows-targets 0.52.5",
 ]
 
 [[package]]

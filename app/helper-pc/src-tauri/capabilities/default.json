@@ -15,9 +15,7 @@
     "menu:default",
     "tray:default",
     "shell:allow-open",
-    "lcu-client:allow-connect-lcu-client",
-    "lcu-client:allow-handle-get-request",
-    "lcu-client:allow-handle-post-request",
-    "lcu-client:allow-start-listen-lcu-event"
+    "wxx-core:allow-handle-get-request",
+    "wxx-core:allow-handle-post-request"
   ]
 }
