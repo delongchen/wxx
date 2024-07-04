@@ -1,7 +1,9 @@
 {
-  "name": "tauri-plugin-lcu-client-api",
+  "name": "tauri-plugin-wxx-core",
   "version": "0.0.0",
-  "author": "You",
+  "author": {
+    "name": "YUQI MAO"
+  },
   "description": "",
   "type": "module",
   "types": "./dist-js/index.d.ts",

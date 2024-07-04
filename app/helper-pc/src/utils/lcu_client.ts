@@ -1,4 +1,4 @@
-import { LcuClient } from 'tauri-plugin-lcu-client-api';
+import { LcuClient } from '../../../../plugins/wxx-core/dist-js';
 
 LcuClient.init();
 
