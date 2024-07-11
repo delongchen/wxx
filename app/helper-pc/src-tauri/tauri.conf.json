@@ -18,11 +18,15 @@
   },
   "productName": "lol_helper",
   "version": "0.0.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "wxsb",
   "plugins": {},
   "app": {
     "security": {
-      "csp": null
+      "csp": null,
+      "capabilities": [
+        "fs",
+        "default"
+      ]
     },
     "windows": [
       {
