@@ -1,7 +1,5 @@
 function Downloaded() {
-  return (
-    <div>download</div>
-  )
+  return (<div>wx</div>)
 }
 
 export default Downloaded

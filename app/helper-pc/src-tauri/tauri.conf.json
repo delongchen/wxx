@@ -22,11 +22,22 @@
   "plugins": {},
   "app": {
     "security": {
-      "csp": null,
+      "csp": {
+        "default-src": "'self' asset:",
+        "connect-src": "ipc: http://ipc.localhost",
+        "img-src": "'self' asset: http://asset.localhost blob: data:",
+        "script-src": "'self' asset: http://asset.localhost"
+      },
       "capabilities": [
         "fs",
         "default"
-      ]
+      ],
+      "assetProtocol": {
+        "enable": true,
+        "scope": [
+          "$APPDATA/**"
+        ]
+      }
     },
     "windows": [
       {
