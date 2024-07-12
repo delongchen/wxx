@@ -1,5 +1,5 @@
 use super::event::{LcuEvent, Payload};
-use super::process::create_lcu_proccess_state_iterator;
+use super::process::create_lcu_process_state_iterator;
 use super::store::LcuManager;
 use futures_util::StreamExt;
 use serde_json::json;
@@ -12,7 +12,7 @@ pub fn start_listen_lcu<R: Runtime>(app: AppHandle<R>) -> () {
     let app_handle = app.clone();
     let lcu = state.0.clone();
     tauri::async_runtime::spawn(async move {
-        let mut lcu_state_iter = create_lcu_proccess_state_iterator();
+        let mut lcu_state_iter = create_lcu_process_state_iterator();
         while let Some(current_state_is_started) = lcu_state_iter.next() {
             let mut read_guard = lcu.write().await;
             let pre_state_is_started = lcu.read().await.is_started;

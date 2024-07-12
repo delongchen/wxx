@@ -22,7 +22,7 @@ impl Iterator for LeagueClientUxStateIterator {
     }
 }
 
-pub fn create_lcu_proccess_state_iterator() -> LeagueClientUxStateIterator {
+pub fn create_lcu_process_state_iterator() -> LeagueClientUxStateIterator {
     let mut sys = System::new_all();
     sys.refresh_processes();
 

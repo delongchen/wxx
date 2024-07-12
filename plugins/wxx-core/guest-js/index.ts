@@ -13,11 +13,12 @@ type Payload<T> = {
   data: T;
 };
 
+// todo: playload?
 type PlayloadDataType = {
   [LcuEventType.LcuStateChange]: {
     is_started: boolean;
   };
-  // TODO: check lcy ws json api schema
+  // TODO: check lcu ws json api schema
   [LcuEventType.LcuWsJsonApi]: Record<string, unknown>;
   [LcuEventType.Log]: {
     type: 'error' | 'info' | 'warning';
