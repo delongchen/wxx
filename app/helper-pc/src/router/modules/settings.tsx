@@ -6,7 +6,8 @@ const settingRoutes: WxxRoute[] = [
     path: '/settings',
     component: () => <div>settings</div>,
     meta: {
-      icon: () => <VscSettings size='24px'/>
+      icon: () => <VscSettings size='24px'/>,
+      index: 1,
     }
   }
 ]

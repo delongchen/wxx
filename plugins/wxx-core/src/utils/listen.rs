@@ -14,6 +14,7 @@ pub fn start_listen_lcu<R: Runtime>(app: AppHandle<R>) -> () {
     tauri::async_runtime::spawn(async move {
         let mut lcu_state_iter = create_lcu_process_state_iterator();
         while let Some(current_state_is_started) = lcu_state_iter.next() {
+            // TODO: here deadlock
             let mut read_guard = lcu.write().await;
             let pre_state_is_started = lcu.read().await.is_started;
             if current_state_is_started != pre_state_is_started {

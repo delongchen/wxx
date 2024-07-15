@@ -7,7 +7,8 @@ const extensionRoutes: WxxRoute[] = [
     path: '/extensions',
     component: ExtensionsPage,
     meta: {
-      icon: () => <VscExtensions size='24px'/>
+      icon: () => <VscExtensions size='24px'/>,
+      index: 2,
     }
   }
 ]

@@ -13,8 +13,7 @@ type Payload<T> = {
   data: T;
 };
 
-// todo: playload?
-type PlayloadDataType = {
+type PayloadDataType = {
   [LcuEventType.LcuStateChange]: {
     is_started: boolean;
   };
@@ -49,7 +48,7 @@ export class WxxCore {
 
   static listen = <T extends LcuEventType>(
     eventName: T,
-    listener: (event: Event<Payload<PlayloadDataType[T]>>) => void
+    listener: (event: Event<Payload<PayloadDataType[T]>>) => void
   ) => {
     return listen(eventName, listener);
   };

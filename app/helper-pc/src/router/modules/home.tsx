@@ -6,7 +6,8 @@ const homeRoutes: WxxRoute[] = [
     path: '/home',
     component: () => <div>root page</div>,
     meta: {
-      icon: () => <VscHome size='24px'/>
+      icon: () => <VscHome size='24px'/>,
+      index: 3,
     }
   }
 ]

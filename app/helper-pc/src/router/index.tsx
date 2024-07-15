@@ -28,14 +28,14 @@ const flatModules = (modules: Record<string, unknown>) => {
   return result
 }
 
-const staticRoutes: WxxRoute[] = [
+export const staticRoutes: WxxRoute[] = [
   {
     path: '/',
     redirect: '/home'
-  }
+  },
+  ...flatModules(routeModules)
 ]
 
 export const allRoutes: WxxRoute[] = [
   ...staticRoutes,
-  ...flatModules(routeModules)
 ]

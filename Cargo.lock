@@ -3865,6 +3865,7 @@ name = "tauri-plugin-wxx-core"
 version = "0.0.0"
 dependencies = [
  "futures-util",
+ "log",
  "serde",
  "serde_json",
  "shaco",
