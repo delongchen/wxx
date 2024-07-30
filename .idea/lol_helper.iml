@@ -7,10 +7,12 @@
       <sourceFolder url="file://$MODULE_DIR$/plugins/tauri-plugin-wxx-core/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/plugins/tauri-plugin-wxx-loader/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/plugins/wxx-core/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/plugins/wxx-core/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/plugins/lcu-client/dist-js" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/app/helper-pc/dist" />
       <excludeFolder url="file://$MODULE_DIR$/plugins/wxx-core/dist-js" />
+      <excludeFolder url="file://$MODULE_DIR$/app/helper-pc/src-tauri/.idea" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

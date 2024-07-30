@@ -1,6 +1,7 @@
 import { invoke } from '@tauri-apps/api/core';
 import { Event, listen } from '@tauri-apps/api/event';
 import qs from 'qs';
+export * as helper from './helper'
 
 export enum LcuEventType {
   LcuStateChange = 'LCU_STATE_CHANGE',
