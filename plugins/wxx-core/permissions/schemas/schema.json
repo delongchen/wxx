@@ -295,87 +295,17 @@
       "type": "string",
       "oneOf": [
         {
-          "description": "allow-connect-lcu-client -> Enables the connect_lcu_client command without any pre-configured scope.",
+          "description": "allow-lcu-fetch -> Enables the lcu_fetch command without any pre-configured scope.",
           "type": "string",
           "enum": [
-            "allow-connect-lcu-client"
+            "allow-lcu-fetch"
           ]
         },
         {
-          "description": "deny-connect-lcu-client -> Denies the connect_lcu_client command without any pre-configured scope.",
+          "description": "deny-lcu-fetch -> Denies the lcu_fetch command without any pre-configured scope.",
           "type": "string",
           "enum": [
-            "deny-connect-lcu-client"
-          ]
-        },
-        {
-          "description": "allow-execute -> Enables the execute command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "allow-execute"
-          ]
-        },
-        {
-          "description": "deny-execute -> Denies the execute command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "deny-execute"
-          ]
-        },
-        {
-          "description": "allow-handle-get-request -> Enables the handle_get_request command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "allow-handle-get-request"
-          ]
-        },
-        {
-          "description": "deny-handle-get-request -> Denies the handle_get_request command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "deny-handle-get-request"
-          ]
-        },
-        {
-          "description": "allow-handle-post-request -> Enables the handle_post_request command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "allow-handle-post-request"
-          ]
-        },
-        {
-          "description": "deny-handle-post-request -> Denies the handle_post_request command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "deny-handle-post-request"
-          ]
-        },
-        {
-          "description": "allow-ping -> Enables the ping command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "allow-ping"
-          ]
-        },
-        {
-          "description": "deny-ping -> Denies the ping command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "deny-ping"
-          ]
-        },
-        {
-          "description": "allow-start-listen-lcu-event -> Enables the start_listen_lcu_event command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "allow-start-listen-lcu-event"
-          ]
-        },
-        {
-          "description": "deny-start-listen-lcu-event -> Denies the start_listen_lcu_event command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "deny-start-listen-lcu-event"
+            "deny-lcu-fetch"
           ]
         }
       ]

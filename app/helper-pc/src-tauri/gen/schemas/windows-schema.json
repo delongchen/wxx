@@ -6356,87 +6356,17 @@
           ]
         },
         {
-          "description": "wxx-core:allow-connect-lcu-client -> Enables the connect_lcu_client command without any pre-configured scope.",
+          "description": "wxx-core:allow-lcu-fetch -> Enables the lcu_fetch command without any pre-configured scope.",
           "type": "string",
           "enum": [
-            "wxx-core:allow-connect-lcu-client"
+            "wxx-core:allow-lcu-fetch"
           ]
         },
         {
-          "description": "wxx-core:allow-execute -> Enables the execute command without any pre-configured scope.",
+          "description": "wxx-core:deny-lcu-fetch -> Denies the lcu_fetch command without any pre-configured scope.",
           "type": "string",
           "enum": [
-            "wxx-core:allow-execute"
-          ]
-        },
-        {
-          "description": "wxx-core:allow-handle-get-request -> Enables the handle_get_request command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "wxx-core:allow-handle-get-request"
-          ]
-        },
-        {
-          "description": "wxx-core:allow-handle-post-request -> Enables the handle_post_request command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "wxx-core:allow-handle-post-request"
-          ]
-        },
-        {
-          "description": "wxx-core:allow-ping -> Enables the ping command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "wxx-core:allow-ping"
-          ]
-        },
-        {
-          "description": "wxx-core:allow-start-listen-lcu-event -> Enables the start_listen_lcu_event command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "wxx-core:allow-start-listen-lcu-event"
-          ]
-        },
-        {
-          "description": "wxx-core:deny-connect-lcu-client -> Denies the connect_lcu_client command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "wxx-core:deny-connect-lcu-client"
-          ]
-        },
-        {
-          "description": "wxx-core:deny-execute -> Denies the execute command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "wxx-core:deny-execute"
-          ]
-        },
-        {
-          "description": "wxx-core:deny-handle-get-request -> Denies the handle_get_request command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "wxx-core:deny-handle-get-request"
-          ]
-        },
-        {
-          "description": "wxx-core:deny-handle-post-request -> Denies the handle_post_request command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "wxx-core:deny-handle-post-request"
-          ]
-        },
-        {
-          "description": "wxx-core:deny-ping -> Denies the ping command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "wxx-core:deny-ping"
-          ]
-        },
-        {
-          "description": "wxx-core:deny-start-listen-lcu-event -> Denies the start_listen_lcu_event command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "wxx-core:deny-start-listen-lcu-event"
+            "wxx-core:deny-lcu-fetch"
           ]
         }
       ]

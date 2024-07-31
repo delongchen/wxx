@@ -7,6 +7,7 @@ use tauri::async_runtime::JoinHandle;
 use super::models::process::{LcuProcessStatus, LcuProcessInfo};
 use tokio::time::sleep;
 use crate::v2::app_states::AppState;
+use crate::v2::consts::LCU_PROCESS_STATUS_CHANGE;
 
 #[cfg(target_os = "windows")]
 const TARGET_PROCESS: &str = "LeagueClientUx.exe";
@@ -28,7 +29,8 @@ fn find_arg_value(args: &[String], flag: &str) -> Result<String, LcuProcessError
         .ok_or(LcuProcessError::ArgValueNotFound)
 }
 
-fn fetch_lcu_info(sys: &mut System) -> Result<LcuProcessInfo, LcuProcessError> {
+fn fetch_lcu_info() -> Result<LcuProcessInfo, LcuProcessError> {
+    let mut sys = System::new_all();
     sys.refresh_processes();
 
     let lcu_args = sys
@@ -47,8 +49,8 @@ fn fetch_lcu_info(sys: &mut System) -> Result<LcuProcessInfo, LcuProcessError> {
     })
 }
 
-fn get_lcu_status(sys: &mut System) -> LcuProcessStatus {
-    match fetch_lcu_info(sys) {
+fn get_lcu_status() -> LcuProcessStatus {
+    match fetch_lcu_info() {
         Ok(info) => LcuProcessStatus::Started(info),
         Err(e) => {
             match e {
@@ -64,19 +66,18 @@ pub fn start_watcher<R: Runtime>(app: &AppHandle<R>, timeout: u64) -> JoinHandle
 
     let handle = tauri::async_runtime::spawn(async move {
         let state = app.state::<AppState>();
-        let mut sys = System::new_all();
 
         loop {
-            let cur_status = get_lcu_status(&mut sys);
+            let cur_status = get_lcu_status();
             let mut status_code: u8 = 0;
 
             {
                 let mut prev_status = state.process_status.lock().await;
                 if cur_status != *prev_status {
                     status_code = match cur_status {
-                        LcuProcessStatus::Started(_) => 1,
+                        LcuProcessStatus::Started(_) => 3,
                         LcuProcessStatus::NotStartedWithAdmin => 2,
-                        LcuProcessStatus::NotStarted => 3,
+                        LcuProcessStatus::NotStarted => 1,
                     };
                     *prev_status = cur_status;
                 }
@@ -84,7 +85,7 @@ pub fn start_watcher<R: Runtime>(app: &AppHandle<R>, timeout: u64) -> JoinHandle
 
             if status_code != 0 {
                 let _ = app.emit(
-                    "LCU_PROCESS_EVENT",
+                    LCU_PROCESS_STATUS_CHANGE,
                     json!({
                         "statusCode": status_code
                     }),

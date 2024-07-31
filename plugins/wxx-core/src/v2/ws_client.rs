@@ -1,6 +1,6 @@
 use super::models::ws::LcuWsClient;
 use crate::v2::app_states::AppState;
-use crate::v2::consts::RIOT_GAMES_PEM_BYTES;
+use crate::v2::consts::{LCU_WS_EVENT, RIOT_GAMES_PEM_BYTES};
 use crate::v2::models::process::LcuProcessInfo;
 use crate::v2::models::process::LcuProcessStatus;
 use futures_util::StreamExt;
@@ -13,8 +13,8 @@ pub fn start_ws_client<R: Runtime>(app: &AppHandle<R>, timeout: u64) -> JoinHand
     let app = app.clone();
 
     let handle = tauri::async_runtime::spawn(async move {
-        let state = app.state::<AppState>();
         let client = LcuWsClient::from(RIOT_GAMES_PEM_BYTES);
+        let state = app.state::<AppState>();
 
         loop {
             let process_info: Option<LcuProcessInfo> = {
@@ -26,7 +26,7 @@ pub fn start_ws_client<R: Runtime>(app: &AppHandle<R>, timeout: u64) -> JoinHand
 
             if let Ok(mut s) = client.connect_with(process_info).await {
                 while let Some(message) = s.next().await {
-                    if let Err(e) = app.emit("LCU_EVENT", message) {
+                    if let Err(e) = app.emit(LCU_WS_EVENT, message) {
                         println!("emit error: {}", e);
                     }
                 }
