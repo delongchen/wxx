@@ -1,7 +1,10 @@
 @use '@/components/wxx/wxx.module' as wxx
 
-.panel
+.container
   height: calc(100vh - wxx.$footer-height)
   width: calc(100vw - wxx.$menu-width)
   overflow-x: hidden
   overflow-y: auto
+
+.panel
+  min-height: 100%

@@ -1,0 +1,8 @@
+@font-face {
+    font-family: "HYWH";
+    src: url("@/assets/wh-65.ttf");
+}
+
+#root {
+    font-family: "HYWH", serif;
+}

@@ -10,12 +10,21 @@ pub mod v2;
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("wxx-core")
         .invoke_handler(tauri::generate_handler![
+            v2::commands::config::read_config,
+            v2::commands::config::write_config,
             v2::commands::request::lcu_fetch,
         ])
         .setup(|app, _api| {
             app.manage(AppState::empty());
-            v2::process_watcher::start_watcher(app, 200);
-            v2::ws_client::start_ws_client(app, 500);
+
+            v2::create_app_dir(app, vec![
+                "wxsb/configs",
+                "wxsb/temp",
+            ]);
+
+            v2::process_watcher::start_watcher(app, 1000);
+            v2::ws_client::start_ws_client(app, 1000);
+
             Ok(())
         })
         .build()

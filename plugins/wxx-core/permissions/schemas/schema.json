@@ -307,6 +307,34 @@
           "enum": [
             "deny-lcu-fetch"
           ]
+        },
+        {
+          "description": "allow-read-config -> Enables the read_config command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "allow-read-config"
+          ]
+        },
+        {
+          "description": "deny-read-config -> Denies the read_config command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "deny-read-config"
+          ]
+        },
+        {
+          "description": "allow-write-config -> Enables the write_config command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "allow-write-config"
+          ]
+        },
+        {
+          "description": "deny-write-config -> Denies the write_config command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "deny-write-config"
+          ]
         }
       ]
     }

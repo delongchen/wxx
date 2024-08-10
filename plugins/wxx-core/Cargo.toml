@@ -1,10 +1,10 @@
 [package]
 name = "tauri-plugin-wxx-core"
 version = "0.0.0"
-authors = [ "You" ]
+authors = [ "MaoKing" ]
 description = ""
 edition = "2021"
-rust-version = "1.70"
+rust-version = "1.80"
 exclude = ["/examples", "/webview-dist", "/webview-src", "/node_modules"]
 links = "tauri-plugin-wxx-core"
 
@@ -12,7 +12,6 @@ links = "tauri-plugin-wxx-core"
 tauri = { version = "2.0.0-beta.22" }
 serde = "1.0"
 thiserror = "1.0"
-shaco = "0.6.0"
 tokio = { version = "1.38.1", features = ["full"] }
 serde_json = "1"
 futures-util = "0.3.30"
@@ -26,7 +25,7 @@ tokio-tungstenite = { version = "0.23.1", features = ["native-tls"] }
 tokio = "1.38.1"
 
 [dependencies.sysinfo]
-version = "0.30.12"
+version = "0.31.2"
 
 [build-dependencies]
 tauri-plugin = { version = "2.0.0-beta.17", features = ["build"] }

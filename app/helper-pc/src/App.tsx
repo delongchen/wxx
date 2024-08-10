@@ -1,6 +1,16 @@
-import { memo } from "react";
-import { WxxLayout } from "@/layouts/AppLayout/WxxLayout.tsx";
+import WxxLayout from "@/layouts/AppLayout/WxxLayout.tsx";
+import {memo, useEffect} from "react";
+import {useAppDispatch} from "@/store";
+import {fetchLocalConfig} from "@/store/modules/global";
 
-const App = memo(WxxLayout)
+function App() {
+  const dispatch = useAppDispatch()
 
-export default App
+  useEffect(() => {
+    dispatch(fetchLocalConfig())
+  }, [])
+
+  return <WxxLayout />
+}
+
+export default memo(App);

@@ -255,7 +255,7 @@ export interface ParticipantDto {
 
 // Challenges DTO
 export interface ChallengesDto {
-  12AssistStreakCount?: number,
+  '12AssistStreakCount'?: number,
   baronBuffGoldAdvantageOverThreshold?: unknown,
   controlWardTimeCoverageInRiverOrEnemyHalf?: unknown,
   earliestBaron?: unknown,
@@ -559,7 +559,7 @@ export interface EventsTimeLineDto {
 export interface ParticipantFramesDto {
 
   // Key value mapping for each participant
-  1-9: ParticipantFrameDto,
+  '1-9': ParticipantFrameDto,
 }
 
 export interface ParticipantFrameDto {

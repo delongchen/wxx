@@ -28,14 +28,30 @@ const flatModules = (modules: Record<string, unknown>) => {
   return result
 }
 
-export const staticRoutes: WxxRoute[] = [
+const staticRoutes: WxxRoute[] = [
   {
     path: '/',
     redirect: '/home'
   },
+]
+const internalRoutes = [
+  ...staticRoutes,
   ...flatModules(routeModules)
 ]
+const outerRoutes: WxxRoute[] = []
 
-export const allRoutes: WxxRoute[] = [
-  ...staticRoutes,
-]
+const internalRoutePathSet = new Set(internalRoutes.map(it => it.path))
+
+export const registerRoute = (route: WxxRoute) => {
+  if (!internalRoutePathSet.has(route.path)) {
+    route.isOuter = true
+    outerRoutes.push(route)
+  }
+}
+
+export const getAllRoutes = (): WxxRoute[] => {
+  return [
+    ...internalRoutes,
+    ...outerRoutes,
+  ]
+}

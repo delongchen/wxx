@@ -1,10 +1,11 @@
 import { WxxRoute } from "@/types/router";
 import { VscHome } from 'react-icons/vsc'
+import HomePage from "@/pages/home/home";
 
 const homeRoutes: WxxRoute[] = [
   {
     path: '/home',
-    component: () => <div>root page</div>,
+    component: HomePage,
     meta: {
       icon: () => <VscHome size='24px'/>,
       index: 3,

@@ -16,8 +16,8 @@
       "icons/icon.ico"
     ]
   },
-  "productName": "lol_helper",
-  "version": "0.0.0",
+  "productName": "wxx",
+  "version": "0.0.3",
   "identifier": "wxsb",
   "plugins": {},
   "app": {
@@ -25,25 +25,23 @@
       "csp": {
         "default-src": "'self' asset:",
         "connect-src": "ipc: http://ipc.localhost",
-        "img-src": "'self' asset: http://asset.localhost blob: data:",
-        "script-src": "'self' asset: http://asset.localhost"
+        "img-src": "'self' asset: http://asset.localhost blob: data:"
       },
       "capabilities": [
         "fs",
-        "default"
+        "default",
+        "wxx-core"
       ],
       "assetProtocol": {
         "enable": true,
-        "scope": [
-          "$APPDATA/**"
-        ]
+        "scope": []
       }
     },
     "windows": [
       {
-        "title": "lol_helper",
-        "width": 1366,
-        "height": 768
+        "title": "WXX",
+        "width": 800,
+        "height": 600
       }
     ]
   }

@@ -1,5 +1,7 @@
 use std::time::Duration;
 use reqwest::{Certificate, ClientBuilder, RequestBuilder};
+use reqwest::header::HeaderValue;
+use serde_json::Value;
 use crate::v2::consts::RIOT_GAMES_PEM_BYTES;
 
 pub enum LcuRestError {
@@ -48,6 +50,7 @@ impl LcuRestClient {
         &self,
         method: String,
         endpoint: String,
+        body: Value,
         port: String,
         auth_token: String,
     ) -> Result<RequestBuilder, LcuRestError> {
@@ -64,14 +67,30 @@ impl LcuRestClient {
 
         let req = match method {
             LcuRestAllowMethod::GET => self.client.get(url),
-            LcuRestAllowMethod::POST => self.client.post(url),
-            LcuRestAllowMethod::PUT => self.client.put(url),
             LcuRestAllowMethod::DELETE => self.client.delete(url),
+            LcuRestAllowMethod::POST => {
+                let req = self.client.post(url);
+                match body {
+                    Value::Object(body) => req.json(&body),
+                    _ => req
+                }
+            },
+            LcuRestAllowMethod::PUT => {
+                let req = self.client.put(url);
+                match body {
+                    Value::Object(body) => req.json(&body),
+                    _ => req
+                }
+            },
         };
 
-        Ok(req.header(
+        let req = req.header(
             "Authorization",
-            format!("Basic {}", auth_token).as_str()
-        ))
+            HeaderValue::from_str(
+                format!("Basic {}", auth_token).as_str()
+            ).unwrap(),
+        );
+
+        Ok(req)
     }
 }

@@ -1,0 +1,13 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "wxx-core",
+  "description": "Capabilities of wxx-core",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "wxx-core:allow-read-config",
+    "wxx-core:allow-lcu-fetch",
+    "wxx-core:allow-write-config"
+  ]
+}

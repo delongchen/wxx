@@ -14,6 +14,7 @@ interface WxxRoute {
   component?: React.FC<BrowserRouterProps>
   children?: WxxRoute[]
   meta?: WxxRouteMeta
+  isOuter?: boolean
 }
 
 export type {

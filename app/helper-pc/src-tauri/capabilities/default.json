@@ -13,8 +13,6 @@
     "image:default",
     "resources:default",
     "menu:default",
-    "tray:default",
-    "shell:allow-open",
-    "wxx-core:allow-lcu-fetch"
+    "tray:default"
   ]
 }

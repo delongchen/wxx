@@ -1,5 +1,7 @@
 const COMMANDS: &[&str] = &[
     "lcu_fetch",
+    "read_config",
+    "write_config"
 ];
 
 fn main() {

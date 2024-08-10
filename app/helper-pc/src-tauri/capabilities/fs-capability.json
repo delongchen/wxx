@@ -5,7 +5,5 @@
   "windows": [
     "main"
   ],
-  "permissions": [
-    "fs:default"
-  ]
+  "permissions": []
 }

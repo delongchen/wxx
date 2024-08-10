@@ -1,6 +1,6 @@
 {
   "name": "tauri-plugin-wxx-core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": {
     "name": "YUQI MAO"
   },
@@ -27,6 +27,7 @@
     "@tauri-apps/api": ">=2.0.0-beta.6"
   },
   "devDependencies": {
+    "yaml": "^2.5.0",
     "@rollup/plugin-typescript": "^11.1.6",
     "rollup": "^4.9.6",
     "tslib": "^2.6.2",

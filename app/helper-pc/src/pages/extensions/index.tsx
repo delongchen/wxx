@@ -1,19 +1,32 @@
-import { Box, Button } from "@chakra-ui/react";
-import { invoke } from '@tauri-apps/api/core'
-
-const testLcuFetch = async () => {
-  const res = await invoke("plugin:wxx-core|lcu_fetch", {
-    method: 'get',
-    endpoint: '/lol-summoner/v1/current-summoner',
-  }).catch(err => err)
-
-  console.log(res)
-}
+import {Box, Button, Input} from "@chakra-ui/react";
+import { lcuFetch } from "tauri-plugin-wxx-core";
+import {useCallback, useState} from "react";
 
 export function ExtensionsPage() {
+  const [text, setText] = useState('')
+  const [value, setValue] = useState('')
+  const handleChange = (ev: any) => {
+    setValue(ev.target.value)
+  }
+
+  const handleClick = useCallback(() => {
+    lcuFetch({endpoint: value, method: 'get'})
+      .then(res => {
+        setText(JSON.stringify(res, null, 2))
+      })
+      .catch(() => {
+        setText('error')
+      })
+  }, [value])
+
   return (
     <Box>
-      <Button onClick={testLcuFetch}>some</Button>
+      <Input
+        value={value}
+        onChange={handleChange}
+      />
+      <Button onClick={handleClick}>click</Button>
+      <pre>{text}</pre>
     </Box>
   )
 }
