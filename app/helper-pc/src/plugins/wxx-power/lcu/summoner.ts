@@ -1,26 +1,21 @@
 import {
   LcuEventHandler,
-  LcuEventType,
-  SummonerInfo,
 } from "tauri-plugin-wxx-core";
 
-const createCurSummonerHandler = (): LcuEventHandler => {
-  const handle = (
-    ev: LcuEventType,
-    emit: (name: string, data: SummonerInfo) => void
-  ) => {
-    if (
-      ev.eventType === 'Update' &&
-      ev.uri === '/lol-summoner/v1/current-summoner'
-    ) {
-      emit('current-summoner-update', ev.data as SummonerInfo)
-    }
-  }
+import type { EMIT_NAMES } from './app-listener'
 
+const createCurSummonerHandler = (): LcuEventHandler<EMIT_NAMES> => {
   return {
     name: 'curSummoner',
     active: true,
-    handle,
+    handle: (ev, emit) => {
+      if (
+        ev.eventType === 'Update' &&
+        ev.uri === '/lol-summoner/v1/current-summoner'
+      ) {
+        emit('current-summoner-update', ev.data)
+      }
+    },
   }
 }
 

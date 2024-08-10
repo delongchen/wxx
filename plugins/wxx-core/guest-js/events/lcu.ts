@@ -13,12 +13,19 @@ export const listenLcuEvent = createListenFn<LcuEventType>(
   WxxCoreEventNames.LCU_WS_EVENT
 )
 
-export interface LcuEventHandler {
+type TupleToUnion<T> = T extends Array<infer ITEMS> ? ITEMS : never
+
+export interface LcuEventHandler<
+  KEYS extends Array<string> = []
+> {
   name: string
   active: boolean
   handle: (
     ev: LcuEventType,
-    emit: (event: string, data: any) => void
+    emit: (
+      event: TupleToUnion<KEYS> | string,
+      data: any
+    ) => void
   ) => void | Promise<void>
 }
 
@@ -27,19 +34,25 @@ const enum HandlerManagerStatus {
   RUNNING,
 }
 
+
 /**
  * The reason why create a listener manager
  * is that some listeners have a lifecycle that is almost as long as the application.
  * If you don't want them to be unlistened when the component is uninstalled,
  * then this is the better way.
  */
-export const createLcuEventHandlerManager = () => {
+export const createLcuEventHandlerManager = <
+  KEYS extends Array<string> = []
+>() => {
   const handlerMap: Map<string, LcuEventHandler> = new Map
   const listenerMap: Map<string, Set<(data: any) => void>> = new Map
 
   let managerStatus = HandlerManagerStatus.RUNNING
 
-  const handleEmit = (name: string, data: any) => {
+  const handleEmit = (
+    name: TupleToUnion<KEYS> | string,
+    data: any
+  ) => {
     const exist = listenerMap.get(name)
 
     if (exist !== undefined) {
@@ -89,7 +102,10 @@ export const createLcuEventHandlerManager = () => {
     managerStatus = HandlerManagerStatus.RUNNING
   }
 
-  const on = <T>(event: string, cb: (data: T) => void) => {
+  const on = <T>(
+    event: TupleToUnion<KEYS> | string,
+    cb: (data: T) => void
+  ) => {
     let listeners = listenerMap.get(event)
 
     if (listeners === undefined) {
