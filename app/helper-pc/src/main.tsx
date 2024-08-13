@@ -24,7 +24,7 @@ const render = () => {
         </BrowserRouter>
       </ReactReduxProvider>
     </ChakraProvider>
-  );
+  )
 }
 
 const main = async () => {

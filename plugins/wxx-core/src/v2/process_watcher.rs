@@ -36,7 +36,7 @@ fn fetch_lcu_info() -> Result<LcuProcessInfo, LcuProcessError> {
     sys.refresh_processes_specifics(
         ProcessesToUpdate::All,
         ProcessRefreshKind::new()
-            .with_cmd(UpdateKind::OnlyIfNotSet)
+            .with_cmd(UpdateKind::Always)
     );
 
     let lcu_args = sys

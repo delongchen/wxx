@@ -1,7 +1,7 @@
 import {useAppDispatch, useAppSelector} from "@/store";
 import {selectGlobal} from "@/store/modules/global";
 import {selectWxxPower, setStateAsync} from "@/store/modules/wxx-power";
-import {memo, useCallback, useEffect, ChangeEvent} from "react";
+import {memo, useCallback, ChangeEvent} from "react";
 import {
   Card,
   CardBody,
@@ -13,7 +13,6 @@ import {
   Switch,
   Tooltip
 } from "@chakra-ui/react";
-import { autoAcceptHandler, autoNextHandler } from "../lcu/tik-tok-helper.ts";
 
 function TikTokHelper() {
   const { theme } = useAppSelector(selectGlobal)
@@ -22,15 +21,8 @@ function TikTokHelper() {
   const {
     autoAcceptMatch,
     autoNextMatch,
+    autoBallot,
   } = useAppSelector(selectWxxPower)
-
-  useEffect(() => {
-    autoAcceptHandler.active = autoAcceptMatch
-  }, [autoAcceptMatch])
-
-  useEffect(() => {
-    autoNextHandler.active = autoNextMatch
-  }, [autoNextMatch])
 
   const handleClick = useCallback((
     ev: ChangeEvent<HTMLInputElement>
@@ -43,6 +35,10 @@ function TikTokHelper() {
     } else if (id === 'wxx-power-auto-next-match') {
       dispatch(setStateAsync(prev => ({
         autoNextMatch: !prev.autoNextMatch
+      })))
+    } else if (id === 'wxx-power-auto-ballot') {
+      dispatch(setStateAsync(prev => ({
+        autoBallot: !prev.autoBallot
       })))
     }
   }, [])
@@ -75,6 +71,16 @@ function TikTokHelper() {
           <Switch
             id='wxx-power-auto-next-match'
             isChecked={autoNextMatch}
+            colorScheme={theme}
+            onChange={handleClick}
+          />
+
+          <FormLabel
+            htmlFor='wxx-power-auto-ballot'
+          >自动点赞</FormLabel>
+          <Switch
+            id='wxx-power-auto-ballot'
+            isChecked={autoBallot}
             colorScheme={theme}
             onChange={handleClick}
           />

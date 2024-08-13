@@ -1,22 +1,14 @@
-import {memo, useEffect} from "react";
+import {memo} from "react";
 import {
   Box,
   Heading, Stack,
   Text,
 } from '@chakra-ui/react'
 import Style from './page.module.sass'
-import {useAppDispatch} from "@/store";
-import {syncToLocalConfig} from "@/store/modules/wxx-power";
 import TikTokHelper from "./components/tik-tok-helper.tsx";
 
 
 function Page() {
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    dispatch(syncToLocalConfig())
-  }, [])
-
   return (
     <>
       <Box className={Style.container}>

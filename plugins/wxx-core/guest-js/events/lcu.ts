@@ -14,9 +14,10 @@ export const listenLcuEvent = createListenFn<LcuEventType>(
 )
 
 type TupleToUnion<T> = T extends Array<infer ITEMS> ? ITEMS : never
+type GetterType<T = any> = ((() => T) | T)
 
 export interface LcuEventHandler<
-  KEYS extends Array<string> = []
+  KEYS extends string[] = []
 > {
   name: string
   active: boolean
@@ -42,9 +43,9 @@ const enum HandlerManagerStatus {
  * then this is the better way.
  */
 export const createLcuEventHandlerManager = <
-  KEYS extends Array<string> = []
+  KEYS extends string[] = []
 >() => {
-  const handlerMap: Map<string, LcuEventHandler> = new Map
+  const handlerMap: Map<string, LcuEventHandler<string[]>> = new Map
   const listenerMap: Map<string, Set<(data: any) => void>> = new Map
 
   let managerStatus = HandlerManagerStatus.RUNNING
@@ -77,7 +78,7 @@ export const createLcuEventHandlerManager = <
   }
 
   const register = (
-    getters: ((() => LcuEventHandler) | LcuEventHandler)[]
+    getters: GetterType<LcuEventHandler<KEYS | string[]>>[]
   ) => {
     for (const getter of getters) {
       const handler = typeof getter === 'function' ?

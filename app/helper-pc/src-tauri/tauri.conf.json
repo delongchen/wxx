@@ -17,16 +17,12 @@
     ]
   },
   "productName": "wxx",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "identifier": "wxsb",
   "plugins": {},
   "app": {
     "security": {
-      "csp": {
-        "default-src": "'self' asset:",
-        "connect-src": "ipc: http://ipc.localhost",
-        "img-src": "'self' asset: http://asset.localhost blob: data:"
-      },
+      "csp": null,
       "capabilities": [
         "fs",
         "default",

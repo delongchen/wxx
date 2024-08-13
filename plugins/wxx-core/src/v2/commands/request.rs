@@ -9,7 +9,7 @@ pub enum LcuFetchError {
     LcuNotStarted,
     CreateRequestError,
     SendRequestError(String),
-    ResponseParseError,
+    RequestNotSuccess(Value),
 }
 
 #[derive(Serialize)]
@@ -21,21 +21,21 @@ struct LcuFetchErrorWrapper {
 impl LcuFetchError {
     fn wrap(&self) -> LcuFetchErrorWrapper {
         match self {
-            LcuFetchError::LcuNotStarted => LcuFetchErrorWrapper {
+            Self::LcuNotStarted => LcuFetchErrorWrapper {
                 code: 0,
                 message: "lcu not started".to_string(),
             },
-            LcuFetchError::CreateRequestError => LcuFetchErrorWrapper {
+            Self::CreateRequestError => LcuFetchErrorWrapper {
                 code: 1,
                 message: "create request error".to_string(),
             },
-            LcuFetchError::SendRequestError(message) => LcuFetchErrorWrapper {
+            Self::SendRequestError(message) => LcuFetchErrorWrapper {
                 code: 2,
                 message: message.to_string(),
             },
-            LcuFetchError::ResponseParseError => LcuFetchErrorWrapper {
+            Self::RequestNotSuccess(err) => LcuFetchErrorWrapper {
                 code: 3,
-                message: "parsing response error".to_string(),
+                message: err.to_string(),
             },
         }
     }
@@ -92,9 +92,16 @@ async fn send_request(req: RequestBuilder) -> Result<Value, LcuFetchError> {
         Err(e) => return Err(LcuFetchError::SendRequestError(e.to_string())),
     };
 
-    if let Ok(v) = res.json::<Value>().await {
-        Ok(v)
-    } else {
-        Err(LcuFetchError::ResponseParseError)
+    let is_success = res.status().is_success();
+
+    let res_json = res
+        .json::<Value>()
+        .await
+        .unwrap_or_else(|_| Value::Null);
+
+    if !is_success {
+        return Err(LcuFetchError::RequestNotSuccess(res_json))
     }
+
+    Ok(res_json)
 }

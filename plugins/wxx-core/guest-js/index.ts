@@ -7,3 +7,5 @@ export * from './api/lcu-fetch'
 export * from './api/local-config'
 
 export * from './types/lcu-api/summoner'
+export * from './types/lcu-api/gameflow'
+export * from './types/lcu-api/honorV2'

@@ -7,6 +7,7 @@ const namespace = 'wxx-power'
 interface WxxPowerState {
   autoAcceptMatch: boolean
   autoNextMatch: boolean
+  autoBallot: boolean
 }
 
 const configHandle = createConfigHandle<WxxPowerState>(
@@ -17,6 +18,7 @@ const configHandle = createConfigHandle<WxxPowerState>(
 const initialState: WxxPowerState = {
   autoAcceptMatch: false,
   autoNextMatch: false,
+  autoBallot: false,
 }
 
 const wxxPowerSlice = createSlice({
@@ -42,11 +44,15 @@ export const {
 export const selectWxxPower = (state: RootState) => state.wxxPower
 export default wxxPowerSlice.reducer
 
-export const syncToLocalConfig = (): AppThunk =>
+export const syncToLocalConfig = (
+  afterSync?: (state: WxxPowerState) => void,
+): AppThunk =>
   dispatch =>
     configHandle
       .readWithInit(initialState)
       .then(state => {
+        if (afterSync !== undefined) afterSync(state)
+
         const keys = Object.keys(state) as (keyof WxxPowerState)[]
 
         for (const key of keys) {

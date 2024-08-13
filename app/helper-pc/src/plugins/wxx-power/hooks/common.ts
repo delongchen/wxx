@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {onLcuProcessStatusChange, SummonerInfo, lcuFetch} from "tauri-plugin-wxx-core";
-import {appListener} from "../lcu/app-listener";
+import {lcuEventBus} from "../lcu/app-listener";
 
 export const useLcuProcessStatus = () => {
   const [status, setStatus] = useState<number>(1)
@@ -37,12 +37,10 @@ export const useCurrentSummoner = () => {
     fn().catch(() => {})
   }, [])
 
-  useEffect(() => {
-    return appListener.on<SummonerInfo>(
-      'current-summoner-update',
-      setCurrentSummoner,
-    )
-  }, [])
+  useEffect(() => lcuEventBus.on(
+    'current-summoner-update',
+    setCurrentSummoner,
+  ), [])
 
   return currentSummoner
 }
