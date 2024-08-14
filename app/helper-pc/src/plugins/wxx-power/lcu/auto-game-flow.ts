@@ -69,7 +69,7 @@ const createMatchStageContext = () => {
       switch (matchStage) {
         case MatchStage.WaitingForStats: timeout = 10000; break
         case MatchStage.PreEndOfGame: timeout = 3000; break
-        case MatchStage.EndOfGame: timeout = 1500; break
+        case MatchStage.EndOfGame: timeout = 2000; break
       }
       resetTimer(timeout)
     }
@@ -104,8 +104,6 @@ const accept = async () => {
 }
 
 const handleGameFlowPhase = (phase: GameflowPhase) => {
-  console.log('phase: ', phase)
-
   if (phase === 'ReadyCheck') {
     return accept()
   }

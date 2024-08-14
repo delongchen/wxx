@@ -1,6 +1,7 @@
 import {LcuEventType, listenLcuEvent} from "./lcu";
 import {UnlistenFn} from "@tauri-apps/api/event";
 
+
 type TypeOfValue<
   MAP extends Record<string, any>,
   KEY extends (keyof MAP | string),
