@@ -71,7 +71,7 @@ export class LcuEventEmitter<
     this.adapterMap.set(name, adapter)
   }
 
-  private emit(key: string | symbol | number, value: any) {
+  public emit(key: string | symbol | number, value: any) {
     this.listenerMap
       .get(key as string)
       ?.forEach(listener => {

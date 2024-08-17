@@ -32,7 +32,7 @@ export type AppThunk<R = void> = ThunkAction<R, RootState, unknown, Action<strin
 export const useAppDispatch = () => useDispatch<AppDispatch>()
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
-// const addReducer = () => {}
+// const addSlice = () => {}
 export const updateStore = () => {
   store.replaceReducer(combineSlices(innerSlices, outerSlices))
 }

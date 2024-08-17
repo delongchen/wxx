@@ -2,7 +2,6 @@ use std::ffi::OsString;
 use std::time::Duration;
 use sysinfo::{ProcessRefreshKind, ProcessesToUpdate, System, UpdateKind};
 use base64::{engine::general_purpose, Engine};
-use serde_json::json;
 use tauri::{AppHandle, Manager, Runtime};
 use tauri::async_runtime::JoinHandle;
 use super::models::process::{LcuProcessStatus, LcuProcessInfo};
@@ -79,7 +78,7 @@ pub fn start_watcher<R: Runtime>(app: &AppHandle<R>, timeout: u64) -> JoinHandle
 
             let _ = app.emit(
                 LCU_PROCESS_STATUS_EVENT,
-                json!({ "statusCode": status_code }),
+                status_code,
             );
 
             {

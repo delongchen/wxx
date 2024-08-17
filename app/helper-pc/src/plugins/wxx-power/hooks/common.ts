@@ -1,19 +1,23 @@
 import {useEffect, useState} from "react";
-import {onLcuProcessStatusChange, SummonerInfo, lcuFetch} from "tauri-plugin-wxx-core";
+import {
+  SummonerInfo,
+  lcuFetch,
+  processStatusStream,
+  LcuProcessStatus,
+} from "tauri-plugin-wxx-core";
 import {lcuEventBus} from "../lcu/app-listener";
 
 export const useLcuProcessStatus = () => {
-  const [status, setStatus] = useState<number>(1)
+  const [status, setStatus] = useState<number>(LcuProcessStatus.NotStarted)
 
   useEffect(() => {
-    const handle = onLcuProcessStatusChange(ev => {
-      setStatus(ev.statusCode)
-    })
+    const subscription = processStatusStream
+      .subscribe(setStatus)
 
     return () => {
-      handle.then(stop => stop())
+      subscription.unsubscribe()
     }
-  }, [])
+  }, []);
 
   return {
     status,

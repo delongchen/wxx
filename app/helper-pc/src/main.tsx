@@ -9,7 +9,8 @@ import App from "@/App.tsx"
 import './styles/index.css'
 
 import { use, initPlugins } from './use'
-import WxxPower from "@/plugins/wxx-power";
+import WxxPower from "@/plugins/wxx-power/index.tsx";
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root')!

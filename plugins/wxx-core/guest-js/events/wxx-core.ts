@@ -1,22 +1,18 @@
-import {createListenFn} from "./utils";
-import {WxxCoreEventNames} from "../consts/events";
+import { createTauriEventStream } from "./utils";
+import { WxxCoreEventNames } from "../consts/events";
+import { distinctUntilChanged, map } from "rxjs";
 
 
-export interface LcuProcessStatusEvent {
-  statusCode: number
+export enum LcuProcessStatus {
+  NotStarted = 1,
+  NotStartedWithAdmin,
+  Started,
 }
 
-export const listenLcuProcessStatus = createListenFn<LcuProcessStatusEvent>(
-  WxxCoreEventNames.LCU_PROCESS_STATUS_EVENT
-)
-
-export const onLcuProcessStatusChange = (cb: (ev: LcuProcessStatusEvent) => void) => {
-  let cache = 0
-
-  return listenLcuProcessStatus(({statusCode}) => {
-    if (cache !== statusCode) {
-      cb({ statusCode })
-      cache = statusCode
-    }
-  })
-}
+export const processStatusStream =
+  createTauriEventStream<LcuProcessStatus>(
+    WxxCoreEventNames.LCU_PROCESS_STATUS_EVENT
+  ).pipe(
+    map(ev => ev.payload),
+    distinctUntilChanged(),
+  )
