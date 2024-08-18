@@ -8,9 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@tauri-apps/api':
+        specifier: ^2.0.0-beta.13
+        version: 2.0.0-beta.14
       '@tauri-apps/cli':
         specifier: 2.0.0-beta.20
         version: 2.0.0-beta.20
+      rxjs:
+        specifier: ^7.8.1
+        version: 7.8.1
     devDependencies:
       '@types/node':
         specifier: ^20.14.10
@@ -36,9 +42,6 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.28.6
         version: 5.28.6(react@18.2.0)
-      '@tauri-apps/api':
-        specifier: ^2.0.0-beta.13
-        version: 2.0.0-beta.13
       '@tauri-apps/plugin-fs':
         specifier: 2.0.0-beta.6
         version: 2.0.0-beta.6
@@ -117,13 +120,6 @@ importers:
         version: 5.2.6(@types/node@20.14.10)(sass@1.72.0)
 
   plugins/wxx-core:
-    dependencies:
-      '@tauri-apps/api':
-        specifier: '>=2.0.0-beta.6'
-        version: 2.0.0-beta.13
-      rxjs:
-        specifier: ^7.8.1
-        version: 7.8.1
     devDependencies:
       '@rollup/plugin-typescript':
         specifier: ^11.1.6

@@ -4,8 +4,8 @@ import {
   lcuFetch,
   processStatusStream,
   LcuProcessStatus,
-} from "tauri-plugin-wxx-core";
-import {lcuEventBus} from "../lcu/app-listener";
+} from "tauri-plugin-wxx-core"
+import { currentSummonerUpdateStream } from "../lcu/event-stream";
 
 export const useLcuProcessStatus = () => {
   const [status, setStatus] = useState<number>(LcuProcessStatus.NotStarted)
@@ -41,10 +41,12 @@ export const useCurrentSummoner = () => {
     fn().catch(() => {})
   }, [])
 
-  useEffect(() => lcuEventBus.on(
-    'current-summoner-update',
-    setCurrentSummoner,
-  ), [])
+  useEffect(() => {
+    const subscription = currentSummonerUpdateStream
+      .subscribe(setCurrentSummoner)
+
+    return () => subscription.unsubscribe()
+  }, [])
 
   return currentSummoner
 }

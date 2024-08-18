@@ -1,4 +1,3 @@
-import { lcuEventBus } from "../lcu/app-listener";
 import {
   GameflowPhase,
   lcuFetch,
@@ -30,17 +29,7 @@ export const uploadGameStatus = () => {
     }
   }
 
-  const stopCurrentSummoner = lcuEventBus.on(
-    'current-summoner-update',
-    updateSummoner,
-  )
-
-  const stopGamePhase = lcuEventBus.on(
-    'game-flow-phase-update',
-    updatePhase,
-  )
-
-  const aaa = processStatusStream
+  const statusSubscription = processStatusStream
     .subscribe(status => {
       if (status === LcuProcessStatus.Started) {
         lcuFetch<SummonerInfo>({
@@ -59,8 +48,6 @@ export const uploadGameStatus = () => {
     })
 
   return () => {
-    stopCurrentSummoner()
-    stopGamePhase()
-    aaa.unsubscribe()
+    statusSubscription.unsubscribe()
   }
 }

@@ -1,6 +1,6 @@
 import { createTauriEventStream } from "./utils";
 import { WxxCoreEventNames } from "../consts/events";
-import { distinctUntilChanged, map } from "rxjs";
+import { distinctUntilChanged, map, share } from "rxjs";
 
 
 export enum LcuProcessStatus {
@@ -15,4 +15,5 @@ export const processStatusStream =
   ).pipe(
     map(ev => ev.payload),
     distinctUntilChanged(),
+    share(),
   )
