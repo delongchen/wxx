@@ -1,17 +1,11 @@
 import { startAutoAccept } from "./auto-accept";
 import { startAutoBallot } from "./auto-ballot";
 import { startAutoPlayAgain } from './auto-play-again'
+import { concat } from '../utils'
 
 
-export const startAutoGameFlow = () => {
-  const stopFns = [
-    startAutoAccept,
-    startAutoBallot,
-    startAutoPlayAgain,
-  ].map(fn => fn())
-
-  return () => {
-    stopFns.forEach(stopFn => stopFn())
-    stopFns.length = 0
-  }
-}
+export default concat(
+  startAutoAccept,
+  startAutoBallot,
+  startAutoPlayAgain,
+)

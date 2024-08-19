@@ -6,15 +6,12 @@ import store from "@/store";
 import { syncToLocalConfig } from "@/store/modules/wxx-power";
 import GroupPage from "./pages/group-page";
 import { VscCloud } from 'react-icons/vsc'
-import { ws } from './ws'
-import { uploadGameStatus } from './services/upload-game-status'
-import { startAutoGameFlow } from "./services/auto-game-flow"
+import { startServices } from './services'
 
 
 const wxxPower: WxxPluginType = {
   name: 'wxx-power',
   async install(ctx) {
-    ws.connect()
 
     ctx.registerPage({
       path: '/',
@@ -35,8 +32,7 @@ const wxxPower: WxxPluginType = {
     ctx.registerStatusBarItem(LcuStatusTag)
 
     store.dispatch(syncToLocalConfig(() => {
-      startAutoGameFlow()
-      uploadGameStatus()
+      startServices()
     }))
   }
 }
