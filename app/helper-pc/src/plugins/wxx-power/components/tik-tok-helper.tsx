@@ -3,11 +3,8 @@ import {selectGlobal} from "@/store/modules/global";
 import {selectWxxPower, setStateAsync} from "@/store/modules/wxx-power";
 import {memo, useCallback, ChangeEvent} from "react";
 import {
-  Card,
-  CardBody,
-  CardHeader,
-  FormControl,
-  FormLabel,
+  Card, CardBody, CardHeader,
+  FormControl, FormLabel,
   Heading,
   SimpleGrid,
   Switch,

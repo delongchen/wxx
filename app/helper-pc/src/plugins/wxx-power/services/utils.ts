@@ -1,5 +1,5 @@
 type CancelFn = () => void
-export type CancellableService = () => CancelFn
+export type CancellableService = ( ) => CancelFn
 
 
 export const concat = (

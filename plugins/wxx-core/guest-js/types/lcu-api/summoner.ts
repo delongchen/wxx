@@ -1,20 +1,20 @@
 export interface SummonerInfo {
+  unnamed: boolean
+  nameChangeFlag: boolean
   accountId: number
+  percentCompleteForNextLevel: number
+  profileIconId: number
+  summonerId: number
+  summonerLevel: number
+  xpSinceLastLevel: number
+  xpUntilNextLevel: number
   displayName: string
   gameName: string
   internalName: string
-  nameChangeFlag: boolean
-  percentCompleteForNextLevel: number
   privacy: 'PUBLIC' | 'PRIVATE' | string
-  profileIconId: number
   puuid: string
-  rerollPoints: RerollPoints
   tagLine: string
-  summonerId: number
-  summonerLevel: number
-  unnamed: boolean
-  xpSinceLastLevel: number
-  xpUntilNextLevel: number
+  rerollPoints: RerollPoints
 }
 
 export interface RerollPoints {

@@ -1,10 +1,10 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+import { SummonerInfo } from "tauri-plugin-wxx-core"
+import { lcuFetch } from 'tauri-plugin-wxx-core/api'
 import {
-  SummonerInfo,
-  lcuFetch,
   processStatusStream,
-  LcuProcessStatus,
-} from "tauri-plugin-wxx-core"
+  LcuProcessStatus
+} from 'tauri-plugin-wxx-core/events'
 import { currentSummonerUpdateStream } from "../lcu/event-stream";
 
 export const useLcuProcessStatus = () => {
@@ -43,7 +43,9 @@ export const useCurrentSummoner = () => {
 
   useEffect(() => {
     const subscription = currentSummonerUpdateStream
-      .subscribe(setCurrentSummoner)
+      .subscribe(info => {
+        setCurrentSummoner(info)
+      })
 
     return () => subscription.unsubscribe()
   }, [])

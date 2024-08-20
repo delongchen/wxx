@@ -12,7 +12,6 @@ import { startServices } from './services'
 const wxxPower: WxxPluginType = {
   name: 'wxx-power',
   async install(ctx) {
-
     ctx.registerPage({
       path: '/',
       component: App,

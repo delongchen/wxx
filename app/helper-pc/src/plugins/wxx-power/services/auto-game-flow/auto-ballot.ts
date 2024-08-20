@@ -1,6 +1,7 @@
 import { gameBallotStream } from '../../lcu/event-stream'
-import {BallotLegacy, lcuFetch} from "tauri-plugin-wxx-core";
-import store from "@/store";
+import { BallotLegacy } from 'tauri-plugin-wxx-core'
+import { lcuFetch } from "tauri-plugin-wxx-core/api"
+import store from "@/store"
 
 
 const handleBallot = async (matchInfo: BallotLegacy) => {

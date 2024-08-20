@@ -1,4 +1,0 @@
-export const enum WxxCoreEventNames {
-  LCU_WS_EVENT = 'LCU_WS_EVENT',
-  LCU_PROCESS_STATUS_EVENT = 'LCU_PROCESS_STATUS_EVENT',
-}

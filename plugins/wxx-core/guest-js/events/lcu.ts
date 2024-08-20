@@ -1,7 +1,6 @@
 import {
   createTauriEventStream
 } from "./utils";
-import { WxxCoreEventNames } from "../consts/events";
 import { share, filter, map, Observable } from 'rxjs'
 
 export type LcuEventTypeEnum = 'Update' | 'Create' | 'Delete'
@@ -12,9 +11,9 @@ export interface LcuEventType<T = unknown> {
   data: T
 }
 
-export const lcuEventStream = createTauriEventStream<LcuEventType>(
-  WxxCoreEventNames.LCU_WS_EVENT
-).pipe(share())
+export const lcuEventStream =
+  createTauriEventStream<LcuEventType>('LCU_WS_EVENT')
+    .pipe(share())
 
 export const createSubLcuEventStream = <T = unknown>(
   uri: string,

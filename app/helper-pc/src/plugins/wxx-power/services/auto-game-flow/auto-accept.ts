@@ -1,7 +1,7 @@
 import { gameFlowPhaseStream } from "../../lcu/event-stream";
 import { filter, debounceTime } from 'rxjs'
 import store from "@/store";
-import { lcuFetch } from "tauri-plugin-wxx-core";
+import { lcuFetch } from "tauri-plugin-wxx-core/api";
 
 const gameReadyCheckStream = gameFlowPhaseStream
   .pipe(
