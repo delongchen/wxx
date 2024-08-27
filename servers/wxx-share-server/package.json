@@ -1,0 +1,23 @@
+{
+  "name": "wxx-power-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": ""
+  },
+  "private": true,
+  "dependencies": {
+    "@koa/router": "^12.0.1",
+    "koa": "^2.15.3",
+    "sharp": "^0.33.5",
+    "wxx-protobufs": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.15.0",
+    "@types/koa__router": "^12.0.4",
+    "@types/ws": "^8.5.12",
+    "ws": "^8.18.0"
+  }
+}

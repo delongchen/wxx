@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package lcu;
 
-import "common/header.proto";
-
 message RerollPoints {
   int32 currentPoints = 1;
   int32 maxRolls = 2;
@@ -29,9 +27,4 @@ message SummonerInfoBody {
   string puuid = 14;
   string tagLine = 15;
   RerollPoints rerollPoints = 16;
-}
-
-message SummonerInfoMessage {
-  header.MessageHeader header = 1;
-  SummonerInfoBody body = 2;
 }

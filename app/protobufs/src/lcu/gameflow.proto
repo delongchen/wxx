@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package lcu;
 
-import "common/header.proto";
-
 enum GameflowPhaseEnum {
   Matchmaking = 0; // 正在匹配
   ChampSelect = 1; // 英雄选择中
@@ -22,9 +20,4 @@ enum GameflowPhaseEnum {
 message PhaseWithSummonerId {
   GameflowPhaseEnum phase = 1;
   uint64 summonerId = 2;
-}
-
-message GameflowPhaseMessage {
-  header.MessageHeader header = 1;
-  PhaseWithSummonerId body = 2;
 }
