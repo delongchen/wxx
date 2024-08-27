@@ -1,12 +1,7 @@
-import {memo} from "react";
-import {
-  Box,
-  Heading, Stack,
-  Text,
-} from '@chakra-ui/react'
-import Style from './page.module.sass'
-import TikTokHelper from "./components/tik-tok-helper.tsx";
-
+import { memo } from 'react';
+import { Box, Heading, Stack, Text } from '@chakra-ui/react';
+import Style from './page.module.sass';
+import TikTokHelper from './components/tik-tok-helper.tsx';
 
 function Page() {
   return (
@@ -17,12 +12,12 @@ function Page() {
           <Text>WXX`s Magical Toolbox</Text>
         </Box>
 
-        <Stack spacing='24px'>
-          <TikTokHelper/>
+        <Stack spacing="24px">
+          <TikTokHelper />
         </Stack>
       </Box>
     </>
-  )
+  );
 }
 
-export default memo(Page)
+export default memo(Page);

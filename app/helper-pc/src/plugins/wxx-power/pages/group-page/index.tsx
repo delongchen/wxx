@@ -1,20 +1,14 @@
-import { memo } from "react";
-import {
-  Tabs, TabList, TabPanels, TabPanel, Tab
-} from '@chakra-ui/react'
-import { useAppSelector } from "@/store";
-import { selectGlobal } from "@/store/modules/global";
-import SummonerList from "./SummonerList.tsx";
-
+import { memo } from 'react';
+import { Tabs, TabList, TabPanels, TabPanel, Tab } from '@chakra-ui/react';
+import { useAppSelector } from '@/store';
+import { selectGlobal } from '@/store/modules/global';
+import SummonerList from './SummonerList.tsx';
 
 function GroupPage() {
-  const { theme } = useAppSelector(selectGlobal)
+  const { theme } = useAppSelector(selectGlobal);
 
   return (
-    <Tabs
-      colorScheme={theme}
-      isLazy
-    >
+    <Tabs colorScheme={theme} isLazy>
       <TabList>
         <Tab>大厅</Tab>
         <Tab>动态</Tab>
@@ -33,7 +27,7 @@ function GroupPage() {
         </TabPanel>
       </TabPanels>
     </Tabs>
-  )
+  );
 }
 
-export default memo(GroupPage)
+export default memo(GroupPage);

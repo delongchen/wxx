@@ -1,30 +1,29 @@
-import { Subject } from 'rxjs'
-import { BasicMessage } from 'wxx-protobufs/common'
-
+import { Subject } from 'rxjs';
+import { BasicMessage } from 'wxx-protobufs/common';
 
 const isBlob = (value: unknown): value is Blob => {
-  return value instanceof Blob
-}
+  return value instanceof Blob;
+};
 
 export const socketMessageSubject = new Subject<{
-  endpoint: string,
-  body: Uint8Array,
-}>()
+  endpoint: string;
+  body: Uint8Array;
+}>();
 
 const handleMessage = async (data: Blob) => {
-  const view = new Uint8Array(await data.arrayBuffer())
-  const message = BasicMessage.decode(view)
+  const view = new Uint8Array(await data.arrayBuffer());
+  const message = BasicMessage.decode(view);
 
   if (message.header?.endpoint !== undefined) {
     socketMessageSubject.next({
       endpoint: message.header.endpoint,
       body: message.body,
-    })
+    });
   }
-}
+};
 
 export class WxxWebSocket {
-  private ws: WebSocket | null = null
+  private ws: WebSocket | null = null;
 
   constructor(
     private baseUrl: string,
@@ -34,47 +33,40 @@ export class WxxWebSocket {
   private reconnect(group: string) {
     if (this.ws !== null) {
       if (this.ws.readyState === WebSocket.OPEN) {
-        this.ws.close(1000)
+        this.ws.close(1000);
       }
-      this.ws = null
+      this.ws = null;
     }
 
     setTimeout(() => {
-      this.connect(group)
-    }, this.reconnectIntervalMs)
+      this.connect(group);
+    }, this.reconnectIntervalMs);
   }
 
   public connect(group: string = 'wxx') {
-    if (
-      this.ws !== null &&
-      this.ws.readyState === WebSocket.OPEN
-    ) return
+    if (this.ws !== null && this.ws.readyState === WebSocket.OPEN) return;
 
-    const ws = new WebSocket(`${this.baseUrl}/group/${group}`)
-    ws.onopen = () => {}
+    const ws = new WebSocket(`${this.baseUrl}/group/${group}`);
+    ws.onopen = () => {};
     ws.onerror = ev => {
-      console.log(`[error] ${this.baseUrl}/group/${group}: `, ev)
-    }
+      console.log(`[error] ${this.baseUrl}/group/${group}: `, ev);
+    };
     ws.onclose = () => {
-      this.reconnect(group)
-    }
+      this.reconnect(group);
+    };
     ws.onmessage = ev => {
-      const data = ev.data
+      const data = ev.data;
       if (isBlob(data)) {
-        handleMessage(data)
-          .catch(console.error)
+        handleMessage(data).catch(console.error);
       }
-    }
+    };
 
-    this.ws = ws
+    this.ws = ws;
   }
 
   public send(message: Uint8Array) {
-    if (
-      this.ws !== null &&
-      this.ws.readyState === WebSocket.OPEN
-    ) {
-      this.ws.send(message)
+    if (this.ws !== null && this.ws.readyState === WebSocket.OPEN) {
+      this.ws.send(message);
     }
   }
 
@@ -83,10 +75,10 @@ export class WxxWebSocket {
       BasicMessage.encode({
         header: { endpoint },
         body,
-      }).finish()
-    )
+      }).finish(),
+    );
   }
 }
 
-export const ws = new WxxWebSocket('ws://localhost:11460')
-ws.connect()
+export const ws = new WxxWebSocket('ws://localhost:11460');
+ws.connect();

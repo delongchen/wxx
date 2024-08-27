@@ -1,14 +1,9 @@
-import AppContent from "./AppContent.tsx";
-import { Flex, Spacer } from "@chakra-ui/react";
-import Style from './WxxLayout.module.sass'
-import { memo } from "react";
+import AppContent from './AppContent.tsx';
+import { Flex, Spacer } from '@chakra-ui/react';
+import Style from './WxxLayout.module.sass';
+import { memo } from 'react';
 
-import {
-  WxxHeader,
-  WxxFooter,
-  WxxToolBar,
-  WxxMenu,
-} from '@/components/wxx'
+import { WxxHeader, WxxFooter, WxxToolBar, WxxMenu } from '@/components/wxx';
 
 function WxxLayout() {
   return (
@@ -16,12 +11,14 @@ function WxxLayout() {
       <WxxHeader />
       <Spacer className={Style.center}>
         <WxxMenu />
-        <Spacer><AppContent /></Spacer>
+        <Spacer>
+          <AppContent />
+        </Spacer>
         <WxxToolBar />
       </Spacer>
       <WxxFooter />
     </Flex>
-  )
+  );
 }
 
-export default memo(WxxLayout)
+export default memo(WxxLayout);

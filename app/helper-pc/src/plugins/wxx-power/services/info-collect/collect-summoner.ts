@@ -1,22 +1,21 @@
-import {currentSummonerUpdateStream, gameFlowPhaseStream} from '../../lcu/event-stream'
-import {socketMessageSubject, ws} from "../../ws/native";
-import {LcuProcessStatus, processStatusStream} from 'tauri-plugin-wxx-core/events'
-import {GameflowPhase, SummonerInfo} from "tauri-plugin-wxx-core";
-import {lcuFetch} from 'tauri-plugin-wxx-core/api'
-import {GameflowPhaseEnum, PhaseWithSummonerId, SummonerInfoBody} from 'wxx-protobufs/lcu'
-import {createStreamHelper} from '../utils'
-import {Subject} from 'rxjs'
-
+import { currentSummonerUpdateStream, gameFlowPhaseStream } from '../../lcu/event-stream';
+import { socketMessageSubject, ws } from '../../ws/native';
+import { LcuProcessStatus, processStatusStream } from 'tauri-plugin-wxx-core/events';
+import { GameflowPhase, SummonerInfo } from 'tauri-plugin-wxx-core';
+import { lcuFetch } from 'tauri-plugin-wxx-core/api';
+import { GameflowPhaseEnum, PhaseWithSummonerId, SummonerInfoBody } from 'wxx-protobufs/lcu';
+import { createStreamHelper } from '../utils';
+import { Subject } from 'rxjs';
 
 export interface SummonerState {
-  info: SummonerInfoBody
-  phase: GameflowPhaseEnum
+  info: SummonerInfoBody;
+  phase: GameflowPhaseEnum;
 }
 
-let enableService = true
-let currentSummoner: SummonerInfo | null = null
-export const summonerMapChange = new Subject<void>()
-export const summonerStateMap: Map<number, SummonerState> = new Map
+let enableService = true;
+let currentSummoner: SummonerInfo | null = null;
+export const summonerMapChange = new Subject<void>();
+export const summonerStateMap: Map<number, SummonerState> = new Map();
 
 const enum Endpoints {
   UpdateSummoner = 'update-summoner',
@@ -28,121 +27,97 @@ const refreshSummoners = () => {
     .then(res => res.json() as Promise<SummonerState[]>)
     .then(states => {
       for (const state of states) {
-        summonerStateMap.set(state.info.summonerId, state)
+        summonerStateMap.set(state.info.summonerId, state);
       }
-      summonerMapChange.next()
-    })
-}
+      summonerMapChange.next();
+    });
+};
 
 const updateAndSendInfo = (info: SummonerInfo) => {
-  currentSummoner = info
-  ws.sendTo(
-    Endpoints.UpdateSummoner,
-    SummonerInfoBody
-      .encode(info)
-      .finish()
-  )
-}
+  currentSummoner = info;
+  ws.sendTo(Endpoints.UpdateSummoner, SummonerInfoBody.encode(info).finish());
+};
 
 const sendPhase = (phase?: GameflowPhase) => {
-  if (currentSummoner === null) return
+  if (currentSummoner === null) return;
 
   ws.sendTo(
     Endpoints.UpdatePhase,
     PhaseWithSummonerId.encode({
       summonerId: currentSummoner.summonerId,
-      phase: phase === undefined ?
-        GameflowPhaseEnum.UNRECOGNIZED
-        :
-        GameflowPhaseEnum[phase],
-    })
-      .finish()
-  )
-}
+      phase: phase === undefined ? GameflowPhaseEnum.UNRECOGNIZED : GameflowPhaseEnum[phase],
+    }).finish(),
+  );
+};
 
-const handleRemoteMessage = (message: {
-  endpoint: string,
-  body: Uint8Array,
-}) => {
-  const { endpoint, body } = message
+const handleRemoteMessage = (message: { endpoint: string; body: Uint8Array }) => {
+  const { endpoint, body } = message;
 
   switch (endpoint) {
     case Endpoints.UpdateSummoner: {
-      const info = SummonerInfoBody.decode(body)
+      const info = SummonerInfoBody.decode(body);
 
-      const existSummoner = summonerStateMap.get(info.summonerId)
+      const existSummoner = summonerStateMap.get(info.summonerId);
 
       if (existSummoner === undefined) {
         summonerStateMap.set(info.summonerId, {
           info,
           phase: GameflowPhaseEnum.Lobby,
-        })
+        });
       } else {
-        existSummoner.info = info
+        existSummoner.info = info;
       }
 
-      summonerMapChange.next()
+      summonerMapChange.next();
 
-      return
+      return;
     }
     case Endpoints.UpdatePhase: {
-      const { summonerId, phase } = PhaseWithSummonerId.decode(body)
+      const { summonerId, phase } = PhaseWithSummonerId.decode(body);
 
-      const existSummoner = summonerStateMap.get(summonerId)
+      const existSummoner = summonerStateMap.get(summonerId);
 
       if (existSummoner !== undefined) {
         if (phase !== existSummoner.phase) {
-          existSummoner.phase = phase
-          summonerMapChange.next()
+          existSummoner.phase = phase;
+          summonerMapChange.next();
         }
       }
 
-      return
+      return;
     }
   }
-}
+};
 
 export const collectSummoner = () => {
-  const { subscribe, quit } = createStreamHelper(() => enableService)
+  const { subscribe, quit } = createStreamHelper(() => enableService);
 
   if (enableService) {
-    refreshSummoners()
+    refreshSummoners();
   }
 
-  subscribe(
-    currentSummonerUpdateStream,
-    updateAndSendInfo,
-  )
+  subscribe(currentSummonerUpdateStream, updateAndSendInfo);
 
-  subscribe(
-    gameFlowPhaseStream,
-    sendPhase,
-  )
+  subscribe(gameFlowPhaseStream, sendPhase);
 
-  subscribe(
-    processStatusStream,
-    async status => {
-      if (status === LcuProcessStatus.Started) {
-        await lcuFetch<SummonerInfo>({
-          endpoint: '/lol-summoner/v1/current-summoner',
-          method: 'get',
-        }).then(updateAndSendInfo)
+  subscribe(processStatusStream, async status => {
+    if (status === LcuProcessStatus.Started) {
+      await lcuFetch<SummonerInfo>({
+        endpoint: '/lol-summoner/v1/current-summoner',
+        method: 'get',
+      }).then(updateAndSendInfo);
 
-        await lcuFetch<GameflowPhase>({
-          endpoint: '/lol-gameflow/v1/gameflow-phase',
-          method: 'get',
-        }).then(sendPhase)
-      } else {
-        sendPhase()
-        currentSummoner = null
-      }
+      await lcuFetch<GameflowPhase>({
+        endpoint: '/lol-gameflow/v1/gameflow-phase',
+        method: 'get',
+      }).then(sendPhase);
+    } else {
+      sendPhase();
+      currentSummoner = null;
     }
-  )
+  });
 
-  subscribe(
-    socketMessageSubject,
-    handleRemoteMessage,
-  )
+  subscribe(socketMessageSubject, handleRemoteMessage);
 
-  return quit
-}
+  return quit;
+};

@@ -1,7 +1,5 @@
-import {Box} from "@chakra-ui/react";
+import { Box } from '@chakra-ui/react';
 
 export function ExtensionsPage() {
-  return (
-    <Box>别急</Box>
-  )
+  return <Box>别急</Box>;
 }

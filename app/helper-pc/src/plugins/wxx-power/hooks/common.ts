@@ -1,54 +1,48 @@
-import { useEffect, useState } from "react";
-import { SummonerInfo } from "tauri-plugin-wxx-core"
-import { lcuFetch } from 'tauri-plugin-wxx-core/api'
-import {
-  processStatusStream,
-  LcuProcessStatus
-} from 'tauri-plugin-wxx-core/events'
-import { currentSummonerUpdateStream } from "../lcu/event-stream";
+import { useEffect, useState } from 'react';
+import { SummonerInfo } from 'tauri-plugin-wxx-core';
+import { lcuFetch } from 'tauri-plugin-wxx-core/api';
+import { processStatusStream, LcuProcessStatus } from 'tauri-plugin-wxx-core/events';
+import { currentSummonerUpdateStream } from '../lcu/event-stream';
 
 export const useLcuProcessStatus = () => {
-  const [status, setStatus] = useState<number>(LcuProcessStatus.NotStarted)
+  const [status, setStatus] = useState<number>(LcuProcessStatus.NotStarted);
 
   useEffect(() => {
-    const subscription = processStatusStream
-      .subscribe(setStatus)
+    const subscription = processStatusStream.subscribe(setStatus);
 
     return () => {
-      subscription.unsubscribe()
-    }
+      subscription.unsubscribe();
+    };
   }, []);
 
   return {
     status,
-  }
-}
+  };
+};
 
 export const useCurrentSummoner = () => {
-  const [
-    currentSummoner,
-    setCurrentSummoner
-  ] = useState<SummonerInfo | null>(null)
+  const [currentSummoner, setCurrentSummoner] = useState<SummonerInfo | null>(null);
 
   useEffect(() => {
     const fn = async () => {
-      setCurrentSummoner(await lcuFetch<SummonerInfo>({
-        endpoint: '/lol-summoner/v1/current-summoner',
-        method: 'get',
-      }))
-    }
+      setCurrentSummoner(
+        await lcuFetch<SummonerInfo>({
+          endpoint: '/lol-summoner/v1/current-summoner',
+          method: 'get',
+        }),
+      );
+    };
 
-    fn().catch(() => {})
-  }, [])
+    fn().catch(() => {});
+  }, []);
 
   useEffect(() => {
-    const subscription = currentSummonerUpdateStream
-      .subscribe(info => {
-        setCurrentSummoner(info)
-      })
+    const subscription = currentSummonerUpdateStream.subscribe(info => {
+      setCurrentSummoner(info);
+    });
 
-    return () => subscription.unsubscribe()
-  }, [])
+    return () => subscription.unsubscribe();
+  }, []);
 
-  return currentSummoner
-}
+  return currentSummoner;
+};

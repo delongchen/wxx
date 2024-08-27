@@ -1,6 +1,6 @@
-import { Box } from "@chakra-ui/react";
+import { Box } from '@chakra-ui/react';
 
 // for now, it is uselessness
 export function WxxToolBar() {
-  return (<Box/>)
+  return <Box />;
 }

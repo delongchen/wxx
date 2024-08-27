@@ -1,27 +1,27 @@
-import { Box } from "@chakra-ui/react";
-import { memo, PropsWithChildren, useEffect } from "react";
-import Style from './AppPage.module.sass'
-import {useAppDispatch, useAppSelector} from "@/store";
-import {selectGlobal, switchFullPage} from "@/store/modules/global";
+import { Box } from '@chakra-ui/react';
+import { memo, PropsWithChildren, useEffect } from 'react';
+import Style from './AppPage.module.sass';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { selectGlobal, switchFullPage } from '@/store/modules/global';
 
 type AppPageProps = PropsWithChildren<{
-  isFullPage?: boolean
-}>
+  isFullPage?: boolean;
+}>;
 
 function AppPage(props: AppPageProps) {
-  const { children, isFullPage } = props
+  const { children, isFullPage } = props;
 
-  const dispatch = useAppDispatch()
-  const globalState = useAppSelector(selectGlobal)
+  const dispatch = useAppDispatch();
+  const globalState = useAppSelector(selectGlobal);
 
-  const bg = [globalState.theme, 100].join('.')
+  const bg = [globalState.theme, 100].join('.');
 
   useEffect(() => {
-    dispatch(switchFullPage(isFullPage))
-  }, [isFullPage])
+    dispatch(switchFullPage(isFullPage));
+  }, [isFullPage]);
 
   if (isFullPage === true) {
-    return <>{children}</>
+    return <>{children}</>;
   }
 
   return (
@@ -30,7 +30,7 @@ function AppPage(props: AppPageProps) {
         {children}
       </Box>
     </Box>
-  )
+  );
 }
 
-export default memo(AppPage)
+export default memo(AppPage);

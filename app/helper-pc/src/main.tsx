@@ -1,39 +1,36 @@
-import ReactDOM from "react-dom/client"
-import { ChakraProvider } from "@chakra-ui/react"
-import { Provider as ReactReduxProvider } from 'react-redux'
-import { BrowserRouter } from "react-router-dom"
-import store from "./store"
-import '@/router'
-import App from "@/App.tsx"
+import ReactDOM from 'react-dom/client';
+import { ChakraProvider } from '@chakra-ui/react';
+import { Provider as ReactReduxProvider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import store from './store';
+import '@/router';
+import App from '@/App.tsx';
 
-import './styles/index.css'
+import './styles/index.css';
 
-import { use, initPlugins } from './use'
-import WxxPower from "@/plugins/wxx-power/index.tsx";
+import { use, initPlugins } from './use';
+import WxxPower from '@/plugins/wxx-power/index.tsx';
 
-
-const root = ReactDOM.createRoot(
-  document.getElementById('root')!
-)
+const root = ReactDOM.createRoot(document.getElementById('root')!);
 
 const render = () => {
   root.render(
     <ChakraProvider>
       <ReactReduxProvider store={store}>
         <BrowserRouter>
-          <App/>
+          <App />
         </BrowserRouter>
       </ReactReduxProvider>
-    </ChakraProvider>
-  )
-}
+    </ChakraProvider>,
+  );
+};
 
 const main = async () => {
-  use(WxxPower)
+  use(WxxPower);
 
-  await initPlugins()
+  await initPlugins();
 
-  render()
-}
+  render();
+};
 
-main().catch(console.error)
+main().catch(console.error);

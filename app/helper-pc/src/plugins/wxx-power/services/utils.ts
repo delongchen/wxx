@@ -1,47 +1,38 @@
-import { Subscription, Observable } from 'rxjs'
+import { Subscription, Observable } from 'rxjs';
 
+type CancelFn = () => void;
+export type CancellableService = () => CancelFn;
 
-type CancelFn = () => void
-export type CancellableService = ( ) => CancelFn
-
-
-export const concat = (
-  ...services: CancellableService[]
-): CancellableService =>
+export const concat =
+  (...services: CancellableService[]): CancellableService =>
   () => {
-    const cancelFns = services.map(it => it())
+    const cancelFns = services.map(it => it());
 
     return () => {
-      cancelFns.forEach(cancel => cancel())
-      cancelFns.length = 0
-    }
-  }
+      cancelFns.forEach(cancel => cancel());
+      cancelFns.length = 0;
+    };
+  };
 
-export const createStreamHelper = (
-  checkEnable?: () => boolean,
-) => {
-  const subscriptions: Subscription[] = []
+export const createStreamHelper = (checkEnable?: () => boolean) => {
+  const subscriptions: Subscription[] = [];
 
-  const subscribe = <T>(
-    ob: Observable<T>,
-    f: (value: T) => Promise<void> | void,
-  ) => {
-    subscriptions.push(ob.subscribe(value => {
-      if (
-        checkEnable === undefined ||
-        checkEnable()
-      ) {
-        f(value)
-      }
-    }))
-  }
+  const subscribe = <T>(ob: Observable<T>, f: (value: T) => Promise<void> | void) => {
+    subscriptions.push(
+      ob.subscribe(value => {
+        if (checkEnable === undefined || checkEnable()) {
+          f(value);
+        }
+      }),
+    );
+  };
 
   const quit = () => {
     for (const subscription of subscriptions) {
-      subscription.unsubscribe()
+      subscription.unsubscribe();
     }
-    subscriptions.length = 0
-  }
+    subscriptions.length = 0;
+  };
 
-  return { subscribe, quit }
-}
+  return { subscribe, quit };
+};

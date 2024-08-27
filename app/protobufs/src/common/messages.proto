@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common;
+
+message MessageHeader {
+    string endpoint = 1;
+}
+
+message BasicMessage {
+    MessageHeader header = 1;
+    bytes body = 2;
+}

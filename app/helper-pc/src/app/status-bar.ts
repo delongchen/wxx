@@ -1,3 +1,3 @@
-import {FC} from "react";
+import { FC } from "react";
 
-export const StatusBarItems: FC[] = []
+export const StatusBarItems: FC[] = [];

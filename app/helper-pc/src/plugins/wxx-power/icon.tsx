@@ -1,7 +1,5 @@
-import { VscTools } from "react-icons/vsc";
+import { VscTools } from 'react-icons/vsc';
 
 export default function Icon() {
-  return (
-    <VscTools size='24px'/>
-  )
+  return <VscTools size="24px" />;
 }

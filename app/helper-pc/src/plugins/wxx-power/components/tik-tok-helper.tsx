@@ -1,82 +1,76 @@
-import {useAppDispatch, useAppSelector} from "@/store";
-import {selectGlobal} from "@/store/modules/global";
-import {selectWxxPower, setStateAsync} from "@/store/modules/wxx-power";
-import {memo, useCallback, ChangeEvent} from "react";
+import { useAppDispatch, useAppSelector } from '@/store';
+import { selectGlobal } from '@/store/modules/global';
+import { selectWxxPower, setStateAsync } from '@/store/modules/wxx-power';
+import { memo, useCallback, ChangeEvent } from 'react';
 import {
-  Card, CardBody, CardHeader,
-  FormControl, FormLabel,
+  Card,
+  CardBody,
+  CardHeader,
+  FormControl,
+  FormLabel,
   Heading,
   SimpleGrid,
   Switch,
-  Tooltip
-} from "@chakra-ui/react";
+  Tooltip,
+} from '@chakra-ui/react';
 
 function TikTokHelper() {
-  const { theme } = useAppSelector(selectGlobal)
-  const dispatch = useAppDispatch()
+  const { theme } = useAppSelector(selectGlobal);
+  const dispatch = useAppDispatch();
 
-  const {
-    autoAcceptMatch,
-    autoNextMatch,
-    autoBallot,
-  } = useAppSelector(selectWxxPower)
+  const { autoAcceptMatch, autoNextMatch, autoBallot } = useAppSelector(selectWxxPower);
 
-  const handleClick = useCallback((
-    ev: ChangeEvent<HTMLInputElement>
-  ) => {
-    const id = ev.target.id
+  const handleClick = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
+    const id = ev.target.id;
     if (id === 'wxx-power-auto-accept-match') {
-      dispatch(setStateAsync(prev => ({
-        autoAcceptMatch: !prev.autoAcceptMatch
-      })))
+      dispatch(
+        setStateAsync(prev => ({
+          autoAcceptMatch: !prev.autoAcceptMatch,
+        })),
+      );
     } else if (id === 'wxx-power-auto-next-match') {
-      dispatch(setStateAsync(prev => ({
-        autoNextMatch: !prev.autoNextMatch
-      })))
+      dispatch(
+        setStateAsync(prev => ({
+          autoNextMatch: !prev.autoNextMatch,
+        })),
+      );
     } else if (id === 'wxx-power-auto-ballot') {
-      dispatch(setStateAsync(prev => ({
-        autoBallot: !prev.autoBallot
-      })))
+      dispatch(
+        setStateAsync(prev => ({
+          autoBallot: !prev.autoBallot,
+        })),
+      );
     }
-  }, [])
+  }, []);
 
   return (
     <Card>
       <CardHeader>
-        <Tooltip
-          label='游戏中途还能刷抖音 我测 简直太酷了! 赞美吴翔!'
-          placement='top-start'
-        >
-          <Heading size='md'>刷抖音助手</Heading>
+        <Tooltip label="游戏中途还能刷抖音 我测 简直太酷了! 赞美吴翔!" placement="top-start">
+          <Heading size="md">刷抖音助手</Heading>
         </Tooltip>
       </CardHeader>
       <CardBody>
         <FormControl as={SimpleGrid} columns={{ base: 2, md: 4 }}>
-          <FormLabel
-            htmlFor='wxx-power-auto-accept-match'
-          >自动接受对局</FormLabel>
+          <FormLabel htmlFor="wxx-power-auto-accept-match">自动接受对局</FormLabel>
           <Switch
-            id='wxx-power-auto-accept-match'
+            id="wxx-power-auto-accept-match"
             isChecked={autoAcceptMatch}
             colorScheme={theme}
             onChange={handleClick}
           />
 
-          <FormLabel
-            htmlFor='wxx-power-auto-next-match'
-          >自动再来一把</FormLabel>
+          <FormLabel htmlFor="wxx-power-auto-next-match">自动再来一把</FormLabel>
           <Switch
-            id='wxx-power-auto-next-match'
+            id="wxx-power-auto-next-match"
             isChecked={autoNextMatch}
             colorScheme={theme}
             onChange={handleClick}
           />
 
-          <FormLabel
-            htmlFor='wxx-power-auto-ballot'
-          >自动点赞</FormLabel>
+          <FormLabel htmlFor="wxx-power-auto-ballot">自动点赞</FormLabel>
           <Switch
-            id='wxx-power-auto-ballot'
+            id="wxx-power-auto-ballot"
             isChecked={autoBallot}
             colorScheme={theme}
             onChange={handleClick}
@@ -84,7 +78,7 @@ function TikTokHelper() {
         </FormControl>
       </CardBody>
     </Card>
-  )
+  );
 }
 
 export default memo(TikTokHelper);

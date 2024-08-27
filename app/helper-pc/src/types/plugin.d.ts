@@ -1,12 +1,12 @@
-import { WxxRoute } from "./router";
-import { FC } from "react";
+import { WxxRoute } from './router';
+import { FC } from 'react';
 
 export interface WxxPluginContext {
-  registerPage: (route: WxxRoute) => void
-  registerStatusBarItem: (component: FC) => void
+  registerPage: (route: WxxRoute) => void;
+  registerStatusBarItem: (component: FC) => void;
 }
 
 export interface WxxPluginType {
-  name: string
-  install: (ctx: WxxPluginContext) => Promise<void>
+  name: string;
+  install: (ctx: WxxPluginContext) => Promise<void>;
 }

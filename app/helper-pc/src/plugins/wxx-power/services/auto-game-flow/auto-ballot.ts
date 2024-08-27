@@ -1,14 +1,13 @@
-import { gameBallotStream } from '../../lcu/event-stream'
-import { BallotLegacy } from 'tauri-plugin-wxx-core'
-import { lcuFetch } from "tauri-plugin-wxx-core/api"
-import store from "@/store"
-
+import { gameBallotStream } from '../../lcu/event-stream';
+import { BallotLegacy } from 'tauri-plugin-wxx-core';
+import { lcuFetch } from 'tauri-plugin-wxx-core/api';
+import store from '@/store';
 
 const handleBallot = async (matchInfo: BallotLegacy) => {
-  const enable = store.getState().wxxPower.autoBallot
-  if (!enable) return
+  const enable = store.getState().wxxPower.autoBallot;
+  if (!enable) return;
 
-  const { gameId } = matchInfo
+  const { gameId } = matchInfo;
 
   await lcuFetch({
     method: 'post',
@@ -16,14 +15,13 @@ const handleBallot = async (matchInfo: BallotLegacy) => {
     body: {
       gameId,
       honorCategory: 'OPT_OUT',
-      summonerId: 0
-    }
-  })
-}
+      summonerId: 0,
+    },
+  });
+};
 
 export const startAutoBallot = () => {
-  const subscription = gameBallotStream
-    .subscribe(handleBallot)
+  const subscription = gameBallotStream.subscribe(handleBallot);
 
-  return () => subscription.unsubscribe()
-}
+  return () => subscription.unsubscribe();
+};
