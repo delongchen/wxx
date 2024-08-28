@@ -27,7 +27,7 @@ interface PhaseInfo {
 
 type PhaseEnumRecord<T> = { [key in GameflowPhaseEnum]: T };
 
-const phaseInfoMap: PhaseEnumRecord<PhaseInfo> = {
+const phaseInfoMap: PhaseEnumRecord<PhaseInfo> = Object.freeze({
   [GameflowPhaseEnum.Matchmaking]: {
     text: '正在匹配',
     color: 'yellow',
@@ -80,7 +80,7 @@ const phaseInfoMap: PhaseEnumRecord<PhaseInfo> = {
     text: '离线',
     color: 'gray',
   },
-};
+});
 
 function SummonerCard({ info, phase }: SummonerState) {
   const { theme } = useAppSelector(selectGlobal);
