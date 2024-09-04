@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { SummonerInfo } from 'tauri-plugin-wxx-core';
-import { lcuFetch } from 'tauri-plugin-wxx-core/api';
+import { getCurrentSummoner } from 'tauri-plugin-wxx-core/lcu-api/summoner';
 import { processStatusStream, LcuProcessStatus } from 'tauri-plugin-wxx-core/events';
 import { currentSummonerUpdateStream } from '../lcu/event-stream';
 
@@ -25,12 +25,7 @@ export const useCurrentSummoner = () => {
 
   useEffect(() => {
     const fn = async () => {
-      setCurrentSummoner(
-        await lcuFetch<SummonerInfo>({
-          endpoint: '/lol-summoner/v1/current-summoner',
-          method: 'get',
-        }),
-      );
+      setCurrentSummoner(await getCurrentSummoner());
     };
 
     fn().catch(() => {});

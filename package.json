@@ -13,10 +13,11 @@
   "dependencies": {
     "@tauri-apps/api": "^2.0.0-beta.13",
     "@tauri-apps/cli": "2.0.0-beta.20",
-    "prettier": "^3.3.3",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
+    "prettier": "^3.3.3",
+    "@rollup/plugin-typescript": "^11.1.6",
     "@types/node": "^20.14.10",
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@typescript-eslint/parser": "^7.3.1",
@@ -27,6 +28,7 @@
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "rollup": "^4.9.6",
     "typescript": "^5.5.4"
   },
   "packageManager": "pnpm@9.3.0+sha1.d4f1da7af76dbdb4ab1a08f6b5add602ffad6fd4"

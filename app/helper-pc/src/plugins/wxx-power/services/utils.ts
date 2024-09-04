@@ -14,17 +14,20 @@ export const concat =
     };
   };
 
-export const createStreamHelper = (checkEnable?: () => boolean) => {
+export const createSubscriptionManager = () => {
   const subscriptions: Subscription[] = [];
+  const deferFnSet: Set<() => void> = new Set();
+
+  const manage = (...s: Subscription[]) => {
+    subscriptions.push(...s);
+  }
 
   const subscribe = <T>(ob: Observable<T>, f: (value: T) => Promise<void> | void) => {
-    subscriptions.push(
-      ob.subscribe(value => {
-        if (checkEnable === undefined || checkEnable()) {
-          f(value);
-        }
-      }),
-    );
+    manage(ob.subscribe(f));
+  };
+
+  const defer = (fn: () => void) => {
+    deferFnSet.add(fn);
   };
 
   const quit = () => {
@@ -32,7 +35,37 @@ export const createStreamHelper = (checkEnable?: () => boolean) => {
       subscription.unsubscribe();
     }
     subscriptions.length = 0;
+
+    for (const fn of deferFnSet) {
+      fn();
+    }
+    deferFnSet.clear();
   };
 
-  return { subscribe, quit };
+  return { subscribe, quit, manage, defer };
 };
+
+export const createMapHelper = <K, V>(map: Map<K, V>) => {
+  const need = (
+    key: K,
+    exist: (value: V) => void,
+    not?: () => V | undefined,
+  ) => {
+    const target = map.get(key);
+    if (target !== undefined) {
+      exist(target);
+    } else {
+      if (not !== undefined) {
+        const toInsert = not();
+
+        if (toInsert !== undefined) {
+          map.set(key, toInsert);
+        }
+      }
+    }
+  }
+
+  return {
+    need,
+  }
+}

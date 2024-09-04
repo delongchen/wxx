@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { VscMenu } from 'react-icons/vsc';
 import { GameflowPhaseEnum } from 'wxx-protobufs/lcu';
-import { SummonerState } from '../services/info-collect/collect-summoner';
+import { SummonerState } from '@/plugins/wxx-power/services/info-share/base-info-share.ts';
 import { useAppSelector } from '@/store';
 import { selectGlobal } from '@/store/modules/global';
 
@@ -37,7 +37,7 @@ const phaseInfoMap: PhaseEnumRecord<PhaseInfo> = Object.freeze({
     color: 'red',
   },
   [GameflowPhaseEnum.ReadyCheck]: {
-    text: '正在纠结接受还是拒绝',
+    text: '没点接受',
     color: 'yellow',
   },
   [GameflowPhaseEnum.InProgress]: {
@@ -45,11 +45,11 @@ const phaseInfoMap: PhaseEnumRecord<PhaseInfo> = Object.freeze({
     color: 'red',
   },
   [GameflowPhaseEnum.EndOfGame]: {
-    text: '正在赛后指指点点',
+    text: '赛后指点中',
     color: 'red',
   },
   [GameflowPhaseEnum.Lobby]: {
-    text: '可能在等哪个鸽子',
+    text: '等鸽子',
     color: 'yellow',
   },
   [GameflowPhaseEnum.GameStart]: {
@@ -57,7 +57,7 @@ const phaseInfoMap: PhaseEnumRecord<PhaseInfo> = Object.freeze({
     color: 'red',
   },
   [GameflowPhaseEnum.None]: {
-    text: '搁外头不知道在干啥',
+    text: '挂机中',
     color: 'green',
   },
   [GameflowPhaseEnum.Reconnect]: {
@@ -69,7 +69,7 @@ const phaseInfoMap: PhaseEnumRecord<PhaseInfo> = Object.freeze({
     color: 'yellow',
   },
   [GameflowPhaseEnum.PreEndOfGame]: {
-    text: '正在思考给谁投票',
+    text: '正在赛后投票',
     color: 'yellow',
   },
   [GameflowPhaseEnum.WatchInProgress]: {

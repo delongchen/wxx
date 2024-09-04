@@ -10,6 +10,7 @@ import './styles/index.css';
 
 import { use, initPlugins } from './use';
 import WxxPower from '@/plugins/wxx-power/index.tsx';
+import Dnw from '@/plugins/dnw';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
@@ -27,6 +28,7 @@ const render = () => {
 
 const main = async () => {
   use(WxxPower);
+  use(Dnw);
 
   await initPlugins();
 

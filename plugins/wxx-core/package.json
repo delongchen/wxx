@@ -1,6 +1,6 @@
 {
   "name": "tauri-plugin-wxx-core",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": {
     "name": "YUQI MAO"
   },
@@ -17,6 +17,10 @@
     "./*": {
       "types": "./dist-js/*/index.d.ts",
       "import": "./dist-js/*/index.js"
+    },
+    "./lcu-api/*": {
+      "types": "./dist-js/api/lcu-api/*.d.ts",
+      "import": "./dist-js/api/lcu-api/*.js"
     }
   },
   "files": [
@@ -30,10 +34,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@rollup/plugin-typescript": "^11.1.6",
-    "rollup": "^4.9.6",
     "tslib": "^2.6.2",
-    "typescript": "^5.3.3",
     "yaml": "^2.5.0"
   }
 }

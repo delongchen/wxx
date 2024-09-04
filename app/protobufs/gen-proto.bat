@@ -1,9 +1,14 @@
-set BASE_DIR=C:\Users\cdlfg\RustroverProjects\lol_helper\app\protobufs\src
+set "BASE_DIR=%CD%"
+set "SORUCE_DIR=%BASE_DIR%\src"
+
+del %BASE_DIR%\lib\*
 
 protoc ^
-    --proto_path=%BASE_DIR% ^
-    --plugin=protoc-gen-ts_proto=".\\node_modules\\.bin\\protoc-gen-ts_proto.cmd" ^
+    --proto_path=%SORUCE_DIR% ^
+    --plugin=protoc-gen-ts_proto=".\\node_modules\\.bin\\protoc-gen-ts_proto.CMD" ^
     --ts_proto_opt=outputIndex=true ^
     --ts_proto_out=".\\lib" ^
-    %BASE_DIR%\lcu\*.proto ^
-    %BASE_DIR%\common\*.proto
+    %SORUCE_DIR%\lcu\*.proto ^
+    %SORUCE_DIR%\common\*.proto
+
+npx tsc

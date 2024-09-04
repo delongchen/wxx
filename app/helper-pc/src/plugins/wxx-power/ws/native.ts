@@ -1,29 +1,8 @@
-import { Subject } from 'rxjs';
-import { BasicMessage } from 'wxx-protobufs/common';
-
-const isBlob = (value: unknown): value is Blob => {
-  return value instanceof Blob;
-};
-
-export const socketMessageSubject = new Subject<{
-  endpoint: string;
-  body: Uint8Array;
-}>();
-
-const handleMessage = async (data: Blob) => {
-  const view = new Uint8Array(await data.arrayBuffer());
-  const message = BasicMessage.decode(view);
-
-  if (message.header?.endpoint !== undefined) {
-    socketMessageSubject.next({
-      endpoint: message.header.endpoint,
-      body: message.body,
-    });
-  }
-};
+const FromVoidToVoid = () => {}
 
 export class WxxWebSocket {
   private ws: WebSocket | null = null;
+  public onmessage: ((ev: MessageEvent<unknown>) => void | Promise<void>) = FromVoidToVoid;
 
   constructor(
     private baseUrl: string,
@@ -55,11 +34,8 @@ export class WxxWebSocket {
       this.reconnect(group);
     };
     ws.onmessage = ev => {
-      const data = ev.data;
-      if (isBlob(data)) {
-        handleMessage(data).catch(console.error);
-      }
-    };
+      this.onmessage(ev)
+    }
 
     this.ws = ws;
   }
@@ -70,15 +46,18 @@ export class WxxWebSocket {
     }
   }
 
-  public sendTo(endpoint: string, body: Uint8Array) {
-    this.send(
-      BasicMessage.encode({
-        header: { endpoint },
-        body,
-      }).finish(),
-    );
+  public sendAsync(message: Uint8Array) {
+    return new Promise<void>((resolve, reject) => {
+      if (this.ws === null || this.ws.readyState !== WebSocket.OPEN) {
+        resolve()
+      } else {
+        try {
+          this.send(message);
+          resolve();
+        } catch (e: unknown) {
+          reject(e);
+        }
+      }
+    })
   }
 }
-
-export const ws = new WxxWebSocket('ws://localhost:11460');
-ws.connect();

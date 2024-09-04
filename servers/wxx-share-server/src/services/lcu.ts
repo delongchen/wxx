@@ -9,7 +9,7 @@ interface UserInfo {
 export const summonerMap: Map<number, UserInfo> = new Map();
 
 wsMessageBus.subscribe(message => {
-  if (message.endpoint === 'update-summoner') {
+  if (message.header.endpoint === 'update-summoner') {
     const cur = SummonerInfoBody.decode(message.body);
     const prev = summonerMap.get(cur.summonerId);
 
@@ -18,18 +18,15 @@ wsMessageBus.subscribe(message => {
     } else {
       summonerMap.set(cur.summonerId, {
         info: cur,
-        phase: GameflowPhaseEnum.Lobby,
+        phase: GameflowPhaseEnum.None,
       });
     }
-
-    message.group.broadcast(message.bytes);
-  } else if (message.endpoint === 'update-phase') {
+  } else if (message.header.endpoint === 'update-phase') {
     const cur = PhaseWithSummonerId.decode(message.body);
     const prev = summonerMap.get(cur.summonerId);
 
     if (prev !== undefined) {
       prev.phase = cur.phase;
-      message.group.broadcast(message.bytes);
     }
   }
 });

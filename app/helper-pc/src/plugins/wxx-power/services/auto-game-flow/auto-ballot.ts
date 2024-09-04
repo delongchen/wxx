@@ -1,6 +1,6 @@
 import { gameBallotStream } from '../../lcu/event-stream';
 import { BallotLegacy } from 'tauri-plugin-wxx-core';
-import { lcuFetch } from 'tauri-plugin-wxx-core/api';
+import { honor } from 'tauri-plugin-wxx-core/lcu-api/honor-v2'
 import store from '@/store';
 
 const handleBallot = async (matchInfo: BallotLegacy) => {
@@ -9,14 +9,10 @@ const handleBallot = async (matchInfo: BallotLegacy) => {
 
   const { gameId } = matchInfo;
 
-  await lcuFetch({
-    method: 'post',
-    endpoint: '/lol-honor-v2/v1/honor-player',
-    body: {
-      gameId,
-      honorCategory: 'OPT_OUT',
-      summonerId: 0,
-    },
+  await honor({
+    gameId,
+    honorCategory: 'OPT_OUT',
+    summonerId: 0,
   });
 };
 

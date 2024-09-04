@@ -3,7 +3,7 @@ import {
   summonerStateMap,
   SummonerState,
   summonerMapChange,
-} from '../../services/info-collect/collect-summoner';
+} from '@/plugins/wxx-power/services/info-share/base-info-share.ts';
 import SummonerCard from '@/plugins/wxx-power/components/summoner-card.tsx';
 
 function SummonerList() {

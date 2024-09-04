@@ -1,5 +1,6 @@
 import { filter, switchMap, of, timer } from 'rxjs';
-import { GameflowPhase, lcuFetch } from 'tauri-plugin-wxx-core';
+import { GameflowPhase } from 'tauri-plugin-wxx-core';
+import { playAgain } from 'tauri-plugin-wxx-core/lcu-api/lobby'
 import { gameFlowPhaseStream } from '../../lcu/event-stream';
 import store from '@/store';
 
@@ -16,13 +17,10 @@ const allowedPhaseSet = new Set<AllowedPhase>([
   'None',
 ]);
 
-const playAgain = () => {
+const doPlayAgain = () => {
   if (!store.getState().wxxPower.autoNextMatch) return;
 
-  lcuFetch({
-    method: 'post',
-    endpoint: '/lol-lobby/v2/play-again',
-  });
+  playAgain();
 };
 
 const isAllowedPhase = (phase: string): phase is AllowedPhase =>
@@ -45,7 +43,7 @@ export const startAutoPlayAgain = () => {
         return of();
       }),
     )
-    .subscribe(playAgain);
+    .subscribe(doPlayAgain);
 
   return () => subscription.unsubscribe();
 };

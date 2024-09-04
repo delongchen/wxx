@@ -6,10 +6,12 @@
   "main": "./lib/index.ts",
   "exports": {
     ".": {
-      "import": "./lib/index.ts"
+      "types": "./lib/index.ts",
+      "import": "./lib/index.js"
     },
     "./*": {
-      "import": "./lib/index.*.ts"
+      "types": "./lib/index.*.ts",
+      "import": "./lib/index.*.js"
     }
   },
   "scripts": {

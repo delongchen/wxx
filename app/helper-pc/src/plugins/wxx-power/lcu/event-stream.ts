@@ -8,7 +8,14 @@ import {
   GameflowPhase,
   SummonerInfo,
   BallotLegacy,
+  lcuEventStream,
 } from 'tauri-plugin-wxx-core';
+
+lcuEventStream.subscribe(ev => {
+  if (ev.payload.uri === '/lol-lobby/v2/lobby') {
+    console.log(ev.payload);
+  }
+})
 
 export const gameFlowPhaseStream = subStream<GameflowPhase>('/lol-gameflow/v1/gameflow-phase', [
   'Update',

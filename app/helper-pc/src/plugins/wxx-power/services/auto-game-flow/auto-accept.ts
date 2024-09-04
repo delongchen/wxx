@@ -1,26 +1,20 @@
 import { gameFlowPhaseStream } from '../../lcu/event-stream';
 import { filter, debounceTime } from 'rxjs';
 import store from '@/store';
-import { lcuFetch } from 'tauri-plugin-wxx-core/api';
+import { accept } from 'tauri-plugin-wxx-core/lcu-api/match-making'
 
 const gameReadyCheckStream = gameFlowPhaseStream.pipe(
   filter(phase => phase === 'ReadyCheck'),
   debounceTime(200),
 );
 
-const accept = async () => {
-  const enable = store.getState().wxxPower.autoAcceptMatch;
-
-  if (enable) {
-    await lcuFetch({
-      method: 'post',
-      endpoint: '/lol-matchmaking/v1/ready-check/accept',
-    });
-  }
-};
-
 export const startAutoAccept = () => {
-  const subscription = gameReadyCheckStream.subscribe(accept);
+  const subscription = gameReadyCheckStream
+    .subscribe(() => {
+      if (store.getState().wxxPower.autoAcceptMatch) {
+        accept();
+      }
+    });
 
   return () => subscription.unsubscribe();
 };

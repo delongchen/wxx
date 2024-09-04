@@ -9,24 +9,25 @@ export type LcuAllowedMethod =
   | 'PUT'
   | 'delete'
   | 'DELETE'
+  | 'patch'
+  | 'PATCH'
 
-type RequestBody = Record<string, any>
+export type RequestBody = Record<string, any>
 
-export interface LcuFetchRequest {
-  method: LcuAllowedMethod
-  endpoint: string
-  body?: RequestBody | null
-}
-
-export const lcuFetch = async <T>(req: LcuFetchRequest) => {
+export const lcuFetch = async <T = unknown>(
+  endpoint: string,
+  options: {
+    method?: LcuAllowedMethod,
+    body?: RequestBody
+  } = {},
+) => {
   const {
-    method,
-    endpoint,
-    body = null
-  } = req
+    method = 'get',
+    body = null,
+  } = options
 
   return invoke<T>(
     'plugin:wxx-core|lcu_fetch',
-    { method, endpoint, body }
+    { endpoint, method, body },
   )
 }
