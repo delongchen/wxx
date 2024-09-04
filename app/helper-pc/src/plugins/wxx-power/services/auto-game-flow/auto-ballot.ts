@@ -1,6 +1,6 @@
 import { gameBallotStream } from '../../lcu/event-stream';
 import { BallotLegacy } from 'tauri-plugin-wxx-core';
-import { honor } from 'tauri-plugin-wxx-core/lcu-api/honor-v2'
+import { honor } from 'tauri-plugin-wxx-core/lcu-api/honor-v2';
 import store from '@/store';
 
 const handleBallot = async (matchInfo: BallotLegacy) => {

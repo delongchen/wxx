@@ -2,9 +2,7 @@ import { WxxPluginType } from '@/types/plugin';
 
 const dnw: WxxPluginType = {
   name: 'dnw',
-  async install() {
+  async install() {},
+};
 
-  }
-}
-
-export default dnw
+export default dnw;

@@ -20,7 +20,7 @@ export const createSubscriptionManager = () => {
 
   const manage = (...s: Subscription[]) => {
     subscriptions.push(...s);
-  }
+  };
 
   const subscribe = <T>(ob: Observable<T>, f: (value: T) => Promise<void> | void) => {
     manage(ob.subscribe(f));
@@ -46,11 +46,7 @@ export const createSubscriptionManager = () => {
 };
 
 export const createMapHelper = <K, V>(map: Map<K, V>) => {
-  const need = (
-    key: K,
-    exist: (value: V) => void,
-    not?: () => V | undefined,
-  ) => {
+  const need = (key: K, exist: (value: V) => void, not?: () => V | undefined) => {
     const target = map.get(key);
     if (target !== undefined) {
       exist(target);
@@ -63,9 +59,9 @@ export const createMapHelper = <K, V>(map: Map<K, V>) => {
         }
       }
     }
-  }
+  };
 
   return {
     need,
-  }
-}
+  };
+};

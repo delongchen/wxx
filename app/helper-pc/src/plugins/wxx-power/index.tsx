@@ -8,7 +8,6 @@ import GroupPage from './pages/group-page';
 import { VscCloud } from 'react-icons/vsc';
 import { startServices } from './services';
 
-
 const wxxPower: WxxPluginType = {
   name: 'wxx-power',
   async install(ctx) {

@@ -1,8 +1,8 @@
-const FromVoidToVoid = () => {}
+const FromVoidToVoid = () => {};
 
 export class WxxWebSocket {
   private ws: WebSocket | null = null;
-  public onmessage: ((ev: MessageEvent<unknown>) => void | Promise<void>) = FromVoidToVoid;
+  public onmessage: (ev: MessageEvent<unknown>) => void | Promise<void> = FromVoidToVoid;
 
   constructor(
     private baseUrl: string,
@@ -34,8 +34,8 @@ export class WxxWebSocket {
       this.reconnect(group);
     };
     ws.onmessage = ev => {
-      this.onmessage(ev)
-    }
+      this.onmessage(ev);
+    };
 
     this.ws = ws;
   }
@@ -49,7 +49,7 @@ export class WxxWebSocket {
   public sendAsync(message: Uint8Array) {
     return new Promise<void>((resolve, reject) => {
       if (this.ws === null || this.ws.readyState !== WebSocket.OPEN) {
-        resolve()
+        resolve();
       } else {
         try {
           this.send(message);
@@ -58,6 +58,6 @@ export class WxxWebSocket {
           reject(e);
         }
       }
-    })
+    });
   }
 }

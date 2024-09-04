@@ -1,4 +1,8 @@
-import { currentSummonerUpdateStream, gameFlowPhaseStream } from '../../lcu/event-stream';
+import {
+  currentSummonerUpdateStream,
+  gameFlowPhaseStream,
+  lobbyStream,
+} from '../../lcu/event-stream';
 import { LcuProcessStatus, processStatusStream } from 'tauri-plugin-wxx-core/events';
 import { GameflowPhase, SummonerInfo } from 'tauri-plugin-wxx-core';
 import { getCurrentSummoner } from 'tauri-plugin-wxx-core/lcu-api/summoner';
@@ -26,17 +30,14 @@ const getPhaseWithPhase = (raw?: GameflowPhase): PhaseWithSummonerId | undefined
 
   return {
     summonerId: currentSummoner.summonerId,
-    phase: raw === undefined ?
-      GameflowPhaseEnum.UNRECOGNIZED
-      :
-      GameflowPhaseEnum[raw],
-  }
-}
+    phase: raw === undefined ? GameflowPhaseEnum.UNRECOGNIZED : GameflowPhaseEnum[raw],
+  };
+};
 
 const handleSummonerInfo = (info: SummonerInfo) => {
   currentSummoner = info;
   return info;
-}
+};
 
 const fetchGroupSummoners = (): Promise<SummonerState[]> =>
   fetch('http://localhost:11460/summoners', { method: 'GET' })
@@ -49,26 +50,32 @@ const enum Endpoints {
 }
 
 const refreshSummoners = () => {
-  fetchGroupSummoners().then(states => {
-    for (const state of states) {
-      summonerStateMap.set(state.info.summonerId, state);
-    }
-  }).then(emitMapChange);
+  fetchGroupSummoners()
+    .then(states => {
+      for (const state of states) {
+        summonerStateMap.set(state.info.summonerId, state);
+      }
+    })
+    .then(emitMapChange);
 };
 
-export const baseInfoShare = () => {
+export default () => {
   const { subscribe, quit, manage, defer } = createSubscriptionManager();
 
   refreshSummoners();
 
+  subscribe(lobbyStream, console.log);
+
   const summonerChan = shareChannel(Endpoints.ShareSummoner, SummonerInfoBody);
-  defer(summonerChan.stop)
+  defer(summonerChan.stop);
   manage(
     summonerChan.sendOn(currentSummonerUpdateStream, handleSummonerInfo),
     summonerChan.receive(info => {
       stateMapHelper.need(
         info.summonerId,
-        state => { state.info = info; },
+        state => {
+          state.info = info;
+        },
         () => ({ info, phase: GameflowPhaseEnum.None }),
       );
       emitMapChange();
@@ -76,33 +83,29 @@ export const baseInfoShare = () => {
   );
 
   const phaseChan = shareChannel(Endpoints.SharePhase, PhaseWithSummonerId);
-  defer(phaseChan.stop)
+  defer(phaseChan.stop);
   manage(
     phaseChan.sendOn(gameFlowPhaseStream, getPhaseWithPhase),
     phaseChan.receive(message => {
-      stateMapHelper.need(
-        message.summonerId,
-        state => {
-          if (message.phase !== state.phase) {
-            state.phase = message.phase;
-            emitMapChange();
-          }
-        },
-      );
+      stateMapHelper.need(message.summonerId, state => {
+        if (message.phase !== state.phase) {
+          state.phase = message.phase;
+          emitMapChange();
+        }
+      });
     }),
   );
 
   subscribe(processStatusStream, async status => {
     if (status === LcuProcessStatus.Started) {
-      await getCurrentSummoner()
-        .then(handleSummonerInfo)
-        .then(summonerChan.send);
+      await getCurrentSummoner().then(handleSummonerInfo).then(summonerChan.send);
 
-      await getGameflowPhase()
-        .then(getPhaseWithPhase)
-        .then(phaseChan.send);
+      await getGameflowPhase().then(getPhaseWithPhase).then(phaseChan.send);
     } else {
-      phaseChan.send(getPhaseWithPhase());
+      phaseChan.send(getPhaseWithPhase())
+        .finally(() => {
+          console.log('lol exit.');
+        });
       currentSummoner = null;
     }
   });

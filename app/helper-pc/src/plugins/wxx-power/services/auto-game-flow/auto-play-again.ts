@@ -1,6 +1,6 @@
 import { filter, switchMap, of, timer } from 'rxjs';
 import { GameflowPhase } from 'tauri-plugin-wxx-core';
-import { playAgain } from 'tauri-plugin-wxx-core/lcu-api/lobby'
+import { playAgain } from 'tauri-plugin-wxx-core/lcu-api/lobby';
 import { gameFlowPhaseStream } from '../../lcu/event-stream';
 import store from '@/store';
 

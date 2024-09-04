@@ -1,6 +1,6 @@
 import { concat } from './utils';
 
 import autoGameFlow from './auto-game-flow';
-import { baseInfoShare } from '@/plugins/wxx-power/services/info-share/base-info-share.ts';
+import infoShare from './info-share'
 
-export const startServices = concat(autoGameFlow, baseInfoShare);
+export const startServices = concat(autoGameFlow, infoShare);

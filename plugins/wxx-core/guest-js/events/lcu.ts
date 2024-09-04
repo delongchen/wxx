@@ -1,7 +1,5 @@
-import {
-  createTauriEventStream
-} from "./utils";
-import { share, filter, map, Observable } from 'rxjs'
+import {createTauriEventStream} from "./utils";
+import {filter, map, Observable, share} from 'rxjs'
 
 export type LcuEventTypeEnum = 'Update' | 'Create' | 'Delete'
 
@@ -18,22 +16,16 @@ export const lcuEventStream =
 export const createSubLcuEventStream = <T = unknown>(
   uri: string,
   eventTypes: LcuEventTypeEnum[],
-  shared: boolean = true,
 ): Observable<T> => {
   const allowedTypeSet = new Set(eventTypes)
 
-  const result = lcuEventStream
+  return lcuEventStream
     .pipe(
       filter(ev =>
         ev.payload.uri === uri &&
         allowedTypeSet.has(ev.payload.eventType)
       ),
       map(ev => ev.payload.data as T),
+      share(),
     )
-
-  if (shared) {
-    return result.pipe(share())
-  }
-
-  return result
 }
