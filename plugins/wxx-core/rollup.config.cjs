@@ -22,7 +22,6 @@ module.exports = {
   ],
   external: [
     /^@tauri-apps\/api/,
-    'rxjs',
     ...Object.keys(pkg.dependencies || {}),
     ...Object.keys(pkg.peerDependencies || {}),
   ]

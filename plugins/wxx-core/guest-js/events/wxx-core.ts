@@ -1,5 +1,4 @@
-import { createTauriEventStream } from "./utils";
-import { distinctUntilChanged, map, share } from "rxjs";
+import {createListenFn} from "./utils";
 
 
 export enum LcuProcessStatus {
@@ -8,11 +7,4 @@ export enum LcuProcessStatus {
   Started,
 }
 
-export const processStatusStream =
-  createTauriEventStream<LcuProcessStatus>(
-    'LCU_PROCESS_STATUS_EVENT'
-  ).pipe(
-    map(ev => ev.payload),
-    distinctUntilChanged(),
-    share(),
-  )
+export const listenProcessStatus = createListenFn<LcuProcessStatus>('LCU_PROCESS_STATUS_EVENT');

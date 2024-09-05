@@ -4,7 +4,6 @@ import { SimpleLobbyInfo } from 'wxx-protobufs/lcu';
 import { lobbyStream } from '../../lcu/event-stream';
 import { Lobby } from 'tauri-plugin-wxx-core';
 
-
 const lobbyMap = new Map<string, SimpleLobbyInfo>();
 const lobbyMapHelper = createMapHelper(lobbyMap);
 

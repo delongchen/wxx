@@ -1,15 +1,5 @@
-import { listen, Event as TauriEvent } from "@tauri-apps/api/event";
-import { Observable } from 'rxjs'
+import { listen, EventCallback } from '@tauri-apps/api/event'
 
 
-export const createTauriEventStream = <T>(
-  eventName: string,
-) => new Observable<TauriEvent<T>>(subscriber => {
-  const unlistenPromise = listen<T>(eventName, event => {
-    subscriber.next(event)
-  })
-
-  return () => {
-    unlistenPromise.then(unlisten => unlisten())
-  }
-})
+export const createListenFn = <T>(eventName: string) =>
+  (listener: EventCallback<T>) => listen(eventName, listener);

@@ -3,7 +3,7 @@ import {
   gameFlowPhaseStream,
   lobbyStream,
 } from '../../lcu/event-stream';
-import { LcuProcessStatus, processStatusStream } from 'tauri-plugin-wxx-core/events';
+import { LcuProcessStatus } from 'tauri-plugin-wxx-core/events';
 import { GameflowPhase, SummonerInfo } from 'tauri-plugin-wxx-core';
 import { getCurrentSummoner } from 'tauri-plugin-wxx-core/lcu-api/summoner';
 import { getGameflowPhase } from 'tauri-plugin-wxx-core/lcu-api/gameflow';
@@ -11,6 +11,7 @@ import { GameflowPhaseEnum, PhaseWithSummonerId, SummonerInfoBody } from 'wxx-pr
 import { createSubscriptionManager, createMapHelper } from '../utils';
 import { Subject } from 'rxjs';
 import { shareChannel } from './share-channel';
+import { lcuProcessStatusBus } from '../../lcu/process';
 
 export interface SummonerState {
   info: SummonerInfoBody;
@@ -96,16 +97,13 @@ export default () => {
     }),
   );
 
-  subscribe(processStatusStream, async status => {
+  subscribe(lcuProcessStatusBus, async status => {
     if (status === LcuProcessStatus.Started) {
       await getCurrentSummoner().then(handleSummonerInfo).then(summonerChan.send);
-
       await getGameflowPhase().then(getPhaseWithPhase).then(phaseChan.send);
     } else {
-      phaseChan.send(getPhaseWithPhase())
-        .finally(() => {
-          console.log('lol exit.');
-        });
+      phaseChan.send(getPhaseWithPhase()).catch(() => console.log('lol exit.'));
+
       currentSummoner = null;
     }
   });
