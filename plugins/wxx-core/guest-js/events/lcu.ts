@@ -8,4 +8,4 @@ export interface LcuEventType<T = unknown> {
   data: T
 }
 
-export const listenLcuEvent = createListenFn<LcuEventType>('LCU_WX_EVENT');
+export const listenLcuEvent = createListenFn<LcuEventType>('LCU_WS_EVENT');

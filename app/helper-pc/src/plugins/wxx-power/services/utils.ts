@@ -46,18 +46,25 @@ export const createSubscriptionManager = () => {
 };
 
 export const createMapHelper = <K, V>(map: Map<K, V>) => {
-  const need = (key: K, exist: (value: V) => void, not?: () => V | undefined) => {
+  const need = (
+    key: K,
+    exist: (value: V, setter: (value: V) => void) => void,
+    not?: (setter: (value: V) => void) => void,
+  ) => {
     const target = map.get(key);
-    if (target !== undefined) {
-      exist(target);
-    } else {
-      if (not !== undefined) {
-        const toInsert = not();
-
-        if (toInsert !== undefined) {
-          map.set(key, toInsert);
-        }
+    const setter = (value?: V) => {
+      if (value === undefined) {
+        map.delete(key);
+        return;
       }
+
+      map.set(key, value);
+    };
+
+    if (target !== undefined) {
+      exist(target, setter);
+    } else if (not !== undefined) {
+      not(setter);
     }
   };
 

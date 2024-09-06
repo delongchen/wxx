@@ -1,8 +1,4 @@
-import {
-  currentSummonerUpdateStream,
-  gameFlowPhaseStream,
-  lobbyStream,
-} from '../../lcu/event-stream';
+import { currentSummonerUpdateStream, gameFlowPhaseStream } from '../../lcu/event-stream';
 import { LcuProcessStatus } from 'tauri-plugin-wxx-core/events';
 import { GameflowPhase, SummonerInfo } from 'tauri-plugin-wxx-core';
 import { getCurrentSummoner } from 'tauri-plugin-wxx-core/lcu-api/summoner';
@@ -65,8 +61,6 @@ export default () => {
 
   refreshSummoners();
 
-  subscribe(lobbyStream, console.log);
-
   const summonerChan = shareChannel(Endpoints.ShareSummoner, SummonerInfoBody);
   defer(summonerChan.stop);
   manage(
@@ -77,7 +71,7 @@ export default () => {
         state => {
           state.info = info;
         },
-        () => ({ info, phase: GameflowPhaseEnum.None }),
+        setter => setter({ info, phase: GameflowPhaseEnum.None }),
       );
       emitMapChange();
     }),

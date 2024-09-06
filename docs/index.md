@@ -3,9 +3,8 @@
 layout: home
 
 hero:
-  name: "WXX"
-  text: "WXX dev docs"
-  tagline: My great project tagline
+  name: "WxxDocs"
+  text: "dev documents"
   actions:
     - theme: brand
       text: Markdown Examples

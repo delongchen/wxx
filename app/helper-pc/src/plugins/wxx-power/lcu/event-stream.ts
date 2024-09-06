@@ -7,7 +7,6 @@ import {
   GameflowPhase,
   SummonerInfo,
   BallotLegacy,
-  Lobby,
   TauriEvent,
   LcuEventType,
   listenLcuEvent,
@@ -16,34 +15,42 @@ import {
 import { Subject, Observable, filter, map, share } from 'rxjs';
 
 const lcuEventBus = new Subject<TauriEvent<LcuEventType>>();
-listenLcuEvent(ev => lcuEventBus.next(ev));
+listenLcuEvent(ev => lcuEventBus.next(ev)).catch(console.error);
 
-export const subStream = <T = unknown>(
+export const createSubStream = <T = unknown>(
   uri: string,
-  eventTypes: LcuEventTypeEnum[],
+  eventTypes: (LcuEventTypeEnum | 'All')[],
+  isSharing: boolean = true,
+  mapper?: (ev: TauriEvent<LcuEventType>) => T,
 ): Observable<T> => {
-  const allowedTypeSet = new Set(eventTypes);
+  const customTypeSet = new Set(eventTypes);
 
-  return lcuEventBus.pipe(
-    filter(ev => ev.payload.uri === uri && allowedTypeSet.has(ev.payload.eventType)),
-    map(ev => ev.payload.data as T),
-    share(),
-  );
+  const checker = customTypeSet.has('All')
+    ? (ev: TauriEvent<LcuEventType>) => ev.payload.uri === uri
+    : (ev: TauriEvent<LcuEventType>) =>
+        ev.payload.uri === uri && customTypeSet.has(ev.payload.eventType);
+
+  mapper ??= (ev: TauriEvent<LcuEventType>) => {
+    return ev.payload.data as T;
+  };
+
+  if (!isSharing) {
+    return lcuEventBus.pipe(filter(checker), map(mapper));
+  }
+
+  return lcuEventBus.pipe(filter(checker), map(mapper), share());
 };
 
-export const lobbyStream = subStream<Lobby | null>('/lol-lobby/v2/lobby', [
-  'Create',
-  'Update',
-  'Delete',
-]);
+export const gameFlowPhaseStream = createSubStream<GameflowPhase>(
+  '/lol-gameflow/v1/gameflow-phase',
+  ['Update'],
+);
 
-export const gameFlowPhaseStream = subStream<GameflowPhase>('/lol-gameflow/v1/gameflow-phase', [
-  'Update',
-]);
-
-export const currentSummonerUpdateStream = subStream<SummonerInfo>(
+export const currentSummonerUpdateStream = createSubStream<SummonerInfo>(
   '/lol-summoner/v1/current-summoner',
   ['Update'],
 );
 
-export const gameBallotStream = subStream<BallotLegacy>('/lol-honor-v2/v1/ballot', ['Create']);
+export const gameBallotStream = createSubStream<BallotLegacy>('/lol-honor-v2/v1/ballot', [
+  'Create',
+]);

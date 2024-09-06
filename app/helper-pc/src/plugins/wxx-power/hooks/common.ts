@@ -34,12 +34,15 @@ export const useCurrentSummoner = () => {
       setCurrentSummoner(await getCurrentSummoner());
     };
 
-    fn().catch(() => {
-      setCurrentSummoner(null);
-    });
+    fn().catch(() => {});
   }, []);
 
   subscribe(currentSummonerUpdateStream, setCurrentSummoner);
+  subscribe(lcuProcessStatusBus, status => {
+    if (status === LcuProcessStatus.NotStarted) {
+      setCurrentSummoner(null);
+    }
+  });
 
   return currentSummoner;
 };
