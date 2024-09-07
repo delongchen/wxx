@@ -1,5 +1,4 @@
 import { GameflowPhaseEnum, SummonerInfoBody, PhaseWithSummonerId } from 'wxx-protobufs/lcu';
-import { wsMessageBus } from '../ws/manager';
 
 interface UserInfo {
   info: SummonerInfoBody;

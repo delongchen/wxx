@@ -9,5 +9,5 @@ message SimpleLocalMember {
 
 message SimpleLobbyInfo {
   string partyId = 1;
-  repeated SimpleLocalMember members = 2;
+  map<int64, SimpleLocalMember> memberMap = 2;
 }

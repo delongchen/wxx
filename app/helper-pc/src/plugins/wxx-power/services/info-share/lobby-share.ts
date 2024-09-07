@@ -14,7 +14,10 @@ const handleLcuLobby = (lobby: Lobby | null): SimpleLobbyInfo | undefined => {
     return undefined;
   }
 
-  return lobby;
+  return {
+    partyId: lobby.partyId,
+    memberMap: Object.fromEntries(lobby.members.map(member => [member.summonerId, member])),
+  };
 };
 
 export default () => {
@@ -32,7 +35,6 @@ export default () => {
       lobbyMapHelper.need(
         lobby.partyId,
         curLobby => {
-          curLobby.members = lobby.members;
           lobbyMapChange.next();
         },
         setter => {

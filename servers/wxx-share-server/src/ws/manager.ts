@@ -1,7 +1,5 @@
 import { WebSocket } from 'ws';
 import { IncomingMessage } from 'node:http';
-import { BasicMessage, MessageHeader } from 'wxx-protobufs/common';
-import { Subject } from 'rxjs';
 
 const HeartbeatInterval = 1000 * 10;
 
@@ -29,12 +27,6 @@ const sendAsync = async (ws: WebSocket, data: Uint8Array) => {
 
 export const groupMap: Map<string, WxxGroup> = new Map();
 
-export const wsMessageBus = new Subject<{
-  group: WxxGroup;
-  header: MessageHeader,
-  body: Uint8Array;
-}>();
-
 export class WxxGroup {
   private readonly connections: Map<WebSocket, ConnectionInfo> = new Map();
 
@@ -46,18 +38,6 @@ export class WxxGroup {
     ws.on('pong', () => this.reset(ws));
     ws.on('message', (message: Buffer, isBinary) => {
       if (!isBinary) return;
-
-      const msg = BasicMessage.decode(message);
-
-      if (msg.header !== undefined) {
-        wsMessageBus.next({
-          group: this,
-          header: msg.header,
-          body: msg.body,
-        });
-
-        this.broadcast(message);
-      }
     });
   }
 
