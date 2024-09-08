@@ -1,6 +1,6 @@
 import { createMapHelper, createSubscriptionManager } from '../utils';
 import { shareChannel } from './share-channel';
-import { SimpleLobbyInfo } from 'wxx-protobufs/lcu';
+import { SimpleLobbyInfo } from 'wxx-protobufs/lcu.lobby';
 import { createSubStream } from '../../lcu/event-stream';
 import { Lobby } from 'tauri-plugin-wxx-core';
 import { debounceTime, Subject } from 'rxjs';
@@ -35,6 +35,7 @@ export default () => {
       lobbyMapHelper.need(
         lobby.partyId,
         curLobby => {
+          console.log(curLobby);
           lobbyMapChange.next();
         },
         setter => {

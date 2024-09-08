@@ -32,10 +32,7 @@ const getPhaseWithPhase = (raw?: GameflowPhase): PhaseWithSummonerId | undefined
   };
 };
 
-const handleSummonerInfo = (info: SummonerInfo) => {
-  currentSummoner = info;
-  return info;
-};
+const handleSummonerInfo = (info: SummonerInfo) => currentSummoner = info;
 
 const fetchGroupSummoners = (): Promise<SummonerState[]> =>
   fetch('http://localhost:11460/summoners', { method: 'GET' })

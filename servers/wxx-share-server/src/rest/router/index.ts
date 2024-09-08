@@ -1,5 +1,5 @@
 import KoaRouter from '@koa/router';
-import { summonerMap } from '../../services/lcu';
+import { sharingState } from '../../services/sharing/store';
 import { getIcon } from '../../services/profile-icon';
 
 export const router = new KoaRouter();
@@ -12,7 +12,7 @@ router.options('/summoners', context => {
 
 router.get('/summoners', async (ctx, next) => {
   ctx.set('Access-Control-Allow-Origin', '*');
-  ctx.body = [...summonerMap.values()];
+  ctx.body = [...sharingState.summonerMap.values()];
 });
 
 router.get('/profile-icon/:id', async ctx => {

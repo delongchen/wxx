@@ -18,6 +18,7 @@ export interface Serializer<T = unknown> {
 
 export interface Context<T> {
   data: T;
+  broadcast: () => void;
   result?: T;
   target?: ResponseTarget;
 }
