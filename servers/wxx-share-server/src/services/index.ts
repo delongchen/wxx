@@ -1,2 +1,2 @@
-import './lcu';
 import './profile-icon';
+import './sharing'

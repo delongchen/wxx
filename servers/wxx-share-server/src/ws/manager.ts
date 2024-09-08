@@ -1,5 +1,7 @@
 import { WebSocket } from 'ws';
 import { IncomingMessage } from 'node:http';
+import { handleIncomingMessage } from '../services/sharing';
+import { ResponseTarget } from '../services/sharing/types'
 
 const HeartbeatInterval = 1000 * 10;
 
@@ -38,6 +40,13 @@ export class WxxGroup {
     ws.on('pong', () => this.reset(ws));
     ws.on('message', (message: Buffer, isBinary) => {
       if (!isBinary) return;
+
+      handleIncomingMessage(message)
+        .then(res => {
+          if (res === null) return;
+          return this.sendTo(ws, res.target, res.bytes);
+        })
+        .catch(console.error);
     });
   }
 
@@ -86,22 +95,22 @@ export class WxxGroup {
     }
   }
 
-  public sendTo(self: WebSocket, target: 'all' | 'others' | 'self', data: Uint8Array) {
+  public sendTo(self: WebSocket, target: ResponseTarget, data: Uint8Array) {
     if (this.connections.size === 0) {
       return;
     }
 
-    if (target === 'all') {
+    if (target === ResponseTarget.All) {
       for (const connection of this.connections.keys()) {
         sendAsync(connection, data);
       }
-    } else if (target === 'others') {
+    } else if (target === ResponseTarget.Others) {
       for (const connection of this.connections.keys()) {
         if (connection !== self) {
           sendAsync(connection, data);
         }
       }
-    } else if (target === 'self') {
+    } else if (target === ResponseTarget.Self) {
       sendAsync(self, data);
     }
   }

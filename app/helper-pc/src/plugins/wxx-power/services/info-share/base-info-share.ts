@@ -3,7 +3,8 @@ import { LcuProcessStatus } from 'tauri-plugin-wxx-core/events';
 import { GameflowPhase, SummonerInfo } from 'tauri-plugin-wxx-core';
 import { getCurrentSummoner } from 'tauri-plugin-wxx-core/lcu-api/summoner';
 import { getGameflowPhase } from 'tauri-plugin-wxx-core/lcu-api/gameflow';
-import { GameflowPhaseEnum, PhaseWithSummonerId, SummonerInfoBody } from 'wxx-protobufs/lcu';
+import { GameflowPhaseEnum, PhaseWithSummonerId, GamePhaseSharingServiceName } from 'wxx-protobufs/lcu.gameflow';
+import { SummonerInfoBody, SummonerSharingServiceName } from 'wxx-protobufs/lcu.summoner'
 import { createSubscriptionManager, createMapHelper } from '../utils';
 import { Subject } from 'rxjs';
 import { shareChannel } from './share-channel';
@@ -41,11 +42,6 @@ const fetchGroupSummoners = (): Promise<SummonerState[]> =>
     .then(res => res.json())
     .catch(() => []);
 
-const enum Endpoints {
-  ShareSummoner = 'share-summoner',
-  SharePhase = 'share-phase',
-}
-
 const refreshSummoners = () => {
   fetchGroupSummoners()
     .then(states => {
@@ -61,7 +57,7 @@ export default () => {
 
   refreshSummoners();
 
-  const summonerChan = shareChannel(Endpoints.ShareSummoner, SummonerInfoBody);
+  const summonerChan = shareChannel(SummonerSharingServiceName, SummonerInfoBody);
   defer(summonerChan.stop);
   manage(
     summonerChan.sendOn(currentSummonerUpdateStream, handleSummonerInfo),
@@ -77,7 +73,7 @@ export default () => {
     }),
   );
 
-  const phaseChan = shareChannel(Endpoints.SharePhase, PhaseWithSummonerId);
+  const phaseChan = shareChannel(GamePhaseSharingServiceName, PhaseWithSummonerId);
   defer(phaseChan.stop);
   manage(
     phaseChan.sendOn(gameFlowPhaseStream, getPhaseWithPhase),

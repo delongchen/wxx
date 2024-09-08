@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package lcu;
+package lcu.gameflow;
 
 enum GameflowPhaseEnum {
   Matchmaking = 0; // 正在匹配
@@ -21,3 +21,5 @@ message PhaseWithSummonerId {
   GameflowPhaseEnum phase = 1;
   uint64 summonerId = 2;
 }
+
+service GamePhaseSharing {}

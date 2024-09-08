@@ -15,7 +15,7 @@ import {
   Progress,
 } from '@chakra-ui/react';
 import { VscMenu } from 'react-icons/vsc';
-import { GameflowPhaseEnum } from 'wxx-protobufs/lcu';
+import { GameflowPhaseEnum } from 'wxx-protobufs/lcu.gameflow';
 import { SummonerState } from '@/plugins/wxx-power/services/info-share/base-info-share.ts';
 import { useAppSelector } from '@/store';
 import { selectGlobal } from '@/store/modules/global';

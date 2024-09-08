@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package lcu;
+package lcu.summoner;
 
 message RerollPoints {
   int32 currentPoints = 1;
@@ -28,3 +28,5 @@ message SummonerInfoBody {
   string tagLine = 15;
   RerollPoints rerollPoints = 16;
 }
+
+service SummonerSharing {}

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package lcu;
+package lcu.lobby;
 
 message SimpleLocalMember {
   bool isLeader = 1;
@@ -11,3 +11,5 @@ message SimpleLobbyInfo {
   string partyId = 1;
   map<int64, SimpleLocalMember> memberMap = 2;
 }
+
+service LobbySharing {}
