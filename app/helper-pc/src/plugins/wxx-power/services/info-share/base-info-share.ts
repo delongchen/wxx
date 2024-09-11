@@ -3,25 +3,39 @@ import { LcuProcessStatus } from 'tauri-plugin-wxx-core/events';
 import { GameflowPhase, SummonerInfo } from 'tauri-plugin-wxx-core';
 import { getCurrentSummoner } from 'tauri-plugin-wxx-core/lcu-api/summoner';
 import { getGameflowPhase } from 'tauri-plugin-wxx-core/lcu-api/gameflow';
-import { GameflowPhaseEnum, PhaseWithSummonerId, GamePhaseSharingServiceName } from 'wxx-protobufs/lcu.gameflow';
-import { SummonerInfoRaw, SummonerSharingServiceName } from 'wxx-protobufs/lcu.summoner'
+import {
+  GameflowPhaseEnum,
+  PhaseWithSummonerId,
+  GamePhaseSharingServiceName,
+} from 'wxx-protobufs/lcu.gameflow';
+import { SummonerInfoRaw, SummonerSharingServiceName } from 'wxx-protobufs/lcu.summoner';
+import { SummonerStates, SummonerState } from 'wxx-protobufs/rest.user';
 import { createSubscriptionManager, createMapHelper } from '../utils';
 import { Subject } from 'rxjs';
 import { shareChannel } from './share-channel';
 import { lcuProcessStatusBus } from '../../lcu/process';
 
-export interface SummonerState {
-  info: SummonerInfoRaw;
-  phase: GameflowPhaseEnum;
-}
-
-let currentSummoner = 0
+let currentSummoner = 0;
 
 export const summonerMapChange = new Subject<void>();
 const emitMapChange = () => summonerMapChange.next();
 
 export const summonerStateMap: Map<number, SummonerState> = new Map();
 const stateMapHelper = createMapHelper(summonerStateMap);
+export const refreshStates = async () => {
+  const res = await fetch('http://localhost:11460/summoners');
+  const view = new Uint8Array(await res.arrayBuffer());
+  const { states } = SummonerStates.decode(view);
+
+  for (const state of states) {
+    const id = state.info?.base?.summonerId;
+    if (id !== undefined) {
+      summonerStateMap.set(id, state);
+    }
+  }
+
+  emitMapChange();
+};
 
 const getPhaseWithSummonerId = (raw?: GameflowPhase): PhaseWithSummonerId | undefined => {
   if (currentSummoner === 0) return;
@@ -37,8 +51,8 @@ const handleSummonerInfo = (info: SummonerInfo): SummonerInfoRaw => {
   return {
     base: info,
     rerollPoints: info.rerollPoints,
-  }
-}
+  };
+};
 
 export default () => {
   const { subscribe, quit, manage, defer } = createSubscriptionManager();
@@ -48,7 +62,7 @@ export default () => {
   manage(
     summonerChan.sendOn(currentSummonerUpdateStream, handleSummonerInfo),
     summonerChan.receive(info => {
-      if (info.base === undefined) return
+      if (info.base === undefined) return;
 
       stateMapHelper.need(
         info.base.summonerId,
