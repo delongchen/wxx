@@ -3,6 +3,7 @@ import { coverHttp } from './ws';
 import { app } from './rest';
 import './services';
 import { HttpPort } from './config';
+import { connect } from "./data/redis";
 
 const httpServer = createServer(app.callback());
 
@@ -17,6 +18,7 @@ const startHttpServer = (port: number) =>
 const main = async () => {
   coverHttp(httpServer);
   await startHttpServer(HttpPort);
+  await connect();
 };
 
 main().catch(console.error);

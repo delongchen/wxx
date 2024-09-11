@@ -62,14 +62,16 @@ export const shareChannel = <T>(endpoint: string, serializer: Serializer<T>) => 
     return shareWithEndpoint(endpoint, serializer.encode(message).finish());
   };
 
-  const sendOn = <M = T>(outlet: Observable<M>, adapter: (source: M) => T | undefined) =>
-    outlet.subscribe(source => {
-      const result = adapter(source);
+  const sendOn = <M = T>(
+    outlet: Observable<M>,
+    adapter: (source: M) => T | undefined
+  ) => outlet.subscribe(source => {
+    const result = adapter(source);
 
-      if (result !== undefined) {
-        send(result);
-      }
-    });
+    if (result !== undefined) {
+      send(result);
+    }
+  });
 
   const receive = (handler: (message: T) => void) => {
     return subject.subscribe(handler);

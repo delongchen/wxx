@@ -24,8 +24,8 @@ const createRouter = () => {
     const decodedData = exist.serializer.decode(body);
     const ctx: Context<any> = {
       data: decodedData,
-      broadcast: () => {
-        ctx.result = decodedData;
+      broadcast: (data?: any) => {
+        ctx.result = data ?? decodedData;
         ctx.target = ResponseTarget.All;
       },
     };

@@ -6,7 +6,7 @@ import { currentSummonerUpdateStream } from '../lcu/event-stream';
 import { Observable } from 'rxjs';
 import { lcuProcessStatusBus } from '../lcu/process';
 
-const subscribe = <T>(source: Observable<T>, ob: (data: T) => void) => {
+export const useSubscribe = <T>(source: Observable<T>, ob: (data: T) => void) => {
   useEffect(() => {
     const subscription = source.subscribe(ob);
 
@@ -19,7 +19,7 @@ const subscribe = <T>(source: Observable<T>, ob: (data: T) => void) => {
 export const useLcuProcessStatus = () => {
   const [status, setStatus] = useState<number>(LcuProcessStatus.NotStarted);
 
-  subscribe(lcuProcessStatusBus, setStatus);
+  useSubscribe(lcuProcessStatusBus, setStatus);
 
   return {
     status,
@@ -37,8 +37,8 @@ export const useCurrentSummoner = () => {
     fn().catch(() => {});
   }, []);
 
-  subscribe(currentSummonerUpdateStream, setCurrentSummoner);
-  subscribe(lcuProcessStatusBus, status => {
+  useSubscribe(currentSummonerUpdateStream, setCurrentSummoner);
+  useSubscribe(lcuProcessStatusBus, status => {
     if (status === LcuProcessStatus.NotStarted) {
       setCurrentSummoner(null);
     }

@@ -9,6 +9,7 @@ protoc ^
     --ts_proto_opt=outputIndex=true ^
     --ts_proto_out=".\\lib" ^
     %SORUCE_DIR%\lcu\*.proto ^
-    %SORUCE_DIR%\common\*.proto
+    %SORUCE_DIR%\common\*.proto ^
+    %SORUCE_DIR%\rest\*.proto
 
 npx tsc

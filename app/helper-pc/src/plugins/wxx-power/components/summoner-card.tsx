@@ -98,16 +98,16 @@ function SummonerCard({ info, phase }: SummonerState) {
         <Flex>
           <Flex flex="1" gap="4" alignItems="center">
             <Avatar
-              name={info.gameName}
-              src={`http://localhost:11460/profile-icon/${info.profileIconId}`}
+              name={info.base?.gameName}
+              src={`http://localhost:11460/profile-icon/${info.base?.profileIconId}`}
             >
               <AvatarBadge boxSize="1em" bg={`${phaseInfo.color}.500`} />
             </Avatar>
 
             <Box>
               <Heading size="sm">
-                {info.gameName}
-                <Tag>#{info.tagLine}</Tag>
+                {info.base?.gameName}
+                <Tag>#{info.base?.tagLine}</Tag>
               </Heading>
               <Text>{phaseInfo.text}</Text>
             </Box>

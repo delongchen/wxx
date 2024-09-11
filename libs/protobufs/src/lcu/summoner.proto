@@ -10,7 +10,7 @@ message RerollPoints {
   int32 pointsToReroll = 5;
 }
 
-message SummonerInfoBody {
+message SummonerBaseInfo {
   bool unnamed = 1;
   bool nameChangeFlag = 2;
   int64 accountId = 3;
@@ -26,7 +26,11 @@ message SummonerInfoBody {
   string privacy = 13;
   string puuid = 14;
   string tagLine = 15;
-  RerollPoints rerollPoints = 16;
+}
+
+message SummonerInfoRaw {
+  SummonerBaseInfo base = 1;
+  RerollPoints rerollPoints = 2;
 }
 
 service SummonerSharing {}
