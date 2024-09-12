@@ -6,10 +6,10 @@ export interface PlayerDto {
   teamId?: string,
 
   // (Legal values:  UNSELECTED,  FILL,  TOP,  JUNGLE,  MIDDLE,  BOTTOM,  UTILITY)
-  position: ("UNSELECTED" | "FILL" | "TOP" | "JUNGLE" | "MIDDLE" | "BOTTOM" | "UTILITY"),
+  position: ('UNSELECTED' | 'FILL' | 'TOP' | 'JUNGLE' | 'MIDDLE' | 'BOTTOM' | 'UTILITY'),
 
   // (Legal values:  CAPTAIN,  MEMBER)
-  role: ("CAPTAIN" | "MEMBER"),
+  role: ('CAPTAIN' | 'MEMBER'),
 }
 
 export interface TeamDto {

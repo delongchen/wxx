@@ -120,7 +120,7 @@ export interface FeaturedGameInfo {
 
   // The game mode
   //              (Legal values:  TFT)
-  gameMode: ("TFT"),
+  gameMode: ('TFT'),
 
   // The amount of time in seconds that has passed since the game started
   gameLength: number,
@@ -130,7 +130,7 @@ export interface FeaturedGameInfo {
 
   // The game type
   //              (Legal values:  MATCHED)
-  gameType: ("MATCHED"),
+  gameType: ('MATCHED'),
 
   // Banned champion information
   bannedChampions: BannedChampion[],

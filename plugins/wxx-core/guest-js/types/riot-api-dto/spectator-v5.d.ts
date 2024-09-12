@@ -123,7 +123,7 @@ export interface FeaturedGameInfo {
 
   // The game mode
   //              (Legal values:  CLASSIC,  ODIN,  ARAM,  TUTORIAL,  ONEFORALL,  ASCENSION,  FIRSTBLOOD,  KINGPORO)
-  gameMode: ("CLASSIC" | "ODIN" | "ARAM" | "TUTORIAL" | "ONEFORALL" | "ASCENSION" | "FIRSTBLOOD" | "KINGPORO"),
+  gameMode: ('CLASSIC' | 'ODIN' | 'ARAM' | 'TUTORIAL' | 'ONEFORALL' | 'ASCENSION' | 'FIRSTBLOOD' | 'KINGPORO'),
 
   // The amount of time in seconds that has passed since the game started
   gameLength: number,
@@ -133,7 +133,7 @@ export interface FeaturedGameInfo {
 
   // The game type
   //              (Legal values:  CUSTOM_GAME,  MATCHED_GAME,  TUTORIAL_GAME)
-  gameType: ("CUSTOM_GAME" | "MATCHED_GAME" | "TUTORIAL_GAME"),
+  gameType: ('CUSTOM_GAME' | 'MATCHED_GAME' | 'TUTORIAL_GAME'),
 
   // Banned champion information
   bannedChampions: BannedChampion[],

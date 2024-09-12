@@ -1,4 +1,4 @@
-import { listen, EventCallback } from '@tauri-apps/api/event'
+import { listen, EventCallback } from '@tauri-apps/api/event';
 
 
 export const createListenFn = <T>(eventName: string) =>

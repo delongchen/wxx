@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { Box, Heading, Stack, Text } from '@chakra-ui/react';
-import Style from './page.module.sass';
-import TikTokHelper from './components/tik-tok-helper.tsx';
+import Style from './index.module.sass';
+import TikTokHelper from '../../components/tik-tok-helper.tsx';
 
 function Page() {
   return (

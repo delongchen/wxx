@@ -13,10 +13,10 @@ export interface StatusDto {
   id: number,
 
   // (Legal values:  scheduled,  in_progress,  complete)
-  maintenance_status?: ("scheduled" | "in_progress" | "complete"),
+  maintenance_status?: ('scheduled' | 'in_progress' | 'complete'),
 
   // (Legal values:  info,  warning,  critical)
-  incident_severity?: ("info" | "warning" | "critical"),
+  incident_severity?: ('info' | 'warning' | 'critical'),
   titles: ContentDto[],
   updates: UpdateDto[],
   created_at: string,
@@ -24,7 +24,7 @@ export interface StatusDto {
   updated_at?: string,
 
   // (Legal values: windows, macos, android, ios, ps4, xbone, switch)
-  platforms: ("windows" | "macos" | "android" | "ios" | "ps4" | "xbone" | "switch")[],
+  platforms: ('windows' | 'macos' | 'android' | 'ios' | 'ps4' | 'xbone' | 'switch')[],
 }
 
 export interface ContentDto {
@@ -38,7 +38,7 @@ export interface UpdateDto {
   publish: boolean,
 
   // (Legal values: riotclient, riotstatus, game)
-  publish_locations: ("riotclient" | "riotstatus" | "game")[],
+  publish_locations: ('riotclient' | 'riotstatus' | 'game')[],
   translations: ContentDto[],
   created_at: string,
   updated_at: string,

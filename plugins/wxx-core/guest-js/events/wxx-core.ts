@@ -1,4 +1,4 @@
-import {createListenFn} from "./utils";
+import { createListenFn } from './utils';
 
 
 export enum LcuProcessStatus {

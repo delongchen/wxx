@@ -6,10 +6,10 @@ export interface ChallengeConfigInfoDto {
   localizedNames: any,
 
   // DISABLED - not visible and not calculated, HIDDEN - not visible, but calculated, ENABLED - visible and calculated, ARCHIVED - visible, but not calculated
-  state: ("DISABLED" | "HIDDEN" | "ENABLED" | "ARCHIVED"),
+  state: ('DISABLED' | 'HIDDEN' | 'ENABLED' | 'ARCHIVED'),
 
   // LIFETIME - stats are incremented without reset, SEASON - stats are accumulated by season and reset at the beginning of new season
-  tracking?: ("LIFETIME" | "SEASON"),
+  tracking?: ('LIFETIME' | 'SEASON'),
   startTimestamp?: number,
   endTimestamp?: number,
   leaderboard: boolean,

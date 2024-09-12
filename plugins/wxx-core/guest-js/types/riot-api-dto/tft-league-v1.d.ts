@@ -49,7 +49,7 @@ export interface LeagueEntryDTO {
 
   // Only included for the RANKED_TFT_TURBO queueType.
   //              (Legal values:  ORANGE,  PURPLE,  BLUE,  GREEN,  GRAY)
-  ratedTier?: ("ORANGE" | "PURPLE" | "BLUE" | "GREEN" | "GRAY"),
+  ratedTier?: ('ORANGE' | 'PURPLE' | 'BLUE' | 'GREEN' | 'GRAY'),
 
   // Only included for the RANKED_TFT_TURBO queueType.
   ratedRating?: number,
@@ -89,7 +89,7 @@ export interface TopRatedLadderEntryDto {
   summonerId: string,
 
   // (Legal values:  ORANGE,  PURPLE,  BLUE,  GREEN,  GRAY)
-  ratedTier: ("ORANGE" | "PURPLE" | "BLUE" | "GREEN" | "GRAY"),
+  ratedTier: ('ORANGE' | 'PURPLE' | 'BLUE' | 'GREEN' | 'GRAY'),
   ratedRating: number,
 
   // First placement.

@@ -1,4 +1,4 @@
-import { invoke } from "@tauri-apps/api/core";
+import { invoke } from '@tauri-apps/api/core';
 
 export type LcuAllowedMethod =
   | 'get'
@@ -24,10 +24,10 @@ export const lcuFetch = async <T = unknown>(
   const {
     method = 'get',
     body = null,
-  } = options
+  } = options;
 
   return invoke<T>(
     'plugin:wxx-core|lcu_fetch',
     { endpoint, method, body },
-  )
-}
+  );
+};

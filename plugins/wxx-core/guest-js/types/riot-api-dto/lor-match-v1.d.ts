@@ -25,15 +25,15 @@ export interface MetadataDto {
 export interface InfoDto {
 
   // (Legal values:  Constructed,  Expeditions,  Tutorial)
-  game_mode: ("Constructed" | "Expeditions" | "Tutorial"),
+  game_mode: ('Constructed' | 'Expeditions' | 'Tutorial'),
 
   // (Legal values:  Ranked,  Normal,  AI,  Tutorial,  VanillaTrial,  Singleton,  StandardGauntlet)
-  game_type: ("Ranked" | "Normal" | "AI" | "Tutorial" | "VanillaTrial" | "Singleton" | "StandardGauntlet"),
+  game_type: ('Ranked' | 'Normal' | 'AI' | 'Tutorial' | 'VanillaTrial' | 'Singleton' | 'StandardGauntlet'),
   game_start_time_utc: string,
   game_version: string,
 
   // (Legal values:  standard,  eternal)
-  game_format: ("standard" | "eternal"),
+  game_format: ('standard' | 'eternal'),
   players: PlayerDto[],
 
   // Total turns taken by both players.

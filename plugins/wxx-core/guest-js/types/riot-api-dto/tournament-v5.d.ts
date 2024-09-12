@@ -14,15 +14,15 @@ export interface TournamentCodeParametersV5 {
 
   // The pick type of the game.
   //              (Legal values:  BLIND_PICK,  DRAFT_MODE,  ALL_RANDOM,  TOURNAMENT_DRAFT)
-  pickType: ("BLIND_PICK" | "DRAFT_MODE" | "ALL_RANDOM" | "TOURNAMENT_DRAFT"),
+  pickType: ('BLIND_PICK' | 'DRAFT_MODE' | 'ALL_RANDOM' | 'TOURNAMENT_DRAFT'),
 
   // The map type of the game.
   //              (Legal values:  SUMMONERS_RIFT,  HOWLING_ABYSS)
-  mapType: ("SUMMONERS_RIFT" | "HOWLING_ABYSS"),
+  mapType: ('SUMMONERS_RIFT' | 'HOWLING_ABYSS'),
 
   // The spectator type of the game.
   //              (Legal values:  NONE,  LOBBYONLY,  ALL)
-  spectatorType: ("NONE" | "LOBBYONLY" | "ALL"),
+  spectatorType: ('NONE' | 'LOBBYONLY' | 'ALL'),
 
   // Checks if allowed participants are enough to make full teams.
   enoughPlayers: boolean,
@@ -62,7 +62,7 @@ export interface TournamentCodeV5DTO {
 
   // The tournament code's region.
   //              (Legal values:  BR,  EUNE,  EUW,  JP,  LAN,  LAS,  NA,  OCE,  PBE,  RU,  TR,  KR,  PH,  SG,  TH,  TW,  VN)
-  region: ("BR" | "EUNE" | "EUW" | "JP" | "LAN" | "LAS" | "NA" | "OCE" | "PBE" | "RU" | "TR" | "KR" | "PH" | "SG" | "TH" | "TW" | "VN"),
+  region: ('BR' | 'EUNE' | 'EUW' | 'JP' | 'LAN' | 'LAS' | 'NA' | 'OCE' | 'PBE' | 'RU' | 'TR' | 'KR' | 'PH' | 'SG' | 'TH' | 'TW' | 'VN'),
 
   // The game map for the tournament code game
   map: string,
@@ -78,15 +78,15 @@ export interface TournamentCodeUpdateParametersV5 {
 
   // The pick type
   //              (Legal values:  BLIND_PICK,  DRAFT_MODE,  ALL_RANDOM,  TOURNAMENT_DRAFT)
-  pickType: ("BLIND_PICK" | "DRAFT_MODE" | "ALL_RANDOM" | "TOURNAMENT_DRAFT"),
+  pickType: ('BLIND_PICK' | 'DRAFT_MODE' | 'ALL_RANDOM' | 'TOURNAMENT_DRAFT'),
 
   // The map type
   //              (Legal values:  SUMMONERS_RIFT,  HOWLING_ABYSS)
-  mapType: ("SUMMONERS_RIFT" | "HOWLING_ABYSS"),
+  mapType: ('SUMMONERS_RIFT' | 'HOWLING_ABYSS'),
 
   // The spectator type
   //              (Legal values:  NONE,  LOBBYONLY,  ALL)
-  spectatorType: ("NONE" | "LOBBYONLY" | "ALL"),
+  spectatorType: ('NONE' | 'LOBBYONLY' | 'ALL'),
 }
 
 export interface TournamentGamesV5 {
@@ -136,7 +136,7 @@ export interface ProviderRegistrationParametersV5 {
 
   // The region in which the provider will be running tournaments.
   //              (Legal values:  BR,  EUNE,  EUW,  JP,  LAN,  LAS,  NA,  OCE,  PBE,  RU,  TR,  KR,  PH,  SG,  TH,  TW,  VN)
-  region: ("BR" | "EUNE" | "EUW" | "JP" | "LAN" | "LAS" | "NA" | "OCE" | "PBE" | "RU" | "TR" | "KR" | "PH" | "SG" | "TH" | "TW" | "VN"),
+  region: ('BR' | 'EUNE' | 'EUW' | 'JP' | 'LAN' | 'LAS' | 'NA' | 'OCE' | 'PBE' | 'RU' | 'TR' | 'KR' | 'PH' | 'SG' | 'TH' | 'TW' | 'VN'),
 
   // The provider's callback URL to which tournament game results in this region should be posted. The URL must be well-formed, use the http or https protocol, and use the default port for the protocol (http URLs must use port 80, https URLs must use port 443).
   url: string,
