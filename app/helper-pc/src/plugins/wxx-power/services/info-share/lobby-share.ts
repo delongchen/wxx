@@ -1,24 +1,9 @@
-import { createMapHelper, createSubscriptionManager } from '../utils';
+import { createSubscriptionManager } from '../utils';
 import { shareChannel } from './share-channel';
 import { SimpleLobbyInfo } from 'wxx-protobufs/lcu.lobby';
 import { createSubStream } from '../../lcu/event-stream';
 import { Lobby } from 'tauri-plugin-wxx-core';
-import { debounceTime, Subject } from 'rxjs';
-
-const lobbyMapChange = new Subject<void>();
-const lobbyMap = new Map<string, SimpleLobbyInfo>();
-const lobbyMapHelper = createMapHelper(lobbyMap);
-
-const handleLcuLobby = (lobby: Lobby | null): SimpleLobbyInfo | undefined => {
-  if (lobby === null) {
-    return undefined;
-  }
-
-  return {
-    partyId: lobby.partyId,
-    memberMap: Object.fromEntries(lobby.members.map(member => [member.summonerId, member])),
-  };
-};
+import { debounceTime } from 'rxjs';
 
 export default () => {
   const { quit, manage, defer } = createSubscriptionManager();
@@ -30,20 +15,8 @@ export default () => {
   const lobbyChan = shareChannel('share-lobby', SimpleLobbyInfo);
   defer(lobbyChan.stop);
   manage(
-    lobbyChan.sendOn(lobbyStream, handleLcuLobby),
-    lobbyChan.receive(lobby => {
-      lobbyMapHelper.need(
-        lobby.partyId,
-        curLobby => {
-          console.log(curLobby);
-          lobbyMapChange.next();
-        },
-        setter => {
-          setter(lobby);
-          lobbyMapChange.next();
-        },
-      );
-    }),
+    lobbyChan.sendOn(lobbyStream, () => undefined),
+    lobbyChan.receive(console.log),
   );
 
   return quit;
