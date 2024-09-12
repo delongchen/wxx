@@ -7,8 +7,7 @@ function NiumaPage() {
   const [info, setInfo] = useState<SummonerInfo | null>(null)
 
   const handleClick = useCallback(async () => {
-    const currentSummoner = await getCurrentSummoner();
-    setInfo(currentSummoner)
+    getCurrentSummoner().then(setInfo)
   }, [])
 
   return (

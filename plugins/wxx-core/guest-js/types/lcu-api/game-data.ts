@@ -436,7 +436,7 @@ export interface ChampChroma {
   chromaPath: string;
   colors: string[];
   descriptions: ChampDescription[];
-  rarities: (ChampRarity | ChampRarity)[];
+  rarities: ChampRarity[];
 }
 
 export interface ChampRarity {
@@ -573,7 +573,7 @@ interface RewardGroup {
 interface RewardGroupReward {
   Title: string;
   Details: string;
-  Media: Media | Media | null;
+  Media: Media | null;
   ItemId: string;
   ItemType?: string;
 }

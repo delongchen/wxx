@@ -1,5 +1,5 @@
 import { api } from './utils';
-import { MatchHistory } from '../../types/lcu-api/match-history';
+import { Game, MatchHistory } from '../../types/lcu-api/match-history';
 
 export const getCurrentSummonerMatchHistory = api('/lol-match-history/v1/products/lol/current-summoner/matches')
   .noPayload('get');
@@ -7,3 +7,7 @@ export const getCurrentSummonerMatchHistory = api('/lol-match-history/v1/product
 export const getMatchHistory =
   api('/lol-match-history/v1/products/lol/:puuid/matches?begIndex&endIndex')
     .noPayload<MatchHistory>('get');
+
+export const getGameDetail =
+  api('/lol-match-history/v1/games/:gameId')
+    .noPayload<Game>('get');

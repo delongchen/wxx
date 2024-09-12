@@ -215,30 +215,3 @@ export interface Player {
   tagLine: string;
   summonerName: string;
 }
-
-// 为什么会有这么多的队列呢？
-const pveQueues = new Set([
-  // 人机模式和新手教程
-  31, 32, 33, 34, 35, 36, 52, 800, 801, 810, 820, 830, 831, 832, 840, 841, 842, 850, 851, 852, 860,
-  870, 880, 890, 2000, 2010, 2020,
-
-  // 大提莫节，应该是新版的末日人机
-  90, 91, 92, 950, 951, 960, 961,
-
-  // 怪兽入侵模式，没打过不知道是不是
-  981, 982, 990,
-
-  // 奥德赛系列
-  1030, 1031, 1032, 1040, 1041, 1050, 1051, 1060, 1061, 1070, 1071,
-
-  // STRAWBERRY 模式
-  1800, 1810, 1820, 1830, 1840, 1850, 1860, 1870, 1880, 1890,
-]);
-
-export function isPveQueue(queueId: number) {
-  if (typeof queueId === 'string') {
-    return pveQueues.has(Number(queueId));
-  }
-
-  return pveQueues.has(queueId);
-}
