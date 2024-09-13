@@ -1,9 +1,9 @@
 use super::process::LcuProcessInfo;
 use futures_util::{SinkExt, Stream, StreamExt};
 use native_tls::{Certificate, TlsConnector};
+use serde_json::Value;
 use std::pin::Pin;
 use std::task::{Context, Poll};
-use serde_json::Value;
 use tokio::net::TcpStream;
 use tokio_tungstenite::tungstenite;
 use tokio_tungstenite::tungstenite::client::IntoClientRequest;
@@ -24,17 +24,15 @@ impl Stream for LcuWsStream {
         loop {
             return match self.0.poll_next_unpin(cx) {
                 Poll::Pending => Poll::Pending,
-                Poll::Ready(Some(Ok(Message::Text(text)))) => {
-                    match serde_json::from_str(&text) {
-                        Ok(Value::Array(mut arr)) => {
-                            if let Some(last) = arr.pop() {
-                                Poll::Ready(Some(last))
-                            } else {
-                                continue
-                            }
+                Poll::Ready(Some(Ok(Message::Text(text)))) => match serde_json::from_str(&text) {
+                    Ok(Value::Array(mut arr)) => {
+                        if let Some(last) = arr.pop() {
+                            Poll::Ready(Some(last))
+                        } else {
+                            continue;
                         }
-                        _ => continue
                     }
+                    _ => continue,
                 },
                 Poll::Ready(Some(Ok(Message::Close(_))) | Some(Err(_)) | None) => Poll::Ready(None),
                 _ => continue,

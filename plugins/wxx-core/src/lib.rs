@@ -17,10 +17,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
         .setup(|app, _api| {
             app.manage(AppState::empty());
 
-            v2::create_app_dir(app, vec![
-                "wxsb/configs",
-                "wxsb/temp",
-            ]);
+            v2::create_app_dir(app, vec!["wxsb/configs", "wxsb/temp"]);
 
             v2::process_watcher::start_watcher(app, 1000);
             v2::ws_client::start_ws_client(app, 1000);

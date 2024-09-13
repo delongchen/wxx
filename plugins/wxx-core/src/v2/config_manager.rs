@@ -1,6 +1,6 @@
+use crate::v2::utils::create_dir_if_not_exists;
 use std::ops::Add;
 use std::path::PathBuf;
-use crate::v2::utils::create_dir_if_not_exists;
 
 const MAIN_DIR: &str = "wxsb";
 const CONFIG_DIR: &str = "configs";
@@ -44,8 +44,7 @@ pub fn resolve_config_file(
     data_path.push(CONFIG_DIR);
     data_path.push(namespace);
 
-    create_dir_if_not_exists(&data_path)
-        .expect("create error");
+    create_dir_if_not_exists(&data_path).expect("create error");
 
     data_path.push(config_type.with_filename(config_name));
 

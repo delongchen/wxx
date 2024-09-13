@@ -1,6 +1,6 @@
-use tauri::async_runtime::Mutex;
 use crate::v2::models::process::LcuProcessStatus;
 use crate::v2::models::rest::LcuRestClient;
+use tauri::async_runtime::Mutex;
 
 pub struct AppState {
     pub process_status: Mutex<LcuProcessStatus>,

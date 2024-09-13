@@ -1,13 +1,13 @@
+use super::models::process::{LcuProcessInfo, LcuProcessStatus};
+use crate::v2::app_states::AppState;
+use crate::v2::consts::LCU_PROCESS_STATUS_EVENT;
+use base64::{engine::general_purpose, Engine};
 use std::ffi::OsString;
 use std::time::Duration;
 use sysinfo::{ProcessRefreshKind, ProcessesToUpdate, System, UpdateKind};
-use base64::{engine::general_purpose, Engine};
-use tauri::{AppHandle, Manager, Runtime};
 use tauri::async_runtime::JoinHandle;
-use super::models::process::{LcuProcessStatus, LcuProcessInfo};
+use tauri::{AppHandle, Manager, Runtime};
 use tokio::time::sleep;
-use crate::v2::app_states::AppState;
-use crate::v2::consts::{LCU_PROCESS_STATUS_EVENT};
 
 #[cfg(target_os = "windows")]
 const TARGET_PROCESS: &str = "LeagueClientUx.exe";
@@ -22,8 +22,7 @@ enum LcuProcessError {
 }
 
 fn find_arg_value(args: &[OsString], flag: &str) -> Result<String, LcuProcessError> {
-    args
-        .iter()
+    args.iter()
         .filter_map(|arg| arg.to_str())
         .find(|arg| arg.starts_with(flag))
         .map(|arg| arg.strip_prefix(flag).unwrap().to_string())
@@ -34,8 +33,7 @@ fn fetch_lcu_info() -> Result<LcuProcessInfo, LcuProcessError> {
     let mut sys = System::new_all();
     sys.refresh_processes_specifics(
         ProcessesToUpdate::All,
-        ProcessRefreshKind::new()
-            .with_cmd(UpdateKind::Always)
+        ProcessRefreshKind::new().with_cmd(UpdateKind::Always),
     );
 
     let lcu_args = sys
@@ -57,12 +55,10 @@ fn fetch_lcu_info() -> Result<LcuProcessInfo, LcuProcessError> {
 fn get_lcu_status() -> LcuProcessStatus {
     match fetch_lcu_info() {
         Ok(info) => LcuProcessStatus::Started(info),
-        Err(e) => {
-            match e {
-                LcuProcessError::ProcessNotFound => LcuProcessStatus::NotStarted,
-                LcuProcessError::ArgValueNotFound => LcuProcessStatus::NotStartedWithAdmin,
-            }
-        }
+        Err(e) => match e {
+            LcuProcessError::ProcessNotFound => LcuProcessStatus::NotStarted,
+            LcuProcessError::ArgValueNotFound => LcuProcessStatus::NotStartedWithAdmin,
+        },
     }
 }
 
@@ -76,10 +72,7 @@ pub fn start_watcher<R: Runtime>(app: &AppHandle<R>, timeout: u64) -> JoinHandle
             let cur_status = get_lcu_status();
             let status_code = cur_status.as_code();
 
-            let _ = app.emit(
-                LCU_PROCESS_STATUS_EVENT,
-                status_code,
-            );
+            let _ = app.emit(LCU_PROCESS_STATUS_EVENT, status_code);
 
             {
                 let mut prev_status = state.process_status.lock().await;

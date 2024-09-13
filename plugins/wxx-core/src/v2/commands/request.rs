@@ -94,13 +94,10 @@ async fn send_request(req: RequestBuilder) -> Result<Value, LcuFetchError> {
 
     let is_success = res.status().is_success();
 
-    let res_json = res
-        .json::<Value>()
-        .await
-        .unwrap_or_else(|_| Value::Null);
+    let res_json = res.json::<Value>().await.unwrap_or_else(|_| Value::Null);
 
     if !is_success {
-        return Err(LcuFetchError::RequestNotSuccess(res_json))
+        return Err(LcuFetchError::RequestNotSuccess(res_json));
     }
 
     Ok(res_json)

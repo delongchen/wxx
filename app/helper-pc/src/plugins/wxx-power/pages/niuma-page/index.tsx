@@ -15,7 +15,7 @@ function NiumaPage() {
       <h2>niuma</h2>
       <button onClick={handleClick}>get</button>
       <div>
-        {info === null ? null : (
+        {info && (
           <pre>{JSON.stringify(info, null, 2)}</pre>
         )}
       </div>

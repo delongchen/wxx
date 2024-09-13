@@ -1,8 +1,8 @@
-use std::time::Duration;
-use reqwest::{Certificate, ClientBuilder, RequestBuilder};
-use reqwest::header::HeaderValue;
-use serde_json::Value;
 use crate::v2::consts::RIOT_GAMES_PEM_BYTES;
+use reqwest::header::HeaderValue;
+use reqwest::{Certificate, ClientBuilder, RequestBuilder};
+use serde_json::Value;
+use std::time::Duration;
 
 pub enum LcuRestError {
     MethodNotAllow,
@@ -41,9 +41,7 @@ impl LcuRestClient {
             .build()
             .unwrap();
 
-        Self {
-            client
-        }
+        Self { client }
     }
 
     pub fn create_request(
@@ -56,10 +54,8 @@ impl LcuRestClient {
     ) -> Result<RequestBuilder, LcuRestError> {
         let method = {
             match LcuRestAllowMethod::from(method) {
-                None => {
-                    return Err(LcuRestError::MethodNotAllow)
-                }
-                Some(method) => method
+                None => return Err(LcuRestError::MethodNotAllow),
+                Some(method) => method,
             }
         };
 
@@ -72,23 +68,21 @@ impl LcuRestClient {
                 let req = self.client.post(url);
                 match body {
                     Value::Object(body) => req.json(&body),
-                    _ => req
+                    _ => req,
                 }
-            },
+            }
             LcuRestAllowMethod::PUT => {
                 let req = self.client.put(url);
                 match body {
                     Value::Object(body) => req.json(&body),
-                    _ => req
+                    _ => req,
                 }
-            },
+            }
         };
 
         let req = req.header(
             "Authorization",
-            HeaderValue::from_str(
-                format!("Basic {}", auth_token).as_str()
-            ).unwrap(),
+            HeaderValue::from_str(format!("Basic {}", auth_token).as_str()).unwrap(),
         );
 
         Ok(req)

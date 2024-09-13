@@ -1,13 +1,13 @@
 use tauri::{AppHandle, Manager, Runtime};
 
+pub mod app_states;
+pub mod commands;
+pub mod config_manager;
 pub mod consts;
 pub mod models;
-pub mod commands;
 pub mod process_watcher;
-pub mod app_states;
-pub mod ws_client;
-pub mod config_manager;
 mod utils;
+pub mod ws_client;
 
 pub fn create_app_dir<R: Runtime>(app: &AppHandle<R>, targets: Vec<&str>) {
     if let Ok(data_dir) = app.path().data_dir() {
