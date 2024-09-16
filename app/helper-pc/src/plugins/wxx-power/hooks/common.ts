@@ -26,23 +26,40 @@ export const useLcuProcessStatus = () => {
   };
 };
 
-export const useCurrentSummoner = () => {
-  const [currentSummoner, setCurrentSummoner] = useState<SummonerInfo | null>(null);
+/**
+ * todo:
+ * 监听lcu-process的状态 当使用管理员启动后返回true
+ * 但是当英雄联盟客户端启动后于wxx时
+ * 即使available为true 此时lcu-fetch也可能不可用 因为英雄联盟没有初始化好
+ * 这里还要改 或者后续lcu-fetch使用retry
+ * 但是英雄联盟已经启动了 wxx再启动就没有这个问题
+ */
+export const useLcuAvailable = () => {
+  const { status } = useLcuProcessStatus();
+  const [available, setAvailable] = useState(status === LcuProcessStatus.Started);
 
   useEffect(() => {
-    const fn = async () => {
-      setCurrentSummoner(await getCurrentSummoner());
-    };
+    setAvailable(status === LcuProcessStatus.Started);
+  }, [status]);
 
-    fn().catch(() => {});
-  }, []);
+  return { available };
+};
 
-  useSubscribe(currentSummonerUpdateStream, setCurrentSummoner);
-  useSubscribe(lcuProcessStatusBus, status => {
-    if (status === LcuProcessStatus.NotStarted) {
+export const useCurrentSummoner = () => {
+  const [currentSummoner, setCurrentSummoner] = useState<SummonerInfo | null>(null);
+  const { available } = useLcuAvailable();
+
+  useEffect(() => {
+    if (available) {
+      getCurrentSummoner().then(setCurrentSummoner);
+    } else {
       setCurrentSummoner(null);
     }
-  });
+  }, [available]);
+
+  useSubscribe(currentSummonerUpdateStream, setCurrentSummoner);
 
   return currentSummoner;
 };
+
+// const useRetry = () => {}

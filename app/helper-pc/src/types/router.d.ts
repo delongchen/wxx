@@ -10,6 +10,7 @@ interface WxxRouteMeta {
 
 interface WxxRoute {
   path: string;
+  isFullPage?: boolean;
   redirect?: string;
   component?: React.FC<BrowserRouterProps>;
   children?: WxxRoute[];

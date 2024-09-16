@@ -4,8 +4,16 @@ import Style from './WxxLayout.module.sass';
 import { memo } from 'react';
 
 import { WxxHeader, WxxFooter, WxxToolBar, WxxMenu } from '@/components/wxx';
+import { useAppSelector } from '@/store';
+import { selectGlobal } from '@/store/modules/global';
 
 function WxxLayout() {
+  const globalState = useAppSelector(selectGlobal);
+
+  if (globalState.isFullPage) {
+    return <AppContent />
+  }
+
   return (
     <Flex flexDirection={'column'} className={Style.panel}>
       <WxxHeader />

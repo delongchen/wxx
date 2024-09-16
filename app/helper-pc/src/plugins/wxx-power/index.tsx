@@ -30,10 +30,11 @@ const wxxPower: WxxPluginType = {
     ctx.registerPage({
       path: '/niuma',
       component: NiumaPage,
+      isFullPage: true,
       meta: {
         icon: () => <VscPerson size="24px" />,
-      }
-    })
+      },
+    });
 
     ctx.registerStatusBarItem(LcuStatusTag);
 

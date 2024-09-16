@@ -21,13 +21,14 @@ const renderRoutes = (routes: WxxRoute[], parentPath: string = '') => {
       continue;
     }
 
+    const { isFullPage } = route;
     if (Component !== undefined) {
       result.push(
         <Route
           key={index}
           path={currentPath}
           element={
-            <AppPage>
+            <AppPage isFullPage={isFullPage}>
               <Component />
             </AppPage>
           }

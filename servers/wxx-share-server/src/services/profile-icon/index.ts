@@ -1,7 +1,7 @@
 import sharp from 'sharp';
 import { readFileSync } from 'node:fs';
 import * as path from 'node:path';
-import { LolProfileIconDir } from '../../config';
+import { config } from '../../config';
 
 interface IconsInfo {
   type: string;
@@ -19,10 +19,10 @@ interface IconsInfo {
   };
 }
 
-const PngBuffer = readFileSync(path.join(LolProfileIconDir, 'profileicon0.png'));
+const PngBuffer = readFileSync(path.join(config.lolProfileIconDir, 'profileicon0.png'));
 
 const iconMap = JSON.parse(
-  readFileSync(path.join(LolProfileIconDir, 'profileicon.json'), 'utf-8'),
+  readFileSync(path.join(config.lolProfileIconDir, 'profileicon.json'), 'utf-8'),
 ) as IconsInfo;
 
 const cache: Map<number, Buffer> = new Map();

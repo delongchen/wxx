@@ -1,26 +1,43 @@
 import { memo, useCallback, useState } from 'react';
-import { getCurrentSummoner } from 'tauri-plugin-wxx-core/lcu-api/summoner'
-import { SummonerInfo } from 'tauri-plugin-wxx-core'
+import { Box } from '@chakra-ui/react';
+import Style from './index.module.sass'
+import NiumaHeader from './NiumaHeader.tsx';
+import NiumaContent from './NiumaContent.tsx'
+import NiumaRank from './NiumaRank.tsx';
+import { useAppSelector } from '@/store';
+import { selectGlobal } from '@/store/modules/global';
 
+
+const NiumaComponentKeys: {key: string, text: string}[] = [
+  { key: 'niuma', text: '🐂🐎' },
+  { key: 'self', text: '个人战绩' },
+] as const;
 
 function NiumaPage() {
-  const [info, setInfo] = useState<SummonerInfo | null>(null)
+  const { theme } = useAppSelector(selectGlobal);
+  const [activeKey, setActiveKey] = useState('niuma');
 
-  const handleClick = useCallback(async () => {
-    getCurrentSummoner().then(setInfo)
+  const handleHeaderClick = useCallback((key: string) => {
+    setActiveKey(key)
   }, [])
 
   return (
-    <div>
-      <h2>niuma</h2>
-      <button onClick={handleClick}>get</button>
-      <div>
-        {info && (
-          <pre>{JSON.stringify(info, null, 2)}</pre>
+    <Box className={Style.container}>
+      <NiumaHeader
+        theme={theme}
+        items={NiumaComponentKeys}
+        activeKey={activeKey}
+        onButtonClick={handleHeaderClick}
+      />
+      <NiumaContent theme={theme}>
+        {activeKey === 'niuma' ? (
+          <NiumaRank />
+        ) : (
+          <div>self</div>
         )}
-      </div>
-    </div>
-  )
+      </NiumaContent>
+    </Box>
+  );
 }
 
-export default memo(NiumaPage)
+export default memo(NiumaPage);

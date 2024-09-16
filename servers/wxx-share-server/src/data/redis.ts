@@ -1,8 +1,8 @@
-import { RedisConfig } from '../config'
+import { config } from '../config'
 import { createClient } from 'redis'
 
 
-const { user, password, host, port, database } = RedisConfig
+const { user, password, host, port, database } = config.redisConfig
 const url = `redis://${user}:${password}@${host}:${port}/${database}`
 
 const client = createClient({ url, database })
