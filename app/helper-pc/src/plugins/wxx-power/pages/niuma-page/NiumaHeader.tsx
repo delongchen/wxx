@@ -1,12 +1,12 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useContext } from 'react';
 import { Flex, IconButton, Spacer, Box, Button, ButtonGroup } from '@chakra-ui/react'
 import Style from './NiumaHeader.module.sass'
 import { useNavigate } from 'react-router-dom'
 import { VscArrowLeft } from 'react-icons/vsc'
+import { NiumaContext } from './context';
 
 
 interface NiumaHeaderProps {
-  theme?: string
   activeKey?: string
   items?: { key: string, text: string }[]
   showButtons?: boolean
@@ -15,12 +15,13 @@ interface NiumaHeaderProps {
 
 function NiumaHeader(props: NiumaHeaderProps) {
   const {
-    theme = 'gary',
     activeKey = '',
     items = [],
     showButtons = true,
     onButtonClick,
   } = props
+
+  const { theme } = useContext(NiumaContext)
   const bg = [theme, 600].join('.')
 
   const navigate = useNavigate()
