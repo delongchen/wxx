@@ -74,15 +74,6 @@ export interface ChampSelectSummoner {
   tradeId: number;
 }
 
-/**
- * 判断是否是极地大乱斗的 session，如果为 undefined 则为 false
- * @param obj session 对象
- * @returns 是否是
- */
-export function isBenchEnabledSession(obj: any): obj is ChampSelectSession {
-  return obj && typeof obj.benchEnabled !== 'undefined' && obj.benchEnabled;
-}
-
 export interface Trade {
   cellId: number;
   id: number;
@@ -234,18 +225,18 @@ export interface CarouselSkins {
   unlocked: boolean;
 }
 
-interface Emblem {
+export interface Emblem {
   emblemPath: EmblemPath;
   name: string;
   positions: Positions;
 }
 
-interface Positions {
+export interface Positions {
   horizontal: string;
   vertical: string;
 }
 
-interface EmblemPath {
+export interface EmblemPath {
   large: string;
   small: string;
 }
@@ -271,17 +262,17 @@ export interface ChildSkin {
   unlocked: boolean;
 }
 
-interface SkinAugments {
+export interface SkinAugments {
 }
 
-interface Ownership {
+export interface Ownership {
   loyaltyReward: boolean;
   owned: boolean;
   rental: Rental;
   xboxGPReward: boolean;
 }
 
-interface Rental {
+export interface Rental {
   rented: boolean;
 }
 

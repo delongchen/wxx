@@ -252,7 +252,7 @@ export interface Perk {
   recommendationDescriptorAttributes: RecommendationDescriptorAttributes;
 }
 
-interface RecommendationDescriptorAttributes {
+export interface RecommendationDescriptorAttributes {
   kUtility?: number;
   kBurstDamage?: number;
   kDamagePerSecond?: number;
@@ -382,19 +382,19 @@ export interface Tier {
   skinAugments: SkinAugments;
 }
 
-interface Overlay {
+export interface Overlay {
   centeredLCOverlayPath: string;
   uncenteredLCOverlayPath: string;
   socialCardLCOverlayPath: string;
   tileLCOverlayPath: string;
 }
 
-interface Borders {
+export interface Borders {
   layer0: Layer0[];
   layer1?: Layer0[];
 }
 
-interface Layer0 {
+export interface Layer0 {
   contentId: string;
   layer: number;
   priority: number;
@@ -411,19 +411,19 @@ export interface Augment2 {
   overlays: Overlay[];
 }
 
-interface Overlay {
+export interface Overlay {
   centeredLCOverlayPath: string;
   uncenteredLCOverlayPath: string;
   socialCardLCOverlayPath: string;
   tileLCOverlayPath: string;
 }
 
-interface Borders {
+export interface Borders {
   layer0: Layer0[];
   layer1?: Layer0[];
 }
 
-interface Layer0 {
+export interface Layer0 {
   contentId: string;
   layer: number;
   priority: number;
@@ -492,18 +492,6 @@ export const enum QueueEnum {
   ARURF = 900 // 无限火力
 }
 
-/**
- * 是否是人机模式
- * @param queueId 队列 ID
- */
-export function isBotQueue(queueId: number) {
-  return (
-    queueId === QueueEnum.BOT_BEGINNER ||
-    queueId === QueueEnum.BOT_INTERMEDIATE ||
-    queueId === QueueEnum.BOT_INTRO
-  );
-}
-
 export interface QueueLegacy {
   name: string;
   shortName: string;
@@ -542,13 +530,13 @@ export interface StrawberryHub {
   EoGNarrativeBarks: EoGNarrativeBark[];
 }
 
-interface EoGNarrativeBark {
+export interface EoGNarrativeBark {
   id: string;
   o: number;
   value: EoGNarrativeBarkValue;
 }
 
-interface EoGNarrativeBarkValue {
+export interface EoGNarrativeBarkValue {
   RewardGroup: RewardGroup;
   Title: string;
   SubHeader: string;
@@ -561,7 +549,7 @@ interface EoGNarrativeBarkValue {
   IsPrimordian: boolean;
 }
 
-interface RewardGroup {
+export interface RewardGroup {
   Id: string;
   Name: string;
   Description: string;
@@ -570,7 +558,7 @@ interface RewardGroup {
   Rewards: RewardGroupReward[];
 }
 
-interface RewardGroupReward {
+export interface RewardGroupReward {
   Title: string;
   Details: string;
   Media: Media | null;
@@ -578,13 +566,13 @@ interface RewardGroupReward {
   ItemType?: string;
 }
 
-interface PowerUpGroup {
+export interface PowerUpGroup {
   id: string;
   o: number;
   value: PowerUpGroupValue;
 }
 
-interface PowerUpGroupValue {
+export interface PowerUpGroupValue {
   Name: string;
   Description: string;
   IconImage: string;
@@ -592,26 +580,26 @@ interface PowerUpGroupValue {
   PrerequisiteBoon: PrerequisiteBoon | null;
 }
 
-interface Boon {
+export interface Boon {
   id: string;
   o: number;
   value: PrerequisiteBoon;
 }
 
-interface ProgressGroup {
+export interface ProgressGroup {
   id: string;
   o: number;
   value: ProgressGroupValue;
 }
 
-interface ProgressGroupValue {
+export interface ProgressGroupValue {
   Name: string;
   IconImage: string;
   Milestones: Milestone[];
   PrerequisiteBoon: PrerequisiteBoon | null;
 }
 
-interface PrerequisiteBoon {
+export interface PrerequisiteBoon {
   ContentId: string;
   OfferId: string;
   ItemId: number;
@@ -619,13 +607,13 @@ interface PrerequisiteBoon {
   ShortValueSummary: string;
 }
 
-interface Milestone {
+export interface Milestone {
   id: string;
   o: number;
   value: MilestoneValue;
 }
 
-interface MilestoneValue {
+export interface MilestoneValue {
   Id: string;
   Name: string;
   TriggerValue: number;
@@ -633,12 +621,12 @@ interface MilestoneValue {
   Counter: Counter;
 }
 
-interface Counter {
+export interface Counter {
   Id: string;
   Name: string;
 }
 
-interface Property {
+export interface Property {
   Id: string;
   Name: string;
   Description: string;
@@ -647,7 +635,7 @@ interface Property {
   Rewards: PropertyReward[];
 }
 
-interface PropertyReward {
+export interface PropertyReward {
   Title?: string;
   Details?: string;
   Media?: Media;
@@ -656,7 +644,7 @@ interface PropertyReward {
   LootReward?: LootReward;
 }
 
-interface LootReward {
+export interface LootReward {
   Id: string;
   LocalizedTitle: string;
   LocalizedDetails: string;
@@ -667,31 +655,31 @@ interface LootReward {
   LegacyLootItem: string;
 }
 
-interface Media {
+export interface Media {
   IconPath: IconPath;
 }
 
-interface IconPath {
+export interface IconPath {
   Image: string;
   SplashImage: string;
 }
 
-interface SelectionStrategyConfig2 {
+export interface SelectionStrategyConfig2 {
   SelectionStrategyConfig: SelectionStrategyConfig;
 }
 
-interface SelectionStrategyConfig {
+export interface SelectionStrategyConfig {
   MinSelectionsAllowed: number;
   MaxSelectionsAllowed: number;
 }
 
-interface MapDisplayInfoList {
+export interface MapDisplayInfoList {
   id: string;
   o: number;
   value: MapDisplayInfoListValue;
 }
 
-interface MapDisplayInfoListValue {
+export interface MapDisplayInfoListValue {
   Name: string;
   Bark: string;
   BarkImage: string;
@@ -699,24 +687,24 @@ interface MapDisplayInfoListValue {
   CompletedMapBoon: null;
 }
 
-interface StMap {
+export interface StMap {
   DisplayName: string;
   ContentId: string;
   OfferId: string;
   ItemId: number;
 }
 
-interface StAllowedChampions {
+export interface StAllowedChampions {
   champions: StAllowedChampions[];
 }
 
-interface StAllowedChampions {
+export interface StAllowedChampions {
   id: string;
   o: number;
   value: ChampionValue;
 }
 
-interface ChampionValue {
+export interface ChampionValue {
   ContentId: string;
   OfferId: string;
   ItemId: number;
@@ -731,7 +719,7 @@ export interface AccountScopeLoadouts {
   scope: string;
 }
 
-interface Loadout {
+export interface Loadout {
   COMPANION_SLOT: COMPANIONSLOT;
   EMOTES_ACE: COMPANIONSLOT;
   EMOTES_FIRST_BLOOD: COMPANIONSLOT;
@@ -756,12 +744,8 @@ interface Loadout {
   WARD_SKIN_SLOT: COMPANIONSLOT;
 }
 
-interface COMPANIONSLOT {
+export interface COMPANIONSLOT {
   contentId: string;
   inventoryType: string;
   itemId: number;
-}
-
-export function maybePveChampion(id: number) {
-  return id >= 3000 && id < 4000;
 }

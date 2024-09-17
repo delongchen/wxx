@@ -149,7 +149,7 @@ export interface Friend {
   time: number;
 }
 
-interface Lol {
+export interface Lol {
   bannerIdSelected: string;
   challengeCrystalLevel: string;
   challengePoints: string;

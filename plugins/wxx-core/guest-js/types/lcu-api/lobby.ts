@@ -168,7 +168,7 @@ export interface QueueEligibility {
   restrictions: Restriction[];
 }
 
-interface Restriction {
+export interface Restriction {
   expiredTimestamp: number;
   restrictionArgs: RestrictionArgs;
   restrictionCode: string;
@@ -176,5 +176,5 @@ interface Restriction {
   summonerIdsString: string;
 }
 
-interface RestrictionArgs {
+export interface RestrictionArgs {
 }

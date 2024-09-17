@@ -5,7 +5,7 @@ export interface PlayerChampionMastery {
   summonerId: number;
 }
 
-interface Mastery {
+export interface Mastery {
   championId: number;
   championLevel: number;
   championPoints: number;
@@ -21,18 +21,18 @@ interface Mastery {
   tokensEarned: number;
 }
 
-interface NextSeasonMilestone {
+export interface NextSeasonMilestone {
   bonus: boolean;
   requireGradeCounts: RequireGradeCounts;
   rewardConfig: RewardConfig;
   rewardMarks: number;
 }
 
-interface RewardConfig {
+export interface RewardConfig {
   maximumReward: number;
   rewardValue: string;
 }
 
-interface RequireGradeCounts {
+export interface RequireGradeCounts {
   [key: string]: number;
 }

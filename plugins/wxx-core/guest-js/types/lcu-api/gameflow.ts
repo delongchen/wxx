@@ -145,7 +145,7 @@ export interface TeamPlayer {
   voterRating: number;
 }
 
-interface GameCustomization {
+export interface GameCustomization {
   Companions: string;
   GoldenSpatulaClub: string;
   Regalia: string;

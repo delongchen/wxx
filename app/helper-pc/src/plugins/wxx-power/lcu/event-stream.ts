@@ -12,6 +12,7 @@ import {
   listenLcuEvent,
   LcuEventTypeEnum,
 } from 'tauri-plugin-wxx-core';
+
 import { Subject, Observable, filter, map, share } from 'rxjs';
 
 const lcuEventBus = new Subject<TauriEvent<LcuEventType>>();

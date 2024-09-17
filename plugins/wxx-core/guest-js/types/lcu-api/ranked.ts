@@ -40,7 +40,7 @@ export interface CHERRY {
   nextSeasonStart: number;
 }
 
-interface QueueMap {
+export interface QueueMap {
   CHERRY: RankedEntry;
   RANKED_FLEX_SR: RankedEntry;
   RANKED_SOLO_5x5: RankedEntry;

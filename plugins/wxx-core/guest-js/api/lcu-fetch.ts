@@ -21,10 +21,7 @@ export const lcuFetch = async <T = unknown>(
     body?: RequestBody
   } = {},
 ) => {
-  const {
-    method = 'get',
-    body = null,
-  } = options;
+  const { method = 'get', body = null } = options;
 
   return invoke<T>(
     'plugin:wxx-core|lcu_fetch',
