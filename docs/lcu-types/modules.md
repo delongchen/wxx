@@ -6,6 +6,15 @@
 
 source: [Hanxven/LeagueAkari](https://github.com/Hanxven/LeagueAkari)
 
+现在的引入方式很垃圾 马上重构
+```typescript
+import {
+  GameflowPhase,
+  SummonerInfo,
+  BallotLegacy,
+} from 'tauri-plugin-wxx-core';
+```
+
 ## Modules
 
 - [champ-select](champ-select/README.md)

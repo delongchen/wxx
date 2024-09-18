@@ -5,6 +5,11 @@ outline: 2
 # ChampSelect
 “英雄选择”（Champ Select）界面交互，进行英雄选择、禁用、换位、换肤等操作。
 
+引入
+```typescript
+import { api } from 'tauri-plugin-wxx-core/lcu-api/champ-select'
+```
+
 ## getChampSelectSession
 获取当前的英雄选择会话信息。这个函数调用 /lol-champ-select/v1/session API，返回英雄选择会话的详细信息，包含玩家的选择、禁用等。
 ### 返回类型

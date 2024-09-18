@@ -4,6 +4,11 @@ outline: 2
 
 # Gameflow
 查询和管理游戏中的状态或执行退出操作。具体来说，它们与游戏的不同阶段和会话管理有关。
+
+引入
+```typescript
+import { api } from 'tauri-plugin-wxx-core/lcu-api/gameflow'
+```
 ## getGameflowPhase
 获取当前的游戏流程阶段。调用 /lol-gameflow/v1/gameflow-phase 接口，返回当前游戏流程的阶段信息。游戏流程阶段通常指的是玩家从登录、匹配、加载、游戏进行等不同状态的阶段。
 
