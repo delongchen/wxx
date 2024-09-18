@@ -4,6 +4,8 @@
 
 # LCU Types
 
+source: [Hanxven/LeagueAkari](https://github.com/Hanxven/LeagueAkari)
+
 ## Modules
 
 - [champ-select](champ-select/README.md)

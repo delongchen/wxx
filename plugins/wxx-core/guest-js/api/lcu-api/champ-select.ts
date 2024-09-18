@@ -35,13 +35,13 @@ export const getPickableChampIds = api('/lol-champ-select/v1/pickable-champion-i
   .noPayload<number[]>('get');
 
 export const getBannableChampIds = api('/lol-champ-select/v1/bannable-champion-ids')
-  .noPayload('get');
+  .noPayload<number[]>('get');
 
 export const reroll = api('/lol-champ-select/v1/session/my-selection/reroll')
   .noPayload('post');
 
 export const getCurrentChamp = api('/lol-champ-select/v1/current-champion')
-  .noPayload('get');
+  .noPayload<number>('get');
 
 export const getChampSelectSummoner = api('/lol-champ-select/v1/summoners/:cellId')
   .noPayload<ChampSelectSummoner>('get');
