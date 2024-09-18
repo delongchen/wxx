@@ -12,7 +12,7 @@ export const getSummonerByPuuid = api('/lol-summoner/v2/summoners/puuid/:puuid')
 
 export const updateSummonerProfile = api('/lol-summoner/v1/current-summoner/summoner-profile')
   .withPayload<void, {
-    inventory?: string;
     key: string;
     value: any;
+    inventory?: string;
   }>('post');
