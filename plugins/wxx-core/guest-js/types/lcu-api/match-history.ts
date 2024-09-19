@@ -65,9 +65,9 @@ export interface Timeline {
   damageTakenDiffPerMinDeltas: CsDiffPerMinDeltas
   damageTakenPerMinDeltas: CreepsPerMinDeltas
   goldPerMinDeltas: CreepsPerMinDeltas
-  lane: string
+  lane: "TOP" | "JUNGLE" | "MIDDLE" | "BOTTOM" | "SUPPORT"
   participantId: number
-  role: string
+  role: "DUO" | "NONE" | "SOLO" | "DUO_CARRY" | "DUO_SUPPORT"
   xpDiffPerMinDeltas: CsDiffPerMinDeltas
   xpPerMinDeltas: CreepsPerMinDeltas
 }
