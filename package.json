@@ -7,7 +7,8 @@
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "build": "turbo build"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +32,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "prettier": "^3.3.3",
     "rollup": "^4.9.6",
+    "turbo": "^2.1.2",
     "typescript": "^5.5.4"
   },
   "packageManager": "pnpm@9.3.0+sha1.d4f1da7af76dbdb4ab1a08f6b5add602ffad6fd4"
