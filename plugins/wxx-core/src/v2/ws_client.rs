@@ -6,6 +6,7 @@ use crate::v2::models::process::LcuProcessStatus;
 use futures_util::StreamExt;
 use std::time::Duration;
 use tauri::async_runtime::JoinHandle;
+use tauri::Emitter;
 use tauri::{AppHandle, Manager, Runtime};
 use tokio::time::sleep;
 

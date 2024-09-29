@@ -295,46 +295,34 @@
       "type": "string",
       "oneOf": [
         {
-          "description": "allow-lcu-fetch -> Enables the lcu_fetch command without any pre-configured scope.",
+          "description": "Enables the lcu_fetch command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "allow-lcu-fetch"
-          ]
+          "const": "allow-lcu-fetch"
         },
         {
-          "description": "deny-lcu-fetch -> Denies the lcu_fetch command without any pre-configured scope.",
+          "description": "Denies the lcu_fetch command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "deny-lcu-fetch"
-          ]
+          "const": "deny-lcu-fetch"
         },
         {
-          "description": "allow-read-config -> Enables the read_config command without any pre-configured scope.",
+          "description": "Enables the read_config command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "allow-read-config"
-          ]
+          "const": "allow-read-config"
         },
         {
-          "description": "deny-read-config -> Denies the read_config command without any pre-configured scope.",
+          "description": "Denies the read_config command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "deny-read-config"
-          ]
+          "const": "deny-read-config"
         },
         {
-          "description": "allow-write-config -> Enables the write_config command without any pre-configured scope.",
+          "description": "Enables the write_config command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "allow-write-config"
-          ]
+          "const": "allow-write-config"
         },
         {
-          "description": "deny-write-config -> Denies the write_config command without any pre-configured scope.",
+          "description": "Denies the write_config command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "deny-write-config"
-          ]
+          "const": "deny-write-config"
         }
       ]
     }

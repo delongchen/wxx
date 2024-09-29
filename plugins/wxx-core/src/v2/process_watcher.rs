@@ -7,6 +7,7 @@ use std::time::Duration;
 use sysinfo::{ProcessRefreshKind, ProcessesToUpdate, System, UpdateKind};
 use tauri::async_runtime::JoinHandle;
 use tauri::{AppHandle, Manager, Runtime};
+use tauri::Emitter;
 use tokio::time::sleep;
 
 #[cfg(target_os = "windows")]
