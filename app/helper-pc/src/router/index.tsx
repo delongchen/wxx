@@ -1,4 +1,7 @@
 import { WxxRoute } from '@/types/router';
+import { useState } from 'react';
+import { Subject } from 'rxjs'
+import { useSubscribe } from '@/utils/rx';
 
 const routeModules = import.meta.glob(['./modules/**/*.ts', './modules/**/*.tsx'], { eager: true });
 
@@ -29,17 +32,30 @@ const staticRoutes: WxxRoute[] = [
   },
 ];
 const internalRoutes = [...staticRoutes, ...flatModules(routeModules)];
-const outerRoutes: WxxRoute[] = [];
 
-const internalRoutePathSet = new Set(internalRoutes.map(it => it.path));
-
+const outerRoutes: Map<string, WxxRoute> = new Map
 export const registerRoute = (route: WxxRoute) => {
-  if (!internalRoutePathSet.has(route.path)) {
-    route.isOuter = true;
-    outerRoutes.push(route);
-  }
+  outerRoutes.set(route.path, route);
 };
+export const unregisterRoute = (path: string) => {
+  outerRoutes.delete(path);
+}
 
-export const getAllRoutes = (): WxxRoute[] => {
-  return [...internalRoutes, ...outerRoutes];
-};
+const getAllRoutes = () => {
+  return [...internalRoutes, ...outerRoutes.values()]
+}
+
+export const RoutesChangeEmitter = new Subject<void>()
+export const emitRoutesChange = () => {
+  RoutesChangeEmitter.next()
+}
+
+export const useWxxRoutes = () => {
+  const [routes, setRoutes] = useState<WxxRoute[]>(getAllRoutes())
+
+  useSubscribe(RoutesChangeEmitter, () => {
+    setRoutes(getAllRoutes())
+  })
+
+  return routes
+}
