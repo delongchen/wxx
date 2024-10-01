@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react';
 import Style from './wxx.module.sass';
 import { useAppSelector } from '@/store';
 import { selectGlobal } from '@/store/modules/global';
-import { StatusBarItems } from '@/app/status-bar';
+import { getBarItems } from '@/app/status-bar';
 
 export function WxxFooter() {
   const globalState = useAppSelector(selectGlobal);
@@ -10,7 +10,7 @@ export function WxxFooter() {
 
   return (
     <Box className={Style.footer} bg={bg}>
-      {StatusBarItems.map((Item, index) => (
+      {getBarItems().map((Item, index) => (
         <Item key={index} />
       ))}
     </Box>

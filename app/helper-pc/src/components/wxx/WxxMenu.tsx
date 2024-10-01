@@ -1,7 +1,6 @@
 import { Flex, IconButton, Spacer } from '@chakra-ui/react';
 import Style from './wxx.module.sass';
 import type { WxxRoute } from '@/types/router';
-import { getAllRoutes } from '@/router';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { memo } from 'react';
 import { useAppSelector } from '@/store';
@@ -40,8 +39,8 @@ const renderMenuItems = (routes: WxxRoute[], theme: string) => {
     });
 };
 
-function WxxSideMenu() {
-  const allRoutes = getAllRoutes();
+function WxxSideMenu(props: { routes: WxxRoute[] }) {
+  const allRoutes = props.routes;
   const internal: WxxRoute[] = [];
   const outer: WxxRoute[] = [];
 

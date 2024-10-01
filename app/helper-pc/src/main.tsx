@@ -3,14 +3,12 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { Provider as ReactReduxProvider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import store from './store';
-import '@/router';
+import { use } from './app/plugin/manager';
 import App from '@/App.tsx';
 
 import './styles/index.css';
 
-import { use, initPlugins } from './use';
 import WxxPower from '@/plugins/wxx-power/index.tsx';
-import Dnw from '@/plugins/dnw';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
@@ -22,15 +20,12 @@ const render = () => {
           <App />
         </BrowserRouter>
       </ReactReduxProvider>
-    </ChakraProvider>,
+    </ChakraProvider>
   );
 };
 
 const main = async () => {
-  use(WxxPower);
-  use(Dnw);
-
-  await initPlugins();
+  await use(WxxPower);
 
   render();
 };

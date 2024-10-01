@@ -2,7 +2,6 @@ import { memo, ReactElement, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { WxxRoute } from '@/types/router';
 import { Box } from '@chakra-ui/react';
-import { getAllRoutes } from '@/router';
 import { resolve } from '@/utils/path';
 import AppPage from '@/layouts/AppLayout/AppPage.tsx';
 
@@ -45,11 +44,11 @@ const renderRoutes = (routes: WxxRoute[], parentPath: string = '') => {
   return result;
 };
 
-function AppContent() {
+function AppContent(props: { routes: WxxRoute[] }) {
   return (
     <Box>
       <Suspense fallback={<Box>loading</Box>}>
-        <Routes>{renderRoutes(getAllRoutes())}</Routes>
+        <Routes>{renderRoutes(props.routes)}</Routes>
       </Suspense>
     </Box>
   );

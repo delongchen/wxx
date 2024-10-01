@@ -1,6 +1,6 @@
-import { WxxPluginType } from '@/types/plugin';
+import { WxxPluginRaw } from '@/app/plugin/types'
 
-const wxxAnalysis: WxxPluginType = {
+const wxxAnalysis: WxxPluginRaw = {
   name: 'wxx-analysis',
   async install() {},
 };
