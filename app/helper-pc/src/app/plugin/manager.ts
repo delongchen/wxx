@@ -8,3 +8,5 @@ export const use = async <T>(plugin: WxxPluginRaw<T>, options?: T) => {
   await ctx.start(options);
   pluginMap.set(ctx.name, ctx as WxxPluginContext<unknown>);
 };
+
+export const getPlugins = () => [...pluginMap.values()]

@@ -1,6 +1,7 @@
 import { WxxRoute } from '@/types/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Subject } from 'rxjs'
+import { useSubscribe } from '@/utils/rx';
 
 const routeModules = import.meta.glob(['./modules/**/*.ts', './modules/**/*.tsx'], { eager: true });
 
@@ -52,15 +53,9 @@ export const emitRoutesChange = () => {
 export const useWxxRoutes = () => {
   const [routes, setRoutes] = useState<WxxRoute[]>(getAllRoutes())
 
-  useEffect(() => {
-    const subscription = RoutesChangeEmitter.subscribe(() => {
-      setRoutes(getAllRoutes())
-    })
-
-    return () => {
-      subscription.unsubscribe();
-    }
-  }, [])
+  useSubscribe(RoutesChangeEmitter, () => {
+    setRoutes(getAllRoutes())
+  })
 
   return routes
 }

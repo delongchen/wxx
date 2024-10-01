@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { WxxRoute } from '@/types/router';
+import { BehaviorSubject } from 'rxjs'
 import { emitRoutesChange, registerRoute, unregisterRoute } from '@/router';
-import { removeBarItem } from '@/app/status-bar';
+import { addBarItem, removeBarItem } from '@/app/status-bar';
 import {
   PluginQuitTask,
   WxxPluginContext,
@@ -10,8 +11,9 @@ import {
   WxxPluginStatus,
 } from './types';
 
+
 export const createWxxPluginContext = <T>(raw: WxxPluginRaw<T>): WxxPluginContext<T> => {
-  let status: WxxPluginStatus = WxxPluginStatus.Stop;
+  const statusSubject = new BehaviorSubject<WxxPluginStatus>(WxxPluginStatus.Stopped);
   const quitTasks: PluginQuitTask[] = [];
 
   const pageMap: Map<string, WxxRoute> = new Map();
@@ -19,13 +21,13 @@ export const createWxxPluginContext = <T>(raw: WxxPluginRaw<T>): WxxPluginContex
 
   const installer = raw.install;
   const pluginName = raw.name;
-  const { version = '0.0.0', description = 'no description', cover = '' } = raw;
+  const { version = '', description = [], cover = '' } = raw;
 
   const getInfo = (): WxxPluginInfo => {
     return {
-      version,
-      description,
       cover,
+      version,
+      description: Array.isArray(description) ? description : [description],
     };
   };
 
@@ -58,52 +60,61 @@ export const createWxxPluginContext = <T>(raw: WxxPluginRaw<T>): WxxPluginContex
   };
 
   const shutdown = async () => {
-    status = WxxPluginStatus.Stopping;
+    statusSubject.next(WxxPluginStatus.Stopping)
+
     if (quitTasks.length > 0) {
       await Promise.allSettled(quitTasks.map((task) => task()));
       quitTasks.length = 0;
     }
     clear();
     emitRoutesChange();
-    status = WxxPluginStatus.Stop;
+
+    statusSubject.next(WxxPluginStatus.Stopped)
   };
 
   const quit = (...tasks: PluginQuitTask[]) => {
     quitTasks.push(...tasks);
   };
 
-  const start = async (options?: T) => {
-    if (status === WxxPluginStatus.Started) {
-      await shutdown();
+  const restart = async (options?: T) => {
+    if (statusSubject.getValue() === WxxPluginStatus.Started) {
+      await shutdown()
     }
+    await start(options)
+  }
 
-    status = WxxPluginStatus.Starting;
+  const start = async (options?: T) => {
+    statusSubject.next(WxxPluginStatus.Starting)
 
     try {
       await installer({ page, statusBar, quit }, options);
     } catch (e: unknown) {
-      clear();
-      status = WxxPluginStatus.Stop;
-      return;
+      await shutdown()
+      throw e
     }
 
     for (const route of pageMap.values()) {
       registerRoute(route);
     }
-    emitRoutesChange();
-    status = WxxPluginStatus.Started;
-  };
 
-  const getStatus = () => status;
+    for (const [key, barItem] of barItemMap.entries()) {
+      addBarItem(key, barItem);
+    }
+
+    emitRoutesChange();
+
+    statusSubject.next(WxxPluginStatus.Started)
+  };
 
   return {
     name: pluginName,
     page,
     statusBar,
+    statusSubject,
     start,
+    restart,
     quit,
     getInfo,
     shutdown,
-    getStatus,
   };
 };

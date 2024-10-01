@@ -1,6 +1,6 @@
 import { WxxRoute } from '@/types/router';
 import { VscExtensions } from 'react-icons/vsc';
-import { ExtensionsPage } from '@/pages/extensions';
+import ExtensionsPage from '@/pages/extensions';
 
 const extensionRoutes: WxxRoute[] = [
   {
