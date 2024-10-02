@@ -8,7 +8,8 @@ import App from '@/App.tsx';
 
 import './styles/index.css';
 
-import WxxPower from '@/plugins/wxx-power/index.tsx';
+import WxxPower from '@/plugins/wxx-power';
+import WxxNiuma from '@/plugins/wxx-niuma'
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
@@ -26,6 +27,7 @@ const render = () => {
 
 const main = async () => {
   await use(WxxPower);
+  await use(WxxNiuma);
 
   render();
 };

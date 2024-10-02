@@ -42,7 +42,7 @@ function ExtensionCard(props: ExtensionCardProp) {
   const [badgeColor, badgeText] = mapPluginStatus(pluginStatus)
 
   return (
-    <Card colorScheme={theme}>
+    <Card colorScheme={theme} mb='4'>
       <CardHeader>
         <Flex>
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
