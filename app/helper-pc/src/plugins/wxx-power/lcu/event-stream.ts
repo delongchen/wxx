@@ -16,13 +16,13 @@ import {
 import { Subject, Observable, filter, map, share } from 'rxjs';
 
 const lcuEventBus = new Subject<TauriEvent<LcuEventType>>();
-listenLcuEvent(ev => lcuEventBus.next(ev)).catch(console.error);
+listenLcuEvent((ev) => lcuEventBus.next(ev)).catch(console.error);
 
 export const createSubStream = <T = unknown>(
   uri: string,
   eventTypes: (LcuEventTypeEnum | 'All')[],
   isSharing: boolean = true,
-  mapper?: (ev: TauriEvent<LcuEventType>) => T,
+  mapper?: (ev: TauriEvent<LcuEventType>) => T
 ): Observable<T> => {
   const customTypeSet = new Set(eventTypes);
 
@@ -44,12 +44,12 @@ export const createSubStream = <T = unknown>(
 
 export const gameFlowPhaseStream = createSubStream<GameflowPhase>(
   '/lol-gameflow/v1/gameflow-phase',
-  ['Update'],
+  ['Update']
 );
 
 export const currentSummonerUpdateStream = createSubStream<SummonerInfo>(
   '/lol-summoner/v1/current-summoner',
-  ['Update'],
+  ['Update']
 );
 
 export const gameBallotStream = createSubStream<BallotLegacy>('/lol-honor-v2/v1/ballot', [

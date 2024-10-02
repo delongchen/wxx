@@ -6,7 +6,7 @@ export class WxxWebSocket {
 
   constructor(
     private baseUrl: string,
-    private reconnectIntervalMs: number = 3000,
+    private reconnectIntervalMs: number = 3000
   ) {}
 
   private reconnect(group: string) {
@@ -27,13 +27,13 @@ export class WxxWebSocket {
 
     const ws = new WebSocket(`${this.baseUrl}/group/${group}`);
     ws.onopen = () => {};
-    ws.onerror = ev => {
+    ws.onerror = (ev) => {
       console.log(`[error] ${this.baseUrl}/group/${group}: `, ev);
     };
     ws.onclose = () => {
       this.reconnect(group);
     };
-    ws.onmessage = ev => {
+    ws.onmessage = (ev) => {
       this.onmessage(ev);
     };
 

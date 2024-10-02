@@ -27,7 +27,7 @@ const wxxPowerSlice = createSlice({
       action: PayloadAction<{
         key: K;
         value: WxxPowerState[K];
-      }>,
+      }>
     ) => {
       state[action.payload.key] = action.payload.value;
     },
@@ -41,8 +41,8 @@ export default wxxPowerSlice.reducer;
 
 export const syncToLocalConfig =
   (afterSync?: (state: WxxPowerState) => void): AppThunk =>
-  dispatch =>
-    configHandle.readWithInit(initialState).then(state => {
+  (dispatch) =>
+    configHandle.readWithInit(initialState).then((state) => {
       if (afterSync !== undefined) afterSync(state);
 
       const keys = Object.keys(state) as (keyof WxxPowerState)[];
@@ -52,14 +52,14 @@ export const syncToLocalConfig =
           setStateValue({
             key,
             value: state[key],
-          }),
+          })
         );
       }
     });
 
 export const setStateAsync =
   (cb: (prev: WxxPowerState) => Partial<WxxPowerState> | undefined): AppThunk =>
-  async dispatch => {
+  async (dispatch) => {
     const prev = await configHandle.read();
     const changed = cb(prev);
     if (changed === undefined) return;

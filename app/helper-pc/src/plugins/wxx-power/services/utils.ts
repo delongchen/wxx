@@ -6,10 +6,10 @@ export type CancellableService = () => CancelFn;
 export const concat =
   (...services: CancellableService[]): CancellableService =>
   () => {
-    const cancelFns = services.map(it => it());
+    const cancelFns = services.map((it) => it());
 
     return () => {
-      cancelFns.forEach(cancel => cancel());
+      cancelFns.forEach((cancel) => cancel());
       cancelFns.length = 0;
     };
   };
@@ -49,7 +49,7 @@ export const createMapHelper = <K, V>(map: Map<K, V>) => {
   const need = (
     key: K,
     exist: (value: V, setter: (value: V) => void) => void,
-    not?: (setter: (value: V) => void) => void,
+    not?: (setter: (value: V) => void) => void
   ) => {
     const target = map.get(key);
     const setter = (value?: V) => {

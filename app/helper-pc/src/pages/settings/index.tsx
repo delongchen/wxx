@@ -31,7 +31,7 @@ function ThemeSetting() {
       </CardHeader>
       <CardBody>
         <Wrap spacing={4}>
-          {AllowColor.map(it => (
+          {AllowColor.map((it) => (
             <WrapItem key={it}>
               <Button colorScheme={it} onClick={() => handleClick(it)}>
                 {it}

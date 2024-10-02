@@ -2,11 +2,11 @@ import { LcuProcessStatus, listenProcessStatus } from 'tauri-plugin-wxx-core';
 import { BehaviorSubject } from 'rxjs';
 
 export const lcuProcessStatusBus = new BehaviorSubject<LcuProcessStatus>(
-  LcuProcessStatus.NotStarted,
+  LcuProcessStatus.NotStarted
 );
 
 let prevStatus = LcuProcessStatus.NotStarted;
-listenProcessStatus(ev => {
+listenProcessStatus((ev) => {
   const currStatus = ev.payload;
   if (currStatus !== prevStatus) {
     prevStatus = currStatus;

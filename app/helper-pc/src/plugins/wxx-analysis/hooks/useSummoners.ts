@@ -41,17 +41,17 @@ export const useSummoners = () => {
    * })
    */
   useEffect(() => {
-    gameFlowPhaseStream.subscribe(phase => {
+    gameFlowPhaseStream.subscribe((phase) => {
       switch (phase) {
         case 'ChampSelect': // GameflowPhaseEnum.ChampSelect:
           // fetch teammates
-          getGameflowSession().then(session => {
+          getGameflowSession().then((session) => {
             setTeammates(session.gameData.teamOne);
           });
           break;
         case 'InProgress': // GameflowPhaseEnum.InProgress:
           // fetch enemies
-          getGameflowSession().then(session => {
+          getGameflowSession().then((session) => {
             setEnemies(session.gameData.teamTwo);
           });
           break;

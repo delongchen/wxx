@@ -38,7 +38,7 @@ const globalSlice = createSlice({
 
 export const { switchFullPage, setGlobalTheme } = globalSlice.actions;
 
-export const fetchLocalConfig = (): AppThunk => async dispatch => {
+export const fetchLocalConfig = (): AppThunk => async (dispatch) => {
   const localConfig = await configHandle.readWithInit(initialWxxAppConfig).catch(() => null);
 
   if (localConfig !== null) {
@@ -48,7 +48,7 @@ export const fetchLocalConfig = (): AppThunk => async dispatch => {
 
 export const setGlobalThemeAsync =
   (theme: string): AppThunk =>
-  async dispatch => {
+  async (dispatch) => {
     const config = await configHandle.write({ theme });
 
     if (config !== null) {

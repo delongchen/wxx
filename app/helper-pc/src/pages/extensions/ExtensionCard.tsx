@@ -22,13 +22,13 @@ interface ExtensionCardProp {
 const mapPluginStatus = (status: WxxPluginStatus): [string, string] => {
   switch (status) {
     case WxxPluginStatus.Started:
-      return ['green', '已启用']
+      return ['green', '已启用'];
     case WxxPluginStatus.Stopped:
       return ['red', '已停用'];
     default:
-      return ['yellow', '正在操作']
+      return ['yellow', '正在操作'];
   }
-}
+};
 
 function ExtensionCard(props: ExtensionCardProp) {
   const theme = useAppTheme();
@@ -39,10 +39,10 @@ function ExtensionCard(props: ExtensionCardProp) {
   const [pluginStatus, setPluginStatus] = useState<WxxPluginStatus>(statusSubject.getValue());
   useSubscribe(statusSubject, setPluginStatus);
 
-  const [badgeColor, badgeText] = mapPluginStatus(pluginStatus)
+  const [badgeColor, badgeText] = mapPluginStatus(pluginStatus);
 
   return (
-    <Card colorScheme={theme} mb='4'>
+    <Card colorScheme={theme} mb="4">
       <CardHeader>
         <Flex>
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">

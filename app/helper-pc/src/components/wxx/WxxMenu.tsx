@@ -12,18 +12,21 @@ const renderMenuItems = (routes: WxxRoute[], theme: string) => {
 
   return Array.from(routes)
     .filter(
-      route =>
-        route.component !== undefined &&
+      (route) =>
         route.meta !== undefined &&
         !route.meta.hidden &&
-        route.meta.icon !== undefined,
+        route.meta.icon !== undefined &&
+        (
+          route.component !== undefined ||
+          (route.children !== undefined && route.children.length > 0)
+        )
     )
     .sort((a, b) => {
       const indexA = a.meta?.index ?? 0;
       const indexB = b.meta?.index ?? 0;
       return indexB - indexA;
     })
-    .map(route => {
+    .map((route) => {
       const path = route.path;
       const Icon = route.meta!.icon!;
       return (

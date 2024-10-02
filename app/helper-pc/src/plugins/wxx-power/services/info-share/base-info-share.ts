@@ -61,35 +61,35 @@ export default () => {
   defer(summonerChan.stop);
   manage(
     summonerChan.sendOn(currentSummonerUpdateStream, handleSummonerInfo),
-    summonerChan.receive(info => {
+    summonerChan.receive((info) => {
       if (info.base === undefined) return;
 
       stateMapHelper.need(
         info.base.summonerId,
-        state => {
+        (state) => {
           state.info = info;
         },
-        setter => setter({ info, phase: GameflowPhaseEnum.None }),
+        (setter) => setter({ info, phase: GameflowPhaseEnum.None })
       );
       emitMapChange();
-    }),
+    })
   );
 
   const phaseChan = shareChannel(GamePhaseSharingServiceName, PhaseWithSummonerId);
   defer(phaseChan.stop);
   manage(
     phaseChan.sendOn(gameFlowPhaseStream, getPhaseWithSummonerId),
-    phaseChan.receive(message => {
-      stateMapHelper.need(message.summonerId, state => {
+    phaseChan.receive((message) => {
+      stateMapHelper.need(message.summonerId, (state) => {
         if (message.phase !== state.phase) {
           state.phase = message.phase;
           emitMapChange();
         }
       });
-    }),
+    })
   );
 
-  subscribe(lcuProcessStatusBus, async status => {
+  subscribe(lcuProcessStatusBus, async (status) => {
     if (status === LcuProcessStatus.Started) {
       await getCurrentSummoner().then(handleSummonerInfo).then(summonerChan.send);
       await getGameflowPhase().then(getPhaseWithSummonerId).then(phaseChan.send);

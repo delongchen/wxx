@@ -30,7 +30,7 @@ export const startAutoPlayAgain = () => {
   const subscription = gameFlowPhaseStream
     .pipe(
       filter(isAllowedPhase),
-      switchMap(phase => {
+      switchMap((phase) => {
         switch (phase) {
           case 'WaitingForStats':
             return timer(10000);
@@ -41,7 +41,7 @@ export const startAutoPlayAgain = () => {
         }
 
         return of();
-      }),
+      })
     )
     .subscribe(doPlayAgain);
 

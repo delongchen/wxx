@@ -27,10 +27,20 @@ export interface WxxPluginRaw<T = void> {
   cover?: string;
 }
 
+export interface WxxPluginPageInfo {
+  name: string;
+  component?: FC;
+  icon?: FC;
+  fullPage?: boolean;
+  redirect?: string;
+  isIndexPage?: boolean;
+  children?: WxxPluginPageInfo[];
+}
+
 export interface WxxPluginContext<T> {
   name: string;
   statusSubject: BehaviorSubject<WxxPluginStatus>;
-  page: (name: string, component: FC, icon: FC, fullPage?: boolean) => void;
+  page: (info: WxxPluginPageInfo) => void;
   statusBar: (name: string, component: FC) => void;
   quit: (...tasks: PluginQuitTask[]) => void;
   start: (options?: T) => Promise<void>;

@@ -24,21 +24,21 @@ function TikTokHelper() {
     const id = ev.target.id;
     if (id === 'wxx-power-auto-accept-match') {
       dispatch(
-        setStateAsync(prev => ({
+        setStateAsync((prev) => ({
           autoAcceptMatch: !prev.autoAcceptMatch,
-        })),
+        }))
       );
     } else if (id === 'wxx-power-auto-next-match') {
       dispatch(
-        setStateAsync(prev => ({
+        setStateAsync((prev) => ({
           autoNextMatch: !prev.autoNextMatch,
-        })),
+        }))
       );
     } else if (id === 'wxx-power-auto-ballot') {
       dispatch(
-        setStateAsync(prev => ({
+        setStateAsync((prev) => ({
           autoBallot: !prev.autoBallot,
-        })),
+        }))
       );
     }
   }, []);

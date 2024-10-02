@@ -1,13 +1,13 @@
 import WxxLayout from '@/layouts/AppLayout/WxxLayout.tsx';
 import { memo } from 'react';
-import { AppProvider } from "@/app/context/app-context.tsx";
+import { AppProvider } from '@/app/context/app-context.tsx';
 
 function App() {
   return (
     <AppProvider>
       <WxxLayout />
     </AppProvider>
-  )
+  );
 }
 
 export default memo(App);

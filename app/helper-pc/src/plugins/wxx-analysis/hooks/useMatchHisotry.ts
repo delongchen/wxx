@@ -17,7 +17,7 @@ export const useMatchHistory = (player: TeamPlayer) => {
       };
     },
     initialPageParam: 1,
-    getNextPageParam: lastPage => {
+    getNextPageParam: (lastPage) => {
       return lastPage.nextPageParam;
     },
   });

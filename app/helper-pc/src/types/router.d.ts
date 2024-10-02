@@ -16,6 +16,7 @@ interface WxxRoute {
   children?: WxxRoute[];
   meta?: WxxRouteMeta;
   isOuter?: boolean;
+  isIndexPage?: boolean;
 }
 
 export type { WxxRoute, WxxRouteMeta };

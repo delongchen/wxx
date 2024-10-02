@@ -17,7 +17,7 @@ import {
 import { VscMenu } from 'react-icons/vsc';
 import { GameflowPhaseEnum } from 'wxx-protobufs/lcu.gameflow';
 import { SummonerState } from 'wxx-protobufs/rest.user';
-import { useAppTheme } from "@/app/context/app-context.tsx";
+import { useAppTheme } from '@/app/context/app-context.tsx';
 
 interface PhaseInfo {
   text: string;
@@ -82,7 +82,7 @@ const phaseInfoMap: PhaseEnumRecord<PhaseInfo> = Object.freeze({
 });
 
 function SummonerCard({ info, phase }: SummonerState) {
-  const theme = useAppTheme()
+  const theme = useAppTheme();
   const [showBody, setShowBody] = useState(false);
 
   const handleClick = useCallback(() => {
