@@ -1,9 +1,5 @@
 import { WxxPluginRaw } from '@/app/plugin/types';
-
-import NiumaPage from './pages/NiumaPage.tsx';
-import { PropsWithChildren } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@chakra-ui/react';
+import { mainPage } from './routes';
 
 const wxxNiuma: WxxPluginRaw = {
   name: 'wxx-niuma',
@@ -13,30 +9,7 @@ const wxxNiuma: WxxPluginRaw = {
   async install(ctx) {
     const { page } = ctx;
 
-    page({
-      name: 'niuma-page',
-      icon: () => '牛马',
-      fullPage: true,
-      component: (props: PropsWithChildren) => {
-        const nav = useNavigate()
-        return (
-          <div>
-            <p>niuma</p>
-            <Button onClick={() => {
-              nav('page1')
-            }}>go</Button>
-            {props.children}
-          </div>
-        )
-      },
-      children: [
-        {
-          name: 'page1',
-          component: NiumaPage,
-          isIndexPage: true,
-        }
-      ]
-    })
+    page(mainPage);
   },
 };
 

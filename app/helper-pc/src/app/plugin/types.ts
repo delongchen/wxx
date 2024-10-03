@@ -35,6 +35,7 @@ export interface WxxPluginPageInfo {
   redirect?: string;
   isIndexPage?: boolean;
   children?: WxxPluginPageInfo[];
+  meta?: Record<string, unknown>;
 }
 
 export interface WxxPluginContext<T> {

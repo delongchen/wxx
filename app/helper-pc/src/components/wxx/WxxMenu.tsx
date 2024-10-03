@@ -16,10 +16,8 @@ const renderMenuItems = (routes: WxxRoute[], theme: string) => {
         route.meta !== undefined &&
         !route.meta.hidden &&
         route.meta.icon !== undefined &&
-        (
-          route.component !== undefined ||
-          (route.children !== undefined && route.children.length > 0)
-        )
+        (route.component !== undefined ||
+          (route.children !== undefined && route.children.length > 0))
     )
     .sort((a, b) => {
       const indexA = a.meta?.index ?? 0;
@@ -29,12 +27,17 @@ const renderMenuItems = (routes: WxxRoute[], theme: string) => {
     .map((route) => {
       const path = route.path;
       const Icon = route.meta!.icon!;
+
+      const active = path === location.pathname;
+
       return (
         <IconButton
+          mt="1"
           key={path}
           colorScheme={theme}
           icon={<Icon />}
-          variant={location.pathname === path ? 'solid' : 'none'}
+          isActive={active}
+          variant={theme === 'gray' ? 'ghost' : 'solid'}
           aria-label={path}
           onClick={() => navigate(path)}
         />
@@ -53,7 +56,7 @@ function WxxSideMenu(props: { routes: WxxRoute[] }) {
 
   const globalState = useAppSelector(selectGlobal);
   const theme = globalState.theme;
-  const bg = [theme, 600].join('.');
+  const bg = [theme, 500].join('.');
 
   return (
     <Flex flexDirection="column" bg={bg} className={Style.menu}>

@@ -22,8 +22,8 @@ const wxxPower: WxxPluginRaw = {
     page({
       name: 'tik-tok',
       component: TikTokPage,
-      icon: () => <VscTools size="24px" />
-    })
+      icon: () => <VscTools size="24px" />,
+    });
 
     statusBar('lcu-status', LcuStatusTag);
 

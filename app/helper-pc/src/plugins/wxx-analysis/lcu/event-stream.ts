@@ -5,8 +5,6 @@
 
 import {
   GameflowPhase,
-  SummonerInfo,
-  BallotLegacy,
   TauriEvent,
   LcuEventType,
   listenLcuEvent,

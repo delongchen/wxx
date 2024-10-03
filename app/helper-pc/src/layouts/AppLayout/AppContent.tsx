@@ -1,107 +1,96 @@
-import { memo, ReactElement, Suspense } from 'react';
+import { memo, Suspense } from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { WxxRoute } from '@/types/router';
 import { Box } from '@chakra-ui/react';
 import AppPage from '@/layouts/AppLayout/AppPage.tsx';
 
-type RoutesElements = ReactElement[];
+const renderChildrenRoutes = (routes: WxxRoute[]) => {
+  let hasIndex = false;
 
-const renderRoutes = (routes: WxxRoute[], isRoot: boolean) => {
-  const result: RoutesElements = [];
+  return routes.map((route, routeIndex) => {
+    const { redirect, children = [], component: Component } = route;
 
-  routes.forEach((route, index) => {
-    const {
-      path,
-      redirect,
-      isIndexPage,
-      children = [],
-      component: Component,
-      isFullPage = false,
-    } = route;
+    let index: boolean = false;
+    if (!hasIndex && route.isIndexPage === true) {
+      index = true;
+      hasIndex = true;
+    }
 
+    const path = index ? undefined : route.path;
+
+    /**
+     * handle redirect first.
+     * render it as a Navigation
+     */
     if (redirect !== undefined) {
-      result.push(<Route key={index} path={path} element={<Navigate to={redirect} replace />} />);
-      return;
+      return <Route key={routeIndex} path={path} element={<Navigate to={redirect} replace />} />;
     }
 
+    /**
+     * we do not render a route who has no component and no children
+     */
     if (Component === undefined && children.length === 0) {
-      return;
+      return null;
     }
 
+    /**
+     * enter here it is means that a route has children but no component
+     */
     if (Component === undefined) {
-      result.push(
-        <Route
-          key={index}
-          path={path}
-          element={
-            isRoot ? (
-              <AppPage isFullPage={isFullPage}>
-                <Outlet />
-              </AppPage>
-            ) : (
-              <Outlet />
-            )
-          }
-        >
-          {renderRoutes(children, false)}
+      return (
+        <Route key={routeIndex} path={path} element={<Outlet />}>
+          {renderChildrenRoutes(children)}
         </Route>
       );
-      return;
     }
 
+    /**
+     * likely, enter here means that a route has a component but no children
+     * we just render its component
+     */
     if (children.length === 0) {
-      result.push(
-        <Route
-          key={index}
-          path={path}
-          index={isIndexPage}
-          element={
-            isRoot ? (
-              <AppPage isFullPage={isFullPage}>
-                <Component />
-              </AppPage>
-            ) : (
-              <Component />
-            )
-          }
-        />
-      );
-      return;
+      return <Route key={routeIndex} path={path} index={index} element={<Component />} />;
     }
 
-    result.push(
+    /**
+     * last, a route has both component and children
+     */
+    return (
+      <Route key={routeIndex} path={path} element={<Component />}>
+        {renderChildrenRoutes(children)}
+      </Route>
+    );
+  });
+};
+
+const renderRootLevelRoutes = (routes: WxxRoute[]) =>
+  routes.map((route, index) => {
+    const { path, isFullPage = false, children = [], component: Component, redirect } = route;
+
+    if (redirect !== undefined) {
+      return <Route key={index} path={path} element={<Navigate to={redirect} replace />} />;
+    }
+
+    return (
       <Route
         key={index}
         path={path}
         element={
-          isRoot ? (
-            <AppPage isFullPage={isFullPage}>
-              <Component>
-                <Outlet />
-              </Component>
-            </AppPage>
-          ) : (
-            <Component>
-              <Outlet />
-            </Component>
-          )
+          <AppPage isFullPage={isFullPage}>
+            {Component === undefined ? <Outlet /> : <Component />}
+          </AppPage>
         }
       >
-        {renderRoutes(children, false)}
+        {children.length !== 0 && renderChildrenRoutes(children)}
       </Route>
     );
   });
 
-  return result;
-};
-
 function AppContent(props: { routes: WxxRoute[] }) {
   return (
-    <Box>
-      <Suspense fallback={<Box>loading</Box>}>
-        <Routes>{renderRoutes(props.routes, true)}</Routes>
-      </Suspense>
-    </Box>
+    <Suspense fallback={<Box>loading</Box>}>
+      <Routes>{renderRootLevelRoutes(props.routes)}</Routes>
+    </Suspense>
   );
 }
 
