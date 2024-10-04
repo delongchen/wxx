@@ -1,5 +1,7 @@
 export * from './events';
 export * from './api';
+export * from './tools'
+export * from './streams'
 
 export * from './types/lcu-api/summoner';
 export * from './types/lcu-api/gameflow';

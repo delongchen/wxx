@@ -13,7 +13,7 @@ import { SummonerStates, SummonerState } from 'wxx-protobufs/rest.user';
 import { createSubscriptionManager, createMapHelper } from '../utils';
 import { Subject } from 'rxjs';
 import { shareChannel } from './share-channel';
-import { lcuProcessStatusBus } from '../../lcu/process';
+import { LCU_PROCESS_STATUS_BUS } from 'tauri-plugin-wxx-core/streams'
 
 let currentSummoner = 0;
 
@@ -89,7 +89,7 @@ export default () => {
     })
   );
 
-  subscribe(lcuProcessStatusBus, async (status) => {
+  subscribe(LCU_PROCESS_STATUS_BUS, async (status) => {
     if (status === LcuProcessStatus.Started) {
       await getCurrentSummoner().then(handleSummonerInfo).then(summonerChan.send);
       await getGameflowPhase().then(getPhaseWithSummonerId).then(phaseChan.send);

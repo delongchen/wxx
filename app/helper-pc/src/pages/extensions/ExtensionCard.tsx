@@ -13,7 +13,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { memo, useState } from 'react';
-import { useSubscribe } from '@/utils/rx';
+import { useSubscribe } from 'tauri-plugin-wxx-core/hooks'
 
 interface ExtensionCardProp {
   ctx: WxxPluginContext<unknown>;

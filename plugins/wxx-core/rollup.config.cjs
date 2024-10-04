@@ -1,11 +1,18 @@
 const typescript = require('@rollup/plugin-typescript')
 const pkg = require('./package.json')
 
+const entries = [
+  'events',
+  'api',
+  'streams',
+  'hooks',
+  'tools'
+]
+
 module.exports = {
   input: [
     'guest-js/index.ts',
-    'guest-js/events/index.ts',
-    'guest-js/api/index.ts',
+    ...entries.map(entry => `guest-js/${entry}/index.ts`),
   ],
   output: [
     {
@@ -24,5 +31,7 @@ module.exports = {
     /^@tauri-apps\/api/,
     ...Object.keys(pkg.dependencies || {}),
     ...Object.keys(pkg.peerDependencies || {}),
+    'rxjs',
+    'react'
   ]
 }

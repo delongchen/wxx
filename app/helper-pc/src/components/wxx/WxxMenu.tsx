@@ -45,6 +45,8 @@ const renderMenuItems = (routes: WxxRoute[], theme: string) => {
     });
 };
 
+const LightThemeSet = new Set(['yellow', 'cyan'])
+
 function WxxSideMenu(props: { routes: WxxRoute[] }) {
   const allRoutes = props.routes;
   const internal: WxxRoute[] = [];
@@ -56,7 +58,8 @@ function WxxSideMenu(props: { routes: WxxRoute[] }) {
 
   const globalState = useAppSelector(selectGlobal);
   const theme = globalState.theme;
-  const bg = [theme, 500].join('.');
+  const bgColorDeep = LightThemeSet.has(theme) ? 400 : 500
+  const bg = [theme, bgColorDeep].join('.');
 
   return (
     <Flex flexDirection="column" bg={bg} className={Style.menu}>

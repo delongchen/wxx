@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { Tag, TagLabel, TagLeftIcon } from '@chakra-ui/react';
 import { VscInfo, VscError, VscEllipsis } from 'react-icons/vsc';
 import { IconType } from 'react-icons';
-import { useCurrentSummoner, useLcuProcessStatus } from '../hooks/common';
+import { useCurrentSummoner, useLcuProcessStatus } from 'tauri-plugin-wxx-core/hooks'
 import { LcuProcessStatus } from 'tauri-plugin-wxx-core/events';
 
 type TagAllowedColor = 'red' | 'green' | 'yellow';

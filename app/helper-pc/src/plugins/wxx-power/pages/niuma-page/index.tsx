@@ -8,7 +8,7 @@ import MyNiuma from './MyNiuma.tsx';
 import { NiumaContext } from './context';
 import { useAppSelector } from '@/store';
 import { selectGlobal } from '@/store/modules/global';
-import { useCurrentSummoner } from '../../hooks/common';
+import { useCurrentSummoner } from 'tauri-plugin-wxx-core/hooks';
 
 const NiumaComponentKeys: { key: string; text: string }[] = [
   { key: 'niuma', text: '🐂🐎' },

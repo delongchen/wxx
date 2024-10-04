@@ -9,6 +9,6 @@
     "noImplicitAny": true,
     "noEmit": true
   },
-  "include": ["guest-js/*.ts", "guest-js/types/lcu-api/*.ts"],
+  "include": ["guest-js/**/*.ts", "guest-js/types/lcu-api/*.ts"],
   "exclude": ["dist-js", "node_modules"]
 }
