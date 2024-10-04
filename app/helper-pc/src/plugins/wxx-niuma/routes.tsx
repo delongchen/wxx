@@ -5,11 +5,11 @@ import NiumaPage from './pages/NiumaPage.tsx';
 
 export const mainPageChildren: WxxPluginPageInfo[] = [
   {
-    name: 'page1',
+    name: 'index',
     component: NiumaPage,
     isIndexPage: true,
     meta: {
-      text: 'page1',
+      text: '我是牛马',
     },
   },
   {

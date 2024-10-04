@@ -1,13 +1,12 @@
 import { memo } from 'react';
 import { useNiumaContext } from '../context/hooks';
+import { Box } from '@chakra-ui/react';
 
 function NiumaPage() {
   const { theme } = useNiumaContext();
 
   return (
-    <div>
-      <p>{theme}</p>
-    </div>
+    <Box p='2'>{theme}</Box>
   );
 }
 
