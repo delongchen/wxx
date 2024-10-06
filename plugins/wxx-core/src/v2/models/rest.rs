@@ -16,8 +16,8 @@ enum LcuRestAllowMethod {
 }
 
 impl LcuRestAllowMethod {
-    fn from(raw: String) -> Option<Self> {
-        match raw.as_str() {
+    fn from(raw: &str) -> Option<Self> {
+        match raw {
             "get" | "GET" => Some(Self::GET),
             "post" | "POST" => Some(Self::POST),
             "put" | "PUT" => Some(Self::PUT),
@@ -37,7 +37,7 @@ impl LcuRestClient {
 
         let client = ClientBuilder::new()
             .add_root_certificate(cert)
-            .timeout(Duration::from_millis(500))
+            .timeout(Duration::from_millis(20000))
             .build()
             .unwrap();
 
@@ -46,11 +46,12 @@ impl LcuRestClient {
 
     pub fn create_request(
         &self,
-        method: String,
-        endpoint: String,
-        body: Value,
-        port: String,
-        auth_token: String,
+        method: &str,
+        endpoint: &str,
+        body: &Value,
+        port: &str,
+        auth_token: &str,
+        timeout: u64,
     ) -> Result<RequestBuilder, LcuRestError> {
         let method = {
             match LcuRestAllowMethod::from(method) {
@@ -67,14 +68,14 @@ impl LcuRestClient {
             LcuRestAllowMethod::POST => {
                 let req = self.client.post(url);
                 match body {
-                    Value::Object(body) => req.json(&body),
+                    Value::Object(body) => req.json(body),
                     _ => req,
                 }
             }
             LcuRestAllowMethod::PUT => {
                 let req = self.client.put(url);
                 match body {
-                    Value::Object(body) => req.json(&body),
+                    Value::Object(body) => req.json(body),
                     _ => req,
                 }
             }
@@ -84,6 +85,10 @@ impl LcuRestClient {
             "Authorization",
             HeaderValue::from_str(format!("Basic {}", auth_token).as_str()).unwrap(),
         );
+        
+        let req = req.timeout(Duration::from_millis(
+            if timeout == 0 { 1000 } else { timeout }
+        ));
 
         Ok(req)
     }

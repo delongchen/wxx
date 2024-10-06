@@ -8,7 +8,7 @@ const NiumaContent = () => {
   const bg = [theme, 100].join('.');
 
   return (
-    <Box minW="100vw" minH="100vh" bg={bg} pt="64px">
+    <Box w="100vw" minH="100vh" bg={bg} pt="64px">
       <Outlet />
     </Box>
   );

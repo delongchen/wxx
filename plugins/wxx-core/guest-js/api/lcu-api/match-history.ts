@@ -1,5 +1,10 @@
+import { invoke } from '@tauri-apps/api/core'
 import { api } from './utils';
 import { Game, MatchHistory } from '../../types/lcu-api/match-history';
+
+export const fetch_match_history = async (puuid: string) => {
+  return invoke<{size: number}>('plugin:wxx-core|fetch_match_history', { puuid });
+}
 
 export const getCurrentSummonerMatchHistory = api('/lol-match-history/v1/products/lol/current-summoner/matches')
   .noPayload('get');

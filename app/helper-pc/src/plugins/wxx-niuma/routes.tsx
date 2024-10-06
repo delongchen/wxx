@@ -2,6 +2,7 @@ import type { WxxPluginPageInfo } from '@/app/plugin/types';
 import { NiumaContextProvider } from './context/provider.tsx';
 import NiumaMainLayout from './components/NiumaMainLayout.tsx';
 import NiumaPage from './pages/NiumaPage.tsx';
+import HistoryFetchPage from './pages/HistoryFetchPage.tsx';
 
 export const mainPageChildren: WxxPluginPageInfo[] = [
   {
@@ -13,10 +14,10 @@ export const mainPageChildren: WxxPluginPageInfo[] = [
     },
   },
   {
-    name: 'page2',
-    component: () => <div>page2</div>,
+    name: 'history-fetch',
+    component: HistoryFetchPage,
     meta: {
-      text: 'page2',
+      text: '成为牛马',
     },
   },
 ];

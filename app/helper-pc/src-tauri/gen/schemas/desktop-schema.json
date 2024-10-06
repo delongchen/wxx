@@ -1657,6 +1657,11 @@
           "const": "core:window:deny-unminimize"
         },
         {
+          "description": "Enables the fetch_match_history command without any pre-configured scope.",
+          "type": "string",
+          "const": "wxx-core:allow-fetch-match-history"
+        },
+        {
           "description": "Enables the lcu_fetch command without any pre-configured scope.",
           "type": "string",
           "const": "wxx-core:allow-lcu-fetch"
@@ -1670,6 +1675,11 @@
           "description": "Enables the write_config command without any pre-configured scope.",
           "type": "string",
           "const": "wxx-core:allow-write-config"
+        },
+        {
+          "description": "Denies the fetch_match_history command without any pre-configured scope.",
+          "type": "string",
+          "const": "wxx-core:deny-fetch-match-history"
         },
         {
           "description": "Denies the lcu_fetch command without any pre-configured scope.",

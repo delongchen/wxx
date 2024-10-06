@@ -18,13 +18,14 @@ export const lcuFetch = async <T = unknown>(
   endpoint: string,
   options: {
     method?: LcuAllowedMethod,
-    body?: RequestBody
+    body?: RequestBody,
+    timeout?: number,
   } = {},
 ) => {
-  const { method = 'get', body = null } = options;
+  const { method = 'get', body = null, timeout = 0 } = options;
 
   return invoke<T>(
     'plugin:wxx-core|lcu_fetch',
-    { endpoint, method, body },
+    { endpoint, method, body, timeout },
   );
 };

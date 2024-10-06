@@ -34,6 +34,7 @@ fn fetch_lcu_info() -> Result<LcuProcessInfo, LcuProcessError> {
     let mut sys = System::new_all();
     sys.refresh_processes_specifics(
         ProcessesToUpdate::All,
+        true,
         ProcessRefreshKind::new().with_cmd(UpdateKind::Always),
     );
 

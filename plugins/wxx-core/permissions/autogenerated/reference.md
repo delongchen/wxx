@@ -11,6 +11,32 @@
 <tr>
 <td>
 
+`wxx-core:allow-fetch-match-history`
+
+</td>
+<td>
+
+Enables the fetch_match_history command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:deny-fetch-match-history`
+
+</td>
+<td>
+
+Denies the fetch_match_history command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `wxx-core:allow-lcu-fetch`
 
 </td>

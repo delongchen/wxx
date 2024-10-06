@@ -8,6 +8,7 @@
   "permissions": [
     "wxx-core:allow-read-config",
     "wxx-core:allow-lcu-fetch",
-    "wxx-core:allow-write-config"
+    "wxx-core:allow-write-config",
+    "wxx-core:allow-fetch-match-history"
   ]
 }
