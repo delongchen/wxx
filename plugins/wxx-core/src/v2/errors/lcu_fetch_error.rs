@@ -7,6 +7,7 @@ pub enum LcuFetchError {
     SendRequestError(String),
     RequestNotSuccess(Value),
     ResponseDeserializationError(String),
+    FsError(String),
 }
 
 #[derive(Serialize)]
@@ -36,6 +37,10 @@ impl LcuFetchError {
             },
             Self::ResponseDeserializationError(message) => LcuFetchErrorWrapper {
                 code: 4,
+                message: message.to_string(),
+            },
+            Self::FsError(message) => LcuFetchErrorWrapper {
+                code: 5,
                 message: message.to_string(),
             }
         }

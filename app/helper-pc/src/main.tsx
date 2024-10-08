@@ -8,6 +8,12 @@ import App from '@/App.tsx';
 
 import './styles/index.css';
 
+import { listen } from '@tauri-apps/api/event'
+
+listen('LCU_MATCH_HISTORY_TASK', (ev) => {
+  console.log(ev.payload);
+})
+
 import WxxPower from '@/plugins/wxx-power';
 import WxxNiuma from '@/plugins/wxx-niuma';
 

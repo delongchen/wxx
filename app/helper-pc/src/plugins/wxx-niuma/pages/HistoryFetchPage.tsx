@@ -14,7 +14,7 @@ function HistoryFetchPage() {
 
   const handleClick = useCallback(() => {
     if (currentSummoner !== null) {
-      fetch_match_history(currentSummoner.puuid)
+      fetch_match_history()
         .then(data => {
           setMessage(JSON.stringify(data));
         })

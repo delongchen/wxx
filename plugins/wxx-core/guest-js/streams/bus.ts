@@ -1,5 +1,11 @@
 import { Subject, BehaviorSubject } from 'rxjs'
-import { LcuEventType, LcuProcessStatus, listenLcuEvent, listenProcessStatus, TauriEvent } from '../events';
+import {
+  LcuEventType,
+  LcuProcessStatus,
+  listenLcuEvent,
+  listenProcessStatus,
+  TauriEvent,
+} from '../events';
 
 export const LCU_EVENT_BUS = new Subject<TauriEvent<LcuEventType>>();
 listenLcuEvent(ev => LCU_EVENT_BUS.next(ev))

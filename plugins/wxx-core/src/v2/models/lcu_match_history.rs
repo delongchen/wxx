@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MatchHistory {
     pub account_id: u64,
@@ -9,7 +9,7 @@ pub struct MatchHistory {
     pub platform_id: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Games {
     pub game_begin_date: String,
@@ -20,7 +20,7 @@ pub struct Games {
     pub games: Vec<Game>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Game {
     pub end_of_game_result: String,
@@ -40,7 +40,7 @@ pub struct Game {
     pub teams: Vec<Team>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Team {
     pub bans: Value, // Using Value for any
@@ -60,7 +60,7 @@ pub struct Team {
     pub win: String, // 'Win' or 'Fail'
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Participant {
     pub champion_id: u32,
@@ -70,10 +70,11 @@ pub struct Participant {
     pub spell2_id: u32,
     pub stats: Stats,
     pub team_id: u32,
-    pub timeline: Value //Timeline,
+    // 
+    // pub timeline: Timeline,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Timeline {
     pub creeps_per_min_deltas: CreepsPerMinDeltas,
@@ -88,19 +89,19 @@ pub struct Timeline {
     pub xp_per_min_deltas: CreepsPerMinDeltas,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CsDiffPerMinDeltas {
     pub deltas: std::collections::HashMap<String, f32>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CreepsPerMinDeltas {
     pub deltas: std::collections::HashMap<String, f32>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Stats {
     pub assists: u32,
@@ -153,29 +154,29 @@ pub struct Stats {
     pub participant_id: u32,
     pub penta_kills: u32,
     pub perk0: u32,
-    pub perk0_var1: u32,
-    pub perk0_var2: u32,
-    pub perk0_var3: u32,
+    pub perk0_var1: i32,
+    pub perk0_var2: i32,
+    pub perk0_var3: i32,
     pub perk1: u32,
-    pub perk1_var1: u32,
-    pub perk1_var2: u32,
-    pub perk1_var3: u32,
+    pub perk1_var1: i32,
+    pub perk1_var2: i32,
+    pub perk1_var3: i32,
     pub perk2: u32,
-    pub perk2_var1: u32,
-    pub perk2_var2: u32,
-    pub perk2_var3: u32,
+    pub perk2_var1: i32,
+    pub perk2_var2: i32,
+    pub perk2_var3: i32,
     pub perk3: u32,
-    pub perk3_var1: u32,
-    pub perk3_var2: u32,
-    pub perk3_var3: u32,
+    pub perk3_var1: i32,
+    pub perk3_var2: i32,
+    pub perk3_var3: i32,
     pub perk4: u32,
-    pub perk4_var1: u32,
-    pub perk4_var2: u32,
-    pub perk4_var3: u32,
+    pub perk4_var1: i32,
+    pub perk4_var2: i32,
+    pub perk4_var3: i32,
     pub perk5: u32,
-    pub perk5_var1: u32,
-    pub perk5_var2: u32,
-    pub perk5_var3: u32,
+    pub perk5_var1: i32,
+    pub perk5_var2: i32,
+    pub perk5_var3: i32,
     pub perk_primary_style: u32,
     pub perk_sub_style: u32,
     pub physical_damage_dealt: u32,
@@ -219,14 +220,14 @@ pub struct Stats {
     pub player_subteam_id: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ParticipantIdentity {
     pub participant_id: u32,
     pub player: Player,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Player {
     pub account_id: u64,

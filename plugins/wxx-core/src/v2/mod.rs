@@ -15,7 +15,7 @@ pub fn create_app_dir<R: Runtime>(app: &AppHandle<R>, targets: Vec<&str>) {
         for target in targets {
             let mut target_path = data_dir.clone();
             target_path.push(target);
-            if let Err(e) = utils::create_dir_if_not_exists(&target_path) {
+            if let Err(e) = utils::create_dir_if_not_exists_sync(&target_path) {
                 println!("create {} failed: {:?}", target_path.display(), e);
             }
         }
