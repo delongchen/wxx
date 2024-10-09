@@ -72,9 +72,9 @@ impl LcuWsClient {
         Ok(Connector::NativeTls(tls))
     }
 
-    pub async fn connect(&self, port: String, auth_token: String) -> LcuWsResult<LcuWsStreamType> {
+    pub async fn connect(&self, port: &String, auth_token: &String) -> LcuWsResult<LcuWsStreamType> {
         let connector = self.create_tls_connector()?;
-        let req = create_req(port, auth_token)?;
+        let req = create_connection_request(port, auth_token)?;
 
         let (mut s, _) =
             tokio_tungstenite::connect_async_tls_with_config(req, None, false, Some(connector))
@@ -88,19 +88,16 @@ impl LcuWsClient {
 
     pub async fn connect_with(
         &self,
-        process_info: Option<LcuProcessInfo>,
+        process_info: &LcuProcessInfo,
     ) -> LcuWsResult<LcuWsStream> {
-        match process_info {
-            None => Err(LcuWsError::ErrorEmptyInfo),
-            Some(info) => match self.connect(info.port, info.auth_token).await {
-                Ok(s) => Ok(LcuWsStream(s)),
-                Err(e) => Err(e),
-            },
+        match self.connect(&process_info.port, &process_info.auth_token).await {
+            Ok(s) => Ok(LcuWsStream(s)),
+            Err(e) => Err(e),
         }
     }
 }
 
-fn create_req(port: String, auth_token: String) -> LcuWsResult<Request> {
+fn create_connection_request(port: &String, auth_token: &String) -> LcuWsResult<Request> {
     let mut req = format!("wss://127.0.0.1:{port}")
         .into_client_request()
         .map_err(|_| LcuWsError::ErrorCreateRequest)?;

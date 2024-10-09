@@ -1,6 +1,8 @@
 use crate::v2::consts::RIOT_GAMES_PEM_BYTES;
+use crate::v2::errors::lcu_fetch_error::LcuFetchError;
 use reqwest::header::HeaderValue;
 use reqwest::{Certificate, ClientBuilder, RequestBuilder};
+use serde::de::DeserializeOwned;
 use serde_json::Value;
 use std::time::Duration;
 
@@ -85,11 +87,62 @@ impl LcuRestClient {
             "Authorization",
             HeaderValue::from_str(format!("Basic {}", auth_token).as_str()).unwrap(),
         );
-        
-        let req = req.timeout(Duration::from_millis(
-            if timeout == 0 { 1000 } else { timeout }
-        ));
+
+        let req = req.timeout(Duration::from_millis(if timeout == 0 {
+            1000
+        } else {
+            timeout
+        }));
 
         Ok(req)
+    }
+}
+
+pub struct LcuFetcher<'this> {
+    client: &'this LcuRestClient,
+    port: &'this str,
+    auth_token: &'this str,
+}
+
+impl<'this> LcuFetcher<'this> {
+    pub fn of(client: &'this LcuRestClient, port: &'this str, auth_token: &'this str) -> Self {
+        LcuFetcher {
+            client,
+            port,
+            auth_token,
+        }
+    }
+
+    pub async fn fetch<T: DeserializeOwned>(
+        &self,
+        method: &str,
+        endpoint: &str,
+        timeout: u64,
+        body: &Value,
+    ) -> Result<T, LcuFetchError> {
+        let req = self
+            .client
+            .create_request(method, endpoint, body, self.port, self.auth_token, timeout)
+            .map_err(|_| LcuFetchError::CreateRequestError)?;
+
+        let res = match req.send().await {
+            Ok(res) => res,
+            Err(e) => return Err(LcuFetchError::SendRequestError(e.to_string())),
+        };
+
+        if !res.status().is_success() {
+            return Err(LcuFetchError::RequestNotSuccess(
+                res.json::<Value>().await.unwrap_or(Value::Null),
+            ));
+        }
+
+        match res.json::<T>().await {
+            Ok(parsed) => Ok(parsed),
+            Err(e) => Err(LcuFetchError::ResponseDeserializationError(e.to_string())),
+        }
+    }
+    
+    pub async fn fetch_without_body<T: DeserializeOwned>(&self, endpoint: String, timeout: u64) -> Result<T, LcuFetchError> {
+        self.fetch::<T>("get", &endpoint, timeout, &Value::Null).await
     }
 }

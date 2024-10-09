@@ -1,8 +1,9 @@
 use serde_json::Value;
 use tauri::{command, State};
 use crate::v2::app_states::AppState;
+use crate::v2::commands::utils::need_lcu_process_info;
 use crate::v2::errors::lcu_fetch_error::LcuFetchError;
-use super::utils::{check_lcu_started, send_request};
+use crate::v2::models::rest::LcuFetcher;
 
 #[command]
 pub async fn lcu_fetch(
@@ -12,18 +13,22 @@ pub async fn lcu_fetch(
     body: Value,
     timeout: u64,
 ) -> Result<Value, LcuFetchError> {
-    let process_info = check_lcu_started(&state).await?;
-
-    let req = state.rest_client.create_request(
-        &method,
-        &endpoint,
-        &body,
+    let process_info = need_lcu_process_info(&state)
+        .await
+        .map_err(|_| LcuFetchError::LcuNotStarted)?;
+    
+    let fetcher = LcuFetcher::of(
+        &state.rest_client,
         &process_info.port,
         &process_info.auth_token,
+    );
+    
+    let response = fetcher.fetch::<Value>(
+        &method,
+        &endpoint,
         timeout,
-    ).map_err(|_| LcuFetchError::CreateRequestError)?;
+        &body,
+    ).await?;
 
-    let res = send_request::<Value>(req).await?;
-
-    Ok(res)
+    Ok(response)
 }

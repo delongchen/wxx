@@ -1,13 +1,14 @@
-use super::utils::{check_lcu_started, send_request};
 use crate::v2::app_states::AppState;
 use crate::v2::consts::LCU_MATCH_HISTORY_TASK;
 use crate::v2::errors::lcu_fetch_error::LcuFetchError;
 use crate::v2::models::lcu_match_history::{Game, MatchHistory};
 use crate::v2::utils::create_dir_if_not_exists;
-use serde::{Deserialize, Serialize};
+use serde::{Serialize};
 use serde_json::{json, Value};
 use tauri::{command, AppHandle, Emitter, Manager, Runtime, State};
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt};
+use crate::v2::commands::utils::need_lcu_process_info;
+use crate::v2::models::rest::LcuFetcher;
 
 const HISTORY_WINDOW_WIDTH_WIDE: u32 = 200;
 const HISTORY_WINDOW_WIDTH_NARROW: u32 = 20;
@@ -28,11 +29,6 @@ struct FetchMatchHistoryEvent {
     pub puuid: String,
     pub stage: FetchMatchHistoryStage,
     pub data: Value,
-}
-
-#[derive(Deserialize)]
-struct SummonerInfo {
-    pub puuid: String,
 }
 
 async fn read_local_match_index(file: &mut tokio::fs::File) -> tokio::io::Result<Vec<(u64, u64)>> {
@@ -58,38 +54,18 @@ async fn read_local_match_index(file: &mut tokio::fs::File) -> tokio::io::Result
 pub async fn fetch_match_history<R: Runtime>(
     app_handle: AppHandle<R>,
     state: State<'_, AppState>,
-    puuid: Option<String>,
+    puuid: String,
 ) -> Result<Value, LcuFetchError> {
-    let process_info = check_lcu_started(&state).await?;
+    let process_info = need_lcu_process_info(&state)
+        .await
+        .map_err(|_| LcuFetchError::LcuNotStarted)?;
 
-    let create_req = |url: &str, timeout: u64| {
-        state
-            .rest_client
-            .create_request(
-                "GET",
-                url,
-                &Value::Null,
-                &process_info.port,
-                &process_info.auth_token,
-                timeout,
-            )
-            .map_err(|_| LcuFetchError::CreateRequestError)
-    };
-
-    let puuid = match puuid {
-        None => {
-            let summoner_info_req = create_req("/lol-summoner/v1/current-summoner", 2000)?;
-            let summoner_info = send_request::<SummonerInfo>(summoner_info_req).await?;
-            summoner_info.puuid
-        }
-        Some(puuid) => puuid,
-    };
-
-    let request_match_detail = |game_id: u64| {
-        let url = format!("/lol-match-history/v1/games/{game_id}", game_id = game_id);
-        create_req(url.as_str(), 2000)
-    };
-
+    let fetcher = LcuFetcher::of(
+        &state.rest_client,
+        &process_info.port,
+        &process_info.auth_token,
+    );
+    
     let emit_fetch_stage = |stage: FetchMatchHistoryStage, data: Value| {
         app_handle
             .emit(
@@ -129,15 +105,15 @@ pub async fn fetch_match_history<R: Runtime>(
         HISTORY_WINDOW_WIDTH_NARROW
     };
 
-    let request_matches_at = |beg_index: u32, timeout: u64| {
-        let puuid = &puuid;
+    let fetch_matches_index_start_at = |beg_index: u32, timeout: u64| {
         let url = format!(
             "/lol-match-history/v1/products/lol/{puuid}/matches?begIndex={beg}&endIndex={end}",
             puuid = &puuid,
             beg = beg_index,
             end = beg_index + index_fetch_width - 1,
         );
-        create_req(url.as_str(), timeout)
+        
+        fetcher.fetch_without_body::<MatchHistory>(url, timeout)
     };
 
     let mut beg_index = 0;
@@ -150,7 +126,6 @@ pub async fn fetch_match_history<R: Runtime>(
     };
 
     'outer: loop {
-        let req = request_matches_at(beg_index, 10000 + error_count * 5000)?;
         emit_fetch_stage(
             FetchMatchHistoryStage::ScanningIndex,
             json!({
@@ -158,8 +133,12 @@ pub async fn fetch_match_history<R: Runtime>(
                 "endIndex": beg_index + index_fetch_width - 1
             }),
         );
-
-        let res = send_request::<MatchHistory>(req).await;
+        
+        let res = fetch_matches_index_start_at(
+            beg_index, 
+            10000 + error_count * 5000
+        ).await;
+        
         if let Ok(res) = res {
             error_count = 0;
 
@@ -187,6 +166,7 @@ pub async fn fetch_match_history<R: Runtime>(
             error_count += 1;
         }
     }
+    
     let updated_matches_len = matches_to_fetch.len();
     if updated_matches_len == 0 {
         emit_fetch_stage(FetchMatchHistoryStage::EndTask, json!({ "ok": true }));
@@ -204,6 +184,13 @@ pub async fn fetch_match_history<R: Runtime>(
         .await
         .map_err(|err| LcuFetchError::FsError(err.to_string()))?;
 
+    let fetch_match_detail = |game_id: u64| {
+        fetcher.fetch_without_body::<Game>(
+            format!("/lol-match-history/v1/games/{game_id}", game_id = game_id),
+            2000,
+        )
+    };
+
     matches_to_fetch.sort_by(|a, b| a.1.cmp(&b.1));
     let mut match_cache_buffer = String::new();
     let mut match_index_buffer = String::new();
@@ -213,9 +200,7 @@ pub async fn fetch_match_history<R: Runtime>(
         json!({ "indexCount": updated_matches_len }),
     );
     for (game_id, _) in &matches_to_fetch {
-        let req = request_match_detail(*game_id)?;
-
-        let res = send_request::<Game>(req).await?;
+        let res = fetch_match_detail(*game_id).await?;
 
         match_cache_buffer.push_str(&serde_json::to_string(&res).unwrap());
         match_cache_buffer.push('\n');
@@ -230,6 +215,7 @@ pub async fn fetch_match_history<R: Runtime>(
             matches_fetched = 0;
         }
     }
+    
     emit_fetch_stage(
         FetchMatchHistoryStage::FetchedMatchDetail,
         json!({ "fetched": matches_fetched }),

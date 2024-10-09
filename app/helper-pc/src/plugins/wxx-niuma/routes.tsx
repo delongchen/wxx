@@ -3,6 +3,7 @@ import { NiumaContextProvider } from './context/provider.tsx';
 import NiumaMainLayout from './components/NiumaMainLayout.tsx';
 import NiumaPage from './pages/NiumaPage.tsx';
 import HistoryFetchPage from './pages/HistoryFetchPage.tsx';
+import GameTestPage from './pages/GameTestPage.tsx'
 
 export const mainPageChildren: WxxPluginPageInfo[] = [
   {
@@ -20,6 +21,13 @@ export const mainPageChildren: WxxPluginPageInfo[] = [
       text: '成为牛马',
     },
   },
+  {
+    name: 'game-test',
+    component: GameTestPage,
+    meta: {
+      text: '测试'
+    }
+  }
 ];
 
 export const mainPage: WxxPluginPageInfo = {

@@ -9,6 +9,7 @@ pub mod process_watcher;
 mod utils;
 pub mod ws_client;
 pub mod errors;
+pub mod preload;
 
 pub fn create_app_dir<R: Runtime>(app: &AppHandle<R>, targets: Vec<&str>) {
     if let Ok(data_dir) = app.path().data_dir() {

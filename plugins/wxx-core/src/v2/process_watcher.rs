@@ -76,7 +76,7 @@ pub fn start_watcher<R: Runtime>(app: &AppHandle<R>, timeout: u64) -> JoinHandle
 
             let _ = app.emit(LCU_PROCESS_STATUS_EVENT, status_code);
             {
-                let mut prev_status = state.process_status.lock().await;
+                let mut prev_status = state.process_status.write().await;
                 if cur_status != *prev_status {
                     *prev_status = cur_status;
                 }

@@ -24,6 +24,9 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
                 "wxsb/users",
             ]);
 
+            v2::preload::preload(app);
+
+            // start services
             v2::process_watcher::start_watcher(app, 1000);
             v2::ws_client::start_ws_client(app, 1000);
 
