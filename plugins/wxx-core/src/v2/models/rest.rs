@@ -142,7 +142,7 @@ impl<'this> LcuFetcher<'this> {
         }
     }
     
-    pub async fn fetch_without_body<T: DeserializeOwned>(&self, endpoint: String, timeout: u64) -> Result<T, LcuFetchError> {
+    pub async fn fetch_without_payload<T: DeserializeOwned>(&self, endpoint: String, timeout: u64) -> Result<T, LcuFetchError> {
         self.fetch::<T>("get", &endpoint, timeout, &Value::Null).await
     }
 }

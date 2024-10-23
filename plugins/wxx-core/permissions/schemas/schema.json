@@ -325,6 +325,26 @@
           "const": "deny-read-config"
         },
         {
+          "description": "Enables the read_local_summoners command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-read-local-summoners"
+        },
+        {
+          "description": "Denies the read_local_summoners command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-read-local-summoners"
+        },
+        {
+          "description": "Enables the record_summoner command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-record-summoner"
+        },
+        {
+          "description": "Denies the record_summoner command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-record-summoner"
+        },
+        {
           "description": "Enables the write_config command without any pre-configured scope.",
           "type": "string",
           "const": "allow-write-config"

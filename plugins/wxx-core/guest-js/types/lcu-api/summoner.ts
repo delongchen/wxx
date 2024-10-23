@@ -17,6 +17,8 @@ export interface SummonerInfo {
   rerollPoints: RerollPoints;
 }
 
+export type SummonerInfoWithoutReRoll = Omit<SummonerInfo, 'rerollPoints'>;
+
 export interface RerollPoints {
   currentPoints: number;
   maxRolls: number;

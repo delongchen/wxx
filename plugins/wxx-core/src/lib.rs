@@ -14,6 +14,8 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             v2::commands::config::write_config,
             v2::commands::request::lcu_fetch::lcu_fetch,
             v2::commands::request::fetch_match_history::fetch_match_history,
+            v2::commands::users::summoner::record_summoner,
+            v2::commands::users::summoner::read_local_summoners,
         ])
         .setup(|app, _api| {
             app.manage(AppState::empty());
@@ -21,7 +23,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             v2::create_app_dir(app, vec![
                 "wxsb/configs",
                 "wxsb/temp",
-                "wxsb/users",
+                "wxsb/summoners",
             ]);
 
             v2::preload::preload(app);

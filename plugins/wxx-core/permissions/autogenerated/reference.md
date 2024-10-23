@@ -89,6 +89,58 @@ Denies the read_config command without any pre-configured scope.
 <tr>
 <td>
 
+`wxx-core:allow-read-local-summoners`
+
+</td>
+<td>
+
+Enables the read_local_summoners command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:deny-read-local-summoners`
+
+</td>
+<td>
+
+Denies the read_local_summoners command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:allow-record-summoner`
+
+</td>
+<td>
+
+Enables the record_summoner command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:deny-record-summoner`
+
+</td>
+<td>
+
+Denies the record_summoner command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `wxx-core:allow-write-config`
 
 </td>
