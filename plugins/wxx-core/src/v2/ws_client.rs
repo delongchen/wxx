@@ -9,7 +9,7 @@ use tauri::Emitter;
 use tauri::{AppHandle, Manager, Runtime};
 use tokio::time::sleep;
 
-pub fn start_ws_client<R: Runtime>(app: &AppHandle<R>, timeout: u64) -> JoinHandle<()> {
+pub fn start_ws_client<R: Runtime>(app: &AppHandle<R>, interval: u64) -> JoinHandle<()> {
     let app = app.clone();
 
     let handle = tauri::async_runtime::spawn(async move {
@@ -35,7 +35,7 @@ pub fn start_ws_client<R: Runtime>(app: &AppHandle<R>, timeout: u64) -> JoinHand
                 }
             }
             
-            sleep(Duration::from_millis(timeout)).await;
+            sleep(Duration::from_millis(interval)).await;
         }
     });
 

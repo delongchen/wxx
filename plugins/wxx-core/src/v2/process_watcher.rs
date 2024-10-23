@@ -64,7 +64,7 @@ fn get_lcu_status() -> LcuProcessStatus {
     }
 }
 
-pub fn start_watcher<R: Runtime>(app: &AppHandle<R>, timeout: u64) -> JoinHandle<()> {
+pub fn start_watcher<R: Runtime>(app: &AppHandle<R>, interval: u64) -> JoinHandle<()> {
     let app = app.clone();
 
     let handle = tauri::async_runtime::spawn(async move {
@@ -82,7 +82,7 @@ pub fn start_watcher<R: Runtime>(app: &AppHandle<R>, timeout: u64) -> JoinHandle
                 }
             }
 
-            sleep(Duration::from_millis(timeout)).await;
+            sleep(Duration::from_millis(interval)).await;
         }
     });
 
