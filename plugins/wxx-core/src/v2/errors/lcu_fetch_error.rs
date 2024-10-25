@@ -42,7 +42,7 @@ impl LcuFetchError {
             Self::FsError(message) => LcuFetchErrorWrapper {
                 code: 5,
                 message: message.to_string(),
-            }
+            },
         }
     }
 }

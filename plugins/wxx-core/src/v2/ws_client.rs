@@ -1,6 +1,6 @@
 use super::models::ws::LcuWsClient;
 use crate::v2::app_states::AppState;
-use crate::v2::consts::{LCU_WS_EVENT, RIOT_GAMES_PEM_BYTES};
+use crate::v2::consts::{events::LCU_WS_EVENT, RIOT_GAMES_PEM_BYTES};
 use crate::v2::models::process::LcuProcessStatus;
 use futures_util::StreamExt;
 use std::time::Duration;
@@ -19,12 +19,12 @@ pub fn start_ws_client<R: Runtime>(app: &AppHandle<R>, interval: u64) -> JoinHan
         loop {
             let process_info = {
                 let read_guard = state.process_status.read().await;
-                match (*read_guard).clone() { 
+                match (*read_guard).clone() {
                     LcuProcessStatus::Started(info) => Some(info),
-                    _ => None
+                    _ => None,
                 }
             };
-            
+
             if let Some(process_info) = process_info {
                 if let Ok(mut s) = client.connect_with(&process_info).await {
                     while let Some(message) = s.next().await {
@@ -34,7 +34,7 @@ pub fn start_ws_client<R: Runtime>(app: &AppHandle<R>, interval: u64) -> JoinHan
                     }
                 }
             }
-            
+
             sleep(Duration::from_millis(interval)).await;
         }
     });

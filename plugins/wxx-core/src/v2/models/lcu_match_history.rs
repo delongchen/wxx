@@ -70,7 +70,7 @@ pub struct Participant {
     pub spell2_id: u32,
     pub stats: Stats,
     pub team_id: u32,
-    // 
+    //
     // pub timeline: Timeline,
 }
 

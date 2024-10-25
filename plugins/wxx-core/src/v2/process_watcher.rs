@@ -1,13 +1,13 @@
 use super::models::process::{LcuProcessInfo, LcuProcessStatus};
 use crate::v2::app_states::AppState;
-use crate::v2::consts::LCU_PROCESS_STATUS_EVENT;
+use crate::v2::consts::events::LCU_PROCESS_STATUS_EVENT;
 use base64::{engine::general_purpose, Engine};
 use std::ffi::OsString;
 use std::time::Duration;
 use sysinfo::{ProcessRefreshKind, ProcessesToUpdate, System, UpdateKind};
 use tauri::async_runtime::JoinHandle;
-use tauri::{AppHandle, Manager, Runtime};
 use tauri::Emitter;
+use tauri::{AppHandle, Manager, Runtime};
 use tokio::time::sleep;
 
 #[cfg(target_os = "windows")]

@@ -141,8 +141,13 @@ impl<'this> LcuFetcher<'this> {
             Err(e) => Err(LcuFetchError::ResponseDeserializationError(e.to_string())),
         }
     }
-    
-    pub async fn fetch_without_payload<T: DeserializeOwned>(&self, endpoint: String, timeout: u64) -> Result<T, LcuFetchError> {
-        self.fetch::<T>("get", &endpoint, timeout, &Value::Null).await
+
+    pub async fn fetch_without_payload<T: DeserializeOwned>(
+        &self,
+        endpoint: String,
+        timeout: u64,
+    ) -> Result<T, LcuFetchError> {
+        self.fetch::<T>("get", &endpoint, timeout, &Value::Null)
+            .await
     }
 }

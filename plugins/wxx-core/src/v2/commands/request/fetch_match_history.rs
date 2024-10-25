@@ -1,6 +1,6 @@
 use crate::v2::app_states::AppState;
 use crate::v2::commands::utils::{need_app_data_dir, need_lcu_process_info};
-use crate::v2::consts::{LCU_MATCH_HISTORY_TASK, SUMMONER_DATA_DIR_NAME};
+use crate::v2::consts::{events::LCU_MATCH_HISTORY_TASK, dir_names::SUMMONER_DATA_DIR_NAME};
 use crate::v2::errors::lcu_fetch_error::LcuFetchError;
 use crate::v2::models::lcu_match_history::{Game, MatchHistory};
 use crate::v2::models::rest::LcuFetcher;

@@ -72,7 +72,11 @@ impl LcuWsClient {
         Ok(Connector::NativeTls(tls))
     }
 
-    pub async fn connect(&self, port: &String, auth_token: &String) -> LcuWsResult<LcuWsStreamType> {
+    pub async fn connect(
+        &self,
+        port: &String,
+        auth_token: &String,
+    ) -> LcuWsResult<LcuWsStreamType> {
         let connector = self.create_tls_connector()?;
         let req = create_connection_request(port, auth_token)?;
 
@@ -86,11 +90,11 @@ impl LcuWsClient {
         Ok(s)
     }
 
-    pub async fn connect_with(
-        &self,
-        process_info: &LcuProcessInfo,
-    ) -> LcuWsResult<LcuWsStream> {
-        match self.connect(&process_info.port, &process_info.auth_token).await {
+    pub async fn connect_with(&self, process_info: &LcuProcessInfo) -> LcuWsResult<LcuWsStream> {
+        match self
+            .connect(&process_info.port, &process_info.auth_token)
+            .await
+        {
             Ok(s) => Ok(LcuWsStream(s)),
             Err(e) => Err(e),
         }
