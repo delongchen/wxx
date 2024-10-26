@@ -1,6 +1,6 @@
 use crate::v2::app_states::AppState;
 use crate::v2::commands::utils::{need_app_data_dir, need_lcu_process_info};
-use crate::v2::consts::{events::LCU_MATCH_HISTORY_TASK, dir_names::SUMMONER_DATA_DIR_NAME};
+use crate::v2::consts::{dir_names::SUMMONER_DATA_DIR_NAME, events::LCU_MATCH_HISTORY_TASK};
 use crate::v2::errors::lcu_fetch_error::LcuFetchError;
 use crate::v2::models::lcu_match_history::{Game, MatchHistory};
 use crate::v2::models::rest::LcuFetcher;
@@ -12,6 +12,9 @@ use tokio::io::{AsyncBufReadExt, AsyncWriteExt};
 
 const HISTORY_WINDOW_WIDTH_WIDE: u32 = 200;
 const HISTORY_WINDOW_WIDTH_NARROW: u32 = 20;
+
+const MATCH_INDEX_FILE_NAME: &str = "match_history_index";
+const MATCH_CACHE_FILE_NAME: &str = "match_history_cache";
 
 #[derive(Serialize, Clone)]
 #[repr(u8)]
@@ -56,16 +59,19 @@ pub async fn fetch_match_history<R: Runtime>(
     state: State<'_, AppState>,
     puuid: String,
 ) -> Result<Value, LcuFetchError> {
+    // before fetching data, lcu must be started
     let process_info = need_lcu_process_info(&state)
         .await
         .map_err(|_| LcuFetchError::LcuNotStarted)?;
 
+    // create an api-helper
     let fetcher = LcuFetcher::of(
         &state.rest_client,
         &process_info.port,
         &process_info.auth_token,
     );
 
+    // create emitter
     let emit_fetch_stage = |stage: FetchMatchHistoryStage, data: Value| {
         app_handle
             .emit(
@@ -91,7 +97,7 @@ pub async fn fetch_match_history<R: Runtime>(
         .append(true)
         .read(true)
         .create(true)
-        .open(summoner_dir.join("match_history_index"))
+        .open(summoner_dir.join(MATCH_INDEX_FILE_NAME))
         .await
         .map_err(|err| LcuFetchError::FsError(err.to_string()))?;
 
@@ -106,14 +112,15 @@ pub async fn fetch_match_history<R: Runtime>(
     };
 
     let fetch_matches_index_start_at = |beg_index: u32, timeout: u64| {
-        let url = format!(
-            "/lol-match-history/v1/products/lol/{puuid}/matches?begIndex={beg}&endIndex={end}",
-            puuid = &puuid,
-            beg = beg_index,
-            end = beg_index + index_fetch_width - 1,
-        );
-
-        fetcher.fetch_without_payload::<MatchHistory>(url, timeout)
+        fetcher.fetch_without_payload::<MatchHistory>(
+            format!(
+                "/lol-match-history/v1/products/lol/{puuid}/matches?begIndex={beg}&endIndex={end}",
+                puuid = &puuid,
+                beg = beg_index,
+                end = beg_index + index_fetch_width - 1,
+            ),
+            timeout,
+        )
     };
 
     let mut beg_index = 0;
@@ -184,14 +191,8 @@ pub async fn fetch_match_history<R: Runtime>(
         .await
         .map_err(|err| LcuFetchError::FsError(err.to_string()))?;
 
-    let fetch_match_detail = |game_id: u64| {
-        fetcher.fetch_without_payload::<Game>(
-            format!("/lol-match-history/v1/games/{game_id}", game_id = game_id),
-            2000,
-        )
-    };
-
     matches_to_fetch.sort_by(|a, b| a.1.cmp(&b.1));
+
     let mut match_cache_buffer = String::new();
     let mut match_index_buffer = String::new();
     let mut matches_fetched = 0;
@@ -200,7 +201,10 @@ pub async fn fetch_match_history<R: Runtime>(
         json!({ "indexCount": updated_matches_len }),
     );
     for (game_id, _) in &matches_to_fetch {
-        let res = fetch_match_detail(*game_id).await?;
+        let game_detail_req_url =
+            format!("/lol-match-history/v1/games/{game_id}", game_id = game_id);
+        let game_detail_req = fetcher.fetch_without_payload::<Game>(game_detail_req_url, 2000);
+        let res = game_detail_req.await?;
 
         match_cache_buffer.push_str(&serde_json::to_string(&res).unwrap());
         match_cache_buffer.push('\n');

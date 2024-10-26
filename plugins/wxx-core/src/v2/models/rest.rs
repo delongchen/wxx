@@ -6,6 +6,8 @@ use serde::de::DeserializeOwned;
 use serde_json::Value;
 use std::time::Duration;
 
+const DEFAULT_TIMEOUT_MILLIS: u64 = 20000;
+
 pub enum LcuRestError {
     MethodNotAllow,
 }
@@ -39,7 +41,6 @@ impl LcuRestClient {
 
         let client = ClientBuilder::new()
             .add_root_certificate(cert)
-            .timeout(Duration::from_millis(20000))
             .build()
             .unwrap();
 
@@ -88,13 +89,11 @@ impl LcuRestClient {
             HeaderValue::from_str(format!("Basic {}", auth_token).as_str()).unwrap(),
         );
 
-        let req = req.timeout(Duration::from_millis(if timeout == 0 {
-            1000
-        } else {
-            timeout
-        }));
+        let timeout_millis = Duration::from_millis(
+            if timeout <= 0 { DEFAULT_TIMEOUT_MILLIS } else { timeout }
+        );
 
-        Ok(req)
+        Ok(req.timeout(timeout_millis))
     }
 }
 
@@ -116,13 +115,13 @@ impl<'this> LcuFetcher<'this> {
     pub async fn fetch<T: DeserializeOwned>(
         &self,
         method: &str,
-        endpoint: &str,
+        endpoint: String,
         timeout: u64,
         body: &Value,
     ) -> Result<T, LcuFetchError> {
         let req = self
             .client
-            .create_request(method, endpoint, body, self.port, self.auth_token, timeout)
+            .create_request(method, &endpoint, body, self.port, self.auth_token, timeout)
             .map_err(|_| LcuFetchError::CreateRequestError)?;
 
         let res = match req.send().await {
@@ -147,7 +146,7 @@ impl<'this> LcuFetcher<'this> {
         endpoint: String,
         timeout: u64,
     ) -> Result<T, LcuFetchError> {
-        self.fetch::<T>("get", &endpoint, timeout, &Value::Null)
+        self.fetch::<T>("get", endpoint, timeout, &Value::Null)
             .await
     }
 }

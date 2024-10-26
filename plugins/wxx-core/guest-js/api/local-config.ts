@@ -1,4 +1,8 @@
 import { invoke } from '@tauri-apps/api/core';
+import { resolveCmdName } from './resolve';
+
+const CMD_READ_CONFIG = resolveCmdName('read_config');
+const CMD_WRITE_CONFIG = resolveCmdName('write_config');
 
 export const readLocalConfig = async <T>(
   namespace: string,
@@ -6,7 +10,7 @@ export const readLocalConfig = async <T>(
   configType: 'json' | 'toml' | 'yaml' = 'json',
 ) => {
   return invoke<T>(
-    'plugin:wxx-core|read_config',
+    CMD_READ_CONFIG,
     {
       namespace,
       configName,
@@ -24,7 +28,7 @@ export const writeLocalConfig = async <
   data: Partial<T> = {},
 ) => {
   return invoke<T>(
-    'plugin:wxx-core|write_config',
+    CMD_WRITE_CONFIG,
     {
       namespace,
       configName,

@@ -95,14 +95,17 @@ pub async fn record_summoner<R: Runtime>(
     );
 
     let current_summoner_info = fetcher
-        .fetch_without_payload::<SummonerInfo>(String::from(""), 2000)
+        .fetch_without_payload::<SummonerInfo>(
+            "/lol-summoner/v1/current-summoner".to_string(),
+            2000,
+        )
         .await?;
 
     let summoners_data_dir = need_app_data_dir(&app_handle).join(SUMMONER_DATA_DIR_NAME);
 
     record_summoner_into_local(summoners_data_dir, &current_summoner_info)
         .await
-        .unwrap();
+        .map_err(|_| LcuFetchError::FsError(String::from("")))?;
 
     Ok(Value::Null)
 }
@@ -110,10 +113,12 @@ pub async fn record_summoner<R: Runtime>(
 #[command]
 pub async fn read_local_summoners<R: Runtime>(
     app_handle: AppHandle<R>,
-) -> Result<Vec<SummonerInfo>, Value> {
+) -> Result<Vec<SummonerInfo>, LcuFetchError> {
     let summoners_data_dir = need_app_data_dir(&app_handle).join(SUMMONER_DATA_DIR_NAME);
 
-    let summoners = read_summoners_from_local(summoners_data_dir).await.unwrap();
+    let summoners = read_summoners_from_local(summoners_data_dir)
+        .await
+        .map_err(|err| LcuFetchError::FsError(err.to_string()))?;
 
     Ok(summoners)
 }

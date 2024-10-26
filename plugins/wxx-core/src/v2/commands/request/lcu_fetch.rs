@@ -24,7 +24,7 @@ pub async fn lcu_fetch(
     );
 
     let response = fetcher
-        .fetch::<Value>(&method, &endpoint, timeout, &body)
+        .fetch::<Value>(&method, endpoint, timeout, &body)
         .await?;
 
     Ok(response)

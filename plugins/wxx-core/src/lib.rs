@@ -20,8 +20,6 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
         .setup(|app, _api| {
             app.manage(AppState::empty());
 
-            v2::create_app_dir(app, vec!["wxsb/configs", "wxsb/temp", "wxsb/summoners"]);
-
             v2::preload::preload(app);
 
             // start services
