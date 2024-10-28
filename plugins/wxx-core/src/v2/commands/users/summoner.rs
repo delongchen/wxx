@@ -1,6 +1,6 @@
 use crate::v2::app_states::AppState;
 use crate::v2::commands::utils::{need_app_data_dir, need_lcu_process_info};
-use crate::v2::consts::dir_names::SUMMONER_DATA_DIR_NAME;
+use crate::v2::consts::dir_names::{SUMMONER_DATA_DIR_NAME, SUMMONER_INFO_FILE_NAME};
 use crate::v2::errors::lcu_fetch_error::LcuFetchError;
 use crate::v2::models::lcu_summoner_info::SummonerInfo;
 use crate::v2::models::rest::LcuFetcher;
@@ -10,13 +10,14 @@ use std::path::{Path, PathBuf};
 use tauri::{command, AppHandle, Runtime, State};
 use tokio::io::AsyncWriteExt;
 
-const SUMMONER_INFO_FILE_NAME: &str = "summoner_info";
 
-async fn record_summoner_into_local(
-    records_path: PathBuf,
+pub async fn record_summoner_into_local(
+    data_dir_path: PathBuf,
     info: &SummonerInfo,
 ) -> tokio::io::Result<()> {
-    let summoner_dir = records_path.join(&info.puuid);
+    let summoner_dir = data_dir_path
+        .join(SUMMONER_DATA_DIR_NAME)
+        .join(&info.puuid);
 
     create_dir_if_not_exists(&summoner_dir).await?;
 
@@ -101,11 +102,11 @@ pub async fn record_summoner<R: Runtime>(
         )
         .await?;
 
-    let summoners_data_dir = need_app_data_dir(&app_handle).join(SUMMONER_DATA_DIR_NAME);
+    let data_dir = need_app_data_dir(&app_handle);
 
-    record_summoner_into_local(summoners_data_dir, &current_summoner_info)
+    record_summoner_into_local(data_dir, &current_summoner_info)
         .await
-        .map_err(|_| LcuFetchError::FsError(String::from("")))?;
+        .map_err(|err| LcuFetchError::FsError(err.to_string()))?;
 
     Ok(Value::Null)
 }

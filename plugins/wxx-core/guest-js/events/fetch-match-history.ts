@@ -60,6 +60,6 @@ export type FetchMatchHistoryEvent =
   | FetchedMatchDetailEvent
   | EndTaskEvent;
 
-export const listenFetchMatchHistory = createListenFn<FetchMatchHistoryEvent>(
+export const listenFetchMatchHistoryTask = createListenFn<FetchMatchHistoryEvent>(
   'LCU_MATCH_HISTORY_TASK'
 );
