@@ -39,7 +39,7 @@ export const shareWithEndpoint = (endpoint: string, body: Uint8Array) => {
     BasicMessage.encode({
       body,
       header: { endpoint },
-    }).finish()
+    }).finish(),
   );
 };
 

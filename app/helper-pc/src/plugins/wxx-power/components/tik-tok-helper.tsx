@@ -26,19 +26,19 @@ function TikTokHelper() {
       dispatch(
         setStateAsync((prev) => ({
           autoAcceptMatch: !prev.autoAcceptMatch,
-        }))
+        })),
       );
     } else if (id === 'wxx-power-auto-next-match') {
       dispatch(
         setStateAsync((prev) => ({
           autoNextMatch: !prev.autoNextMatch,
-        }))
+        })),
       );
     } else if (id === 'wxx-power-auto-ballot') {
       dispatch(
         setStateAsync((prev) => ({
           autoBallot: !prev.autoBallot,
-        }))
+        })),
       );
     }
   }, []);

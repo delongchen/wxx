@@ -40,7 +40,7 @@ function CenterButtonGroup() {
   );
 }
 
-const LightThemeSet = new Set(['yellow', 'cyan'])
+const LightThemeSet = new Set(['yellow', 'cyan']);
 
 function NiumaHeader() {
   const { theme } = useNiumaContext();

@@ -28,6 +28,7 @@ const GAME_END_OF_COMPLETE: &str = "GameComplete";
 #[repr(u8)]
 enum FetchMatchHistoryStage {
     StartTask = 0,
+    FetchedSummoner,
     ScanningIndex,
     ScannedIndex,
     FetchingMatchDetail,
@@ -36,10 +37,10 @@ enum FetchMatchHistoryStage {
 }
 
 #[derive(Serialize, Clone)]
-struct FetchMatchHistoryEvent {
+struct FetchMatchHistoryEvent<T: Serialize + Clone> {
     pub puuid: String,
     pub stage: FetchMatchHistoryStage,
-    pub data: Value,
+    pub data: T,
 }
 
 type OpenOptionFn = fn(options: &mut OpenOptions);
@@ -101,6 +102,28 @@ async fn read_local_matches_index(
     Ok(match_history_vec)
 }
 
+struct StageEmitter<'cmd, R: Runtime> {
+    app_handle: &'cmd AppHandle<R>,
+    puuid: &'cmd str,
+}
+
+impl<'cmd, R: Runtime> StageEmitter<'cmd, R> {
+    fn new(app_handle: &'cmd AppHandle<R>, puuid: &'cmd str) -> Self {
+        Self { app_handle, puuid }
+    }
+    
+    fn stage<T: Serialize + Clone>(&self, stage: FetchMatchHistoryStage, data: T) {
+        self.app_handle.emit(
+            LCU_MATCH_HISTORY_TASK,
+            FetchMatchHistoryEvent {
+                puuid: self.puuid.to_string(),
+                stage,
+                data,
+            }
+        ).unwrap();
+    }
+}
+
 //
 #[command]
 pub async fn fetch_match_history<R: Runtime>(
@@ -108,6 +131,10 @@ pub async fn fetch_match_history<R: Runtime>(
     state: State<'_, AppState>,
     puuid: String,
 ) -> Result<Value, LcuFetchError> {
+    let emitter = StageEmitter::new(&app_handle, &puuid);
+    
+    emitter.stage(FetchMatchHistoryStage::StartTask, Value::Null);
+    
     // before fetching data, lcu must be started
     let process_info = need_lcu_process_info(&state)
         .await
@@ -119,20 +146,6 @@ pub async fn fetch_match_history<R: Runtime>(
         &process_info.port,
         &process_info.auth_token,
     );
-
-    // create emitter
-    let emit_fetch_stage = |stage: FetchMatchHistoryStage, data: Value| {
-        app_handle
-            .emit(
-                LCU_MATCH_HISTORY_TASK,
-                FetchMatchHistoryEvent {
-                    stage,
-                    data,
-                    puuid: puuid.clone(),
-                },
-            )
-            .unwrap();
-    };
 
     let app_data_dir_path = need_app_data_dir(&app_handle);
     // path: {APP_DATA_PATH}/wxsb/summoners/{puuid}
@@ -146,7 +159,7 @@ pub async fn fetch_match_history<R: Runtime>(
 
         summoner_dir
     };
-
+    
     {
         let summoner_info = fetcher
             .fetch_without_payload::<SummonerInfo>(
@@ -158,12 +171,11 @@ pub async fn fetch_match_history<R: Runtime>(
         record_summoner_into_local(app_data_dir_path, &summoner_info)
             .await
             .map_err(|err| LcuFetchError::FsError(err.to_string()))?;
-    }
+        
+        emitter.stage(FetchMatchHistoryStage::FetchedSummoner, summoner_info);
+    };
 
     let matches_to_fetch = {
-        // [stage: start task]
-        emit_fetch_stage(FetchMatchHistoryStage::StartTask, json!({}));
-
         let matches_index = read_local_matches_index(&summoner_data_dir_path).await?;
 
         let index_fetch_width = if matches_index.len() == 0 {
@@ -183,7 +195,7 @@ pub async fn fetch_match_history<R: Runtime>(
 
         'outer: loop {
             // [stage: scanning index] tell front-end the info about scanning
-            emit_fetch_stage(
+            emitter.stage(
                 FetchMatchHistoryStage::ScanningIndex,
                 json!({
                     "begIndex": beg_index,
@@ -231,7 +243,7 @@ pub async fn fetch_match_history<R: Runtime>(
                 beg_index += index_fetch_width;
             } else {
                 if error_count > MAX_RETRIES {
-                    emit_fetch_stage(FetchMatchHistoryStage::EndTask, json!({ "ok": false }));
+                    emitter.stage(FetchMatchHistoryStage::EndTask, json!({ "ok": false }));
                     return Err(LcuFetchError::RequestNotSuccess(json!({})));
                 }
 
@@ -243,11 +255,11 @@ pub async fn fetch_match_history<R: Runtime>(
 
         // if there are no matches to fetch, end task.
         if updated_matches_len == 0 {
-            emit_fetch_stage(FetchMatchHistoryStage::EndTask, json!({ "ok": true }));
+            emitter.stage(FetchMatchHistoryStage::EndTask, json!({ "ok": true }));
             return Ok(json!({}));
         }
 
-        emit_fetch_stage(
+        emitter.stage(
             FetchMatchHistoryStage::ScannedIndex,
             json!({ "indexCount": updated_matches_len }),
         );
@@ -260,7 +272,10 @@ pub async fn fetch_match_history<R: Runtime>(
 
     // do fetch game detail here
     let (matches_index, matches_cache) = {
-        emit_fetch_stage(
+        // TODO
+        // can not tell different between stage `FetchingMatchDetail` and `ScannedIndex`
+        // it should be refactored
+        emitter.stage(
             FetchMatchHistoryStage::FetchingMatchDetail,
             json!({ "indexCount": matches_to_fetch.len() }),
         );
@@ -284,7 +299,7 @@ pub async fn fetch_match_history<R: Runtime>(
 
             // report front-end every 20 successful fetching
             if matches_fetched_count == 20 {
-                emit_fetch_stage(
+                emitter.stage(
                     FetchMatchHistoryStage::FetchedMatchDetail,
                     json!({ "fetched": matches_fetched_count }),
                 );
@@ -309,7 +324,7 @@ pub async fn fetch_match_history<R: Runtime>(
         )
         .await?;
 
-        emit_fetch_stage(FetchMatchHistoryStage::EndTask, json!({ "ok": true }));
+        emitter.stage(FetchMatchHistoryStage::EndTask, json!({ "ok": true }));
     };
 
     Ok(json!({}))

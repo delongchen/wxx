@@ -6,7 +6,7 @@ function NiumaPage() {
   const { theme } = useNiumaContext();
 
   return (
-    <Box p='2'>
+    <Box p="2">
       {theme}
     </Box>
   );

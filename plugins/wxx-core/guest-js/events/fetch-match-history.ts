@@ -1,7 +1,9 @@
 import { createListenFn } from './utils';
+import { SummonerInfoWithoutReRoll } from '../types/lcu-api/summoner';
 
 export enum FetchMatchHistoryStage {
   StartTask = 'StartTask',
+  FetchedSummoner = 'FetchedSummoner',
   ScanningIndex = 'ScanningIndex',
   ScannedIndex = 'ScannedIndex',
   FetchingMatchDetail = 'FetchingMatchDetail',
@@ -9,8 +11,7 @@ export enum FetchMatchHistoryStage {
   EndTask = 'EndTask',
 }
 
-interface StartTaskData {}
-interface ScanningIndexData { begIndex: number, endIndex: number }
+export interface ScanningIndexData { begIndex: number, endIndex: number }
 interface ScannedIndexData { indexCount: number }
 interface FetchingMatchDetailData { indexCount: number }
 interface FetchedMatchDetailData { fetched: number }
@@ -18,7 +19,13 @@ interface EndTaskData { ok: boolean }
 
 interface StartTaskEvent {
   stage: FetchMatchHistoryStage.StartTask;
-  data: StartTaskData;
+  data: null;
+  puuid: string;
+}
+
+interface FetchedSummonerEvent {
+  stage: FetchMatchHistoryStage.FetchedSummoner;
+  data: SummonerInfoWithoutReRoll;
   puuid: string;
 }
 
@@ -54,6 +61,7 @@ interface EndTaskEvent {
 
 export type FetchMatchHistoryEvent =
   | StartTaskEvent
+  | FetchedSummonerEvent
   | ScanningIndexEvent
   | ScannedIndexEvent
   | FetchingMatchDetailEvent

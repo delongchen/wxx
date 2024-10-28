@@ -30,7 +30,7 @@ const wxxPower: WxxPluginRaw = {
     store.dispatch(
       syncToLocalConfig(() => {
         startServices();
-      })
+      }),
     );
 
     quit(async () => {

@@ -21,7 +21,7 @@ const render = () => {
           <App />
         </BrowserRouter>
       </ReactReduxProvider>
-    </ChakraProvider>
+    </ChakraProvider>,
   );
 };
 

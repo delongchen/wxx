@@ -20,7 +20,7 @@ export interface WxxPluginRaw<T = void> {
   name: string;
   install: (
     ctx: Pick<WxxPluginContext<T>, 'page' | 'statusBar' | 'quit'>,
-    options?: T
+    options?: T,
   ) => Promise<void>;
   version?: string;
   description?: string | string[];

@@ -19,14 +19,14 @@ export const createSubStream = <T = unknown>(
   uri: string,
   eventTypes: (LcuEventTypeEnum | 'All')[],
   isSharing: boolean = true,
-  mapper?: (ev: TauriEvent<LcuEventType>) => T
+  mapper?: (ev: TauriEvent<LcuEventType>) => T,
 ): Observable<T> => {
   const customTypeSet = new Set(eventTypes);
 
   const checker = customTypeSet.has('All')
     ? (ev: TauriEvent<LcuEventType>) => ev.payload.uri === uri
     : (ev: TauriEvent<LcuEventType>) =>
-        ev.payload.uri === uri && customTypeSet.has(ev.payload.eventType);
+      ev.payload.uri === uri && customTypeSet.has(ev.payload.eventType);
 
   mapper ??= (ev: TauriEvent<LcuEventType>) => {
     return ev.payload.data as T;
@@ -41,5 +41,5 @@ export const createSubStream = <T = unknown>(
 
 export const gameFlowPhaseStream = createSubStream<GameflowPhase>(
   '/lol-gameflow/v1/gameflow-phase',
-  ['Update']
+  ['Update'],
 );

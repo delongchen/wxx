@@ -29,7 +29,7 @@ function NiumaHeader(props: NiumaHeaderProps) {
         onButtonClick(key);
       }
     },
-    [onButtonClick]
+    [onButtonClick],
   );
 
   return (

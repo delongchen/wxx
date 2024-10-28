@@ -1,7 +1,7 @@
 import { WxxRoute } from '@/types/router';
 import { useState } from 'react';
 import { Subject } from 'rxjs';
-import { useSubscribe } from 'tauri-plugin-wxx-core/hooks'
+import { useSubscribe } from 'tauri-plugin-wxx-core/hooks';
 
 const routeModules = import.meta.glob(['./modules/**/*.ts', './modules/**/*.tsx'], { eager: true });
 

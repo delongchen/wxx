@@ -13,7 +13,7 @@ import { SummonerStates, SummonerState } from 'wxx-protobufs/rest.user';
 import { createSubscriptionManager, createMapHelper } from '../utils';
 import { Subject } from 'rxjs';
 import { shareChannel } from './share-channel';
-import { LCU_PROCESS_STATUS_BUS } from 'tauri-plugin-wxx-core/streams'
+import { LCU_PROCESS_STATUS_BUS } from 'tauri-plugin-wxx-core/streams';
 
 let currentSummoner = 0;
 
@@ -69,10 +69,10 @@ export default () => {
         (state) => {
           state.info = info;
         },
-        (setter) => setter({ info, phase: GameflowPhaseEnum.None })
+        (setter) => setter({ info, phase: GameflowPhaseEnum.None }),
       );
       emitMapChange();
-    })
+    }),
   );
 
   const phaseChan = shareChannel(GamePhaseSharingServiceName, PhaseWithSummonerId);
@@ -86,7 +86,7 @@ export default () => {
           emitMapChange();
         }
       });
-    })
+    }),
   );
 
   subscribe(LCU_PROCESS_STATUS_BUS, async (status) => {

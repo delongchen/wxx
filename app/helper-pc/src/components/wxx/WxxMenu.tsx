@@ -17,7 +17,7 @@ const renderMenuItems = (routes: WxxRoute[], theme: string) => {
         !route.meta.hidden &&
         route.meta.icon !== undefined &&
         (route.component !== undefined ||
-          (route.children !== undefined && route.children.length > 0))
+          (route.children !== undefined && route.children.length > 0)),
     )
     .sort((a, b) => {
       const indexA = a.meta?.index ?? 0;
@@ -45,7 +45,7 @@ const renderMenuItems = (routes: WxxRoute[], theme: string) => {
     });
 };
 
-const LightThemeSet = new Set(['yellow', 'cyan'])
+const LightThemeSet = new Set(['yellow', 'cyan']);
 
 function WxxSideMenu(props: { routes: WxxRoute[] }) {
   const allRoutes = props.routes;
@@ -58,7 +58,7 @@ function WxxSideMenu(props: { routes: WxxRoute[] }) {
 
   const globalState = useAppSelector(selectGlobal);
   const theme = globalState.theme;
-  const bgColorDeep = LightThemeSet.has(theme) ? 400 : 500
+  const bgColorDeep = LightThemeSet.has(theme) ? 400 : 500;
   const bg = [theme, bgColorDeep].join('.');
 
   return (
