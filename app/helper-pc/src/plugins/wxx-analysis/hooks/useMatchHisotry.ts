@@ -7,8 +7,8 @@ export const useMatchHistory = (player: TeamPlayer) => {
     queryKey: ['match-history', player.summonerId],
     queryFn: async ({ pageParam = 1 }) => {
       const data = await getMatchHistory({
-        summonerId: player.summonerId,
-        startIndex: (pageParam - 1) * 20,
+        puuid: player.summonerId,
+        begIndex: (pageParam - 1) * 20,
         endIndex: pageParam * 20,
       });
       return {

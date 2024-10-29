@@ -1,4 +1,4 @@
-import { Flex, IconButton, Spacer, ButtonGroup, Button } from '@chakra-ui/react';
+import { Flex, IconButton, Spacer, Button, Group } from '@chakra-ui/react';
 import { useNiumaContext } from '../../context/hooks';
 import { VscArrowLeft } from 'react-icons/vsc';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -14,7 +14,7 @@ function CenterButtonGroup() {
   const rootPath = ['', pluginName, pageName].join('/');
 
   return (
-    <ButtonGroup>
+    <Group>
       {mainPageChildren.map((child) => {
         const { meta = {}, name } = child;
         const text = (meta['text'] as string) ?? '';
@@ -24,7 +24,7 @@ function CenterButtonGroup() {
         return (
           <Button
             key={name}
-            isActive={activating}
+            disabled={!activating}
             colorScheme={theme}
             onClick={() => {
               if (!activating) {
@@ -36,7 +36,7 @@ function CenterButtonGroup() {
           </Button>
         );
       })}
-    </ButtonGroup>
+    </Group>
   );
 }
 
@@ -72,8 +72,9 @@ function NiumaHeader() {
         onClick={handleBack}
         colorScheme={theme}
         variant={buttonVariant}
-        icon={<VscArrowLeft size="24px" />}
-      />
+      >
+        <VscArrowLeft size='24px'/>
+      </IconButton>
       <Spacer>
         <Flex alignItems="center" justifyContent="center" h="100%">
           <CenterButtonGroup />

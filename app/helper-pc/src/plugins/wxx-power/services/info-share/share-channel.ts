@@ -3,9 +3,9 @@ import { Subject, Observable } from 'rxjs';
 import { BasicMessage } from 'wxx-protobufs/common';
 import { BinaryReader, BinaryWriter } from '@bufbuild/protobuf/wire';
 
-interface Serializer<T = unknown> {
-  encode: (message: T, writer?: BinaryWriter) => BinaryWriter;
-  decode: (input: BinaryReader | Uint8Array, length?: number) => T;
+interface Serializer<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
 }
 
 const isBlob = (value: unknown): value is Blob => value instanceof Blob;

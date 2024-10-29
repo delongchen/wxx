@@ -45,14 +45,10 @@ const needPrevCtx = (puuid: string, cb?: (ctx: FetchingContext) => void) => {
 }
 
 function MHFTaskCardContent({ ctx }: { ctx: FetchingContext }) {
-  const { status } = ctx
-
-  if (status.finished) {
-    return ''
-  }
-
   return (
-    <div></div>
+    <div>
+      <pre>{JSON.stringify(ctx)}</pre>
+    </div>
   );
 }
 

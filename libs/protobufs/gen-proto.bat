@@ -3,7 +3,7 @@ set "SORUCE_DIR=%BASE_DIR%\src"
 
 del %BASE_DIR%\lib\*
 
-protoc ^
+protoc.exe ^
     --proto_path=%SORUCE_DIR% ^
     --plugin=protoc-gen-ts_proto=".\\node_modules\\.bin\\protoc-gen-ts_proto.CMD" ^
     --ts_proto_opt=outputIndex=true ^

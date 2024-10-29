@@ -1,16 +1,14 @@
 import { WxxPluginContext, WxxPluginStatus } from '@/app/plugin/types';
 import { useAppTheme } from '@/app/context/app-context.tsx';
+import { Avatar } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import {
-  Avatar,
   Badge,
   Box,
-  Button,
-  ButtonGroup,
   Card,
-  CardBody,
-  CardHeader,
   Flex,
   Text,
+  Group,
 } from '@chakra-ui/react';
 import { memo, useState } from 'react';
 import { useSubscribe } from 'tauri-plugin-wxx-core/hooks';
@@ -42,8 +40,8 @@ function ExtensionCard(props: ExtensionCardProp) {
   const [badgeColor, badgeText] = mapPluginStatus(pluginStatus);
 
   return (
-    <Card colorScheme={theme} mb="4">
-      <CardHeader>
+    <Card.Root colorScheme={theme} mb="4">
+      <Card.Header>
         <Flex>
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
             <Avatar name={ctx.name} src={cover} />
@@ -57,7 +55,7 @@ function ExtensionCard(props: ExtensionCardProp) {
               {version && <Text>v{version}</Text>}
             </Box>
           </Flex>
-          <ButtonGroup>
+          <Group>
             {pluginStatus === WxxPluginStatus.Stopped && (
               <Button variant="ghost" colorScheme="green" onClick={start}>
                 启用
@@ -73,18 +71,18 @@ function ExtensionCard(props: ExtensionCardProp) {
                 停用
               </Button>
             )}
-          </ButtonGroup>
+          </Group>
         </Flex>
-      </CardHeader>
+      </Card.Header>
 
       {description.length !== 0 && (
-        <CardBody>
+        <Card.Body>
           {description.map((line, index) => (
             <Text key={index}>{line}</Text>
           ))}
-        </CardBody>
+        </Card.Body>
       )}
-    </Card>
+    </Card.Root>
   );
 }
 

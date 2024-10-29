@@ -35,12 +35,13 @@ const renderMenuItems = (routes: WxxRoute[], theme: string) => {
           mt="1"
           key={path}
           colorScheme={theme}
-          icon={<Icon />}
-          isActive={active}
+          disabled={active}
           variant={theme === 'gray' ? 'ghost' : 'solid'}
           aria-label={path}
           onClick={() => navigate(path)}
-        />
+        >
+          <Icon />
+        </IconButton>
       );
     });
 };

@@ -1,18 +1,15 @@
 import { memo, useCallback, useState } from 'react';
+import { Avatar } from '@/components/ui/avatar'
+import { Tag } from '@/components/ui/tag'
+import { ProgressBar, ProgressRoot } from '@/components/ui/progress'
 import {
   Card,
-  CardHeader,
-  CardBody,
   Flex,
-  Avatar,
-  AvatarBadge,
   Box,
   Text,
   Spacer,
   Heading,
-  Tag,
   IconButton,
-  Progress,
 } from '@chakra-ui/react';
 import { VscMenu } from 'react-icons/vsc';
 import { GameflowPhaseEnum } from 'wxx-protobufs/lcu.gameflow';
@@ -94,8 +91,8 @@ function SummonerCard({ info, phase }: SummonerState) {
   const phaseInfo = phaseInfoMap[phase];
 
   return (
-    <Card colorScheme={theme}>
-      <CardHeader>
+    <Card.Root colorScheme={theme}>
+      <Card.Header>
         <Flex>
           <Flex flex="1" gap="4" alignItems="center">
             <Avatar
@@ -117,11 +114,12 @@ function SummonerCard({ info, phase }: SummonerState) {
               <Text>
                 roll点: {info.rerollPoints!.numberOfRolls}/{info.rerollPoints!.maxRolls}
               </Text>
-              <Progress
-                width="96px"
+              <ProgressRoot
+                maxW='96px'
                 value={((info.rerollPoints!.currentPoints % 250) * 100) / 250}
-                colorScheme={theme}
-              />
+              >
+                <ProgressBar/>
+              </ProgressRoot>
             </Flex>
           </Flex>
 
@@ -131,14 +129,15 @@ function SummonerCard({ info, phase }: SummonerState) {
             aria-label="more"
             variant="ghost"
             colorScheme={theme}
-            icon={<VscMenu size="24px" />}
             onClick={handleClick}
-          />
+          >
+            <VscMenu size="24px" />
+          </IconButton>
         </Flex>
-      </CardHeader>
+      </Card.Header>
 
-      {showBody && <CardBody>没啥了 等下次更新8</CardBody>}
-    </Card>
+      {showBody && <Card.Body>没啥了 等下次更新8</Card.Body>}
+    </Card.Root>
   );
 }
 
