@@ -49,7 +49,7 @@ pub struct Team {
     pub dragon_kills: u32,
     pub first_baron: bool,
     pub first_blood: bool,
-    pub first_dargon: bool, // Keeping as is based on your note
+    pub first_dargon: bool, // May RIOT is ShaBi
     pub first_inhibitor: bool,
     pub first_tower: bool,
     pub inhibitor_kills: u32,

@@ -1,7 +1,10 @@
 use crate::v2::app_states::AppState;
 use crate::v2::commands::users::summoner::record_summoner_into_local;
 use crate::v2::commands::utils::{need_app_data_dir, need_lcu_process_info};
-use crate::v2::consts::{dir_names::SUMMONER_DATA_DIR_NAME, events::LCU_MATCH_HISTORY_TASK};
+use crate::v2::consts::{
+    dir_names::{MATCH_CACHE_FILE_NAME, MATCH_INDEX_FILE_NAME, SUMMONER_DATA_DIR_NAME},
+    events::LCU_MATCH_HISTORY_TASK,
+};
 use crate::v2::errors::lcu_fetch_error::LcuFetchError;
 use crate::v2::models::lcu_match_history::{Game, MatchHistory};
 use crate::v2::models::lcu_summoner_info::SummonerInfo;
@@ -18,8 +21,6 @@ const HISTORY_WINDOW_WIDTH_WIDE: u32 = 200;
 const HISTORY_WINDOW_WIDTH_NARROW: u32 = 20;
 const MAX_RETRIES: u32 = 3;
 
-const MATCH_INDEX_FILE_NAME: &str = "match_history_index";
-const MATCH_CACHE_FILE_NAME: &str = "match_history_cache";
 const GAME_MODE_ARAM: &str = "ARAM";
 const GAME_TYPE_MATCHED: &str = "MATCHED_GAME";
 const GAME_END_OF_COMPLETE: &str = "GameComplete";
@@ -111,16 +112,18 @@ impl<'cmd, R: Runtime> StageEmitter<'cmd, R> {
     fn new(app_handle: &'cmd AppHandle<R>, puuid: &'cmd str) -> Self {
         Self { app_handle, puuid }
     }
-    
+
     fn stage<T: Serialize + Clone>(&self, stage: FetchMatchHistoryStage, data: T) {
-        self.app_handle.emit(
-            LCU_MATCH_HISTORY_TASK,
-            FetchMatchHistoryEvent {
-                puuid: self.puuid.to_string(),
-                stage,
-                data,
-            }
-        ).unwrap();
+        self.app_handle
+            .emit(
+                LCU_MATCH_HISTORY_TASK,
+                FetchMatchHistoryEvent {
+                    puuid: self.puuid.to_string(),
+                    stage,
+                    data,
+                },
+            )
+            .unwrap();
     }
 }
 
@@ -132,9 +135,9 @@ pub async fn fetch_match_history<R: Runtime>(
     puuid: String,
 ) -> Result<Value, LcuFetchError> {
     let emitter = StageEmitter::new(&app_handle, &puuid);
-    
+
     emitter.stage(FetchMatchHistoryStage::StartTask, Value::Null);
-    
+
     // before fetching data, lcu must be started
     let process_info = need_lcu_process_info(&state)
         .await
@@ -150,16 +153,14 @@ pub async fn fetch_match_history<R: Runtime>(
     let app_data_dir_path = need_app_data_dir(&app_handle);
     // path: {APP_DATA_PATH}/wxsb/summoners/{puuid}
     let summoner_data_dir_path = {
-        let summoner_dir = app_data_dir_path
-            .join(SUMMONER_DATA_DIR_NAME)
-            .join(&puuid);
+        let summoner_dir = app_data_dir_path.join(SUMMONER_DATA_DIR_NAME).join(&puuid);
 
         // prepare the dir
         create_dir_if_not_exists(&summoner_dir).await.unwrap();
 
         summoner_dir
     };
-    
+
     {
         let summoner_info = fetcher
             .fetch_without_payload::<SummonerInfo>(
@@ -171,7 +172,7 @@ pub async fn fetch_match_history<R: Runtime>(
         record_summoner_into_local(app_data_dir_path, &summoner_info)
             .await
             .map_err(|err| LcuFetchError::FsError(err.to_string()))?;
-        
+
         emitter.stage(FetchMatchHistoryStage::FetchedSummoner, summoner_info);
     };
 

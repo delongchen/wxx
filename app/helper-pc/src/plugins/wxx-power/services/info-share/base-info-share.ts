@@ -57,7 +57,10 @@ const handleSummonerInfo = (info: SummonerInfo): SummonerInfoRaw => {
 export default () => {
   const { subscribe, quit, manage, defer } = createSubscriptionManager();
 
-  const summonerChan = shareChannel(SummonerSharingServiceName, SummonerInfoRaw);
+  const summonerChan = shareChannel(
+    SummonerSharingServiceName,
+    SummonerInfoRaw,
+  );
   defer(summonerChan.stop);
   manage(
     summonerChan.sendOn(currentSummonerUpdateStream, handleSummonerInfo),
@@ -75,7 +78,10 @@ export default () => {
     }),
   );
 
-  const phaseChan = shareChannel(GamePhaseSharingServiceName, PhaseWithSummonerId);
+  const phaseChan = shareChannel(
+    GamePhaseSharingServiceName,
+    PhaseWithSummonerId,
+  );
   defer(phaseChan.stop);
   manage(
     phaseChan.sendOn(gameFlowPhaseStream, getPhaseWithSummonerId),

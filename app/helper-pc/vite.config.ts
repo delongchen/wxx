@@ -7,7 +7,7 @@ export default defineConfig(async () => ({
   plugins: [react()],
   css: {
     preprocessorOptions: {
-      scss: {
+      sass: {
         api: 'modern-compiler',
       }
     }

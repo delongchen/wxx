@@ -24,8 +24,8 @@ function CenterButtonGroup() {
         return (
           <Button
             key={name}
-            disabled={!activating}
-            colorScheme={theme}
+            colorPalette={theme}
+            variant={activating ? 'solid' : 'ghost'}
             onClick={() => {
               if (!activating) {
                 navigate(path, { replace: true });
@@ -52,8 +52,6 @@ function NiumaHeader() {
     navigate('/', { replace: true });
   };
 
-  const buttonVariant = theme === 'gray' ? 'ghost' : 'solid';
-
   return (
     <Flex
       position="fixed"
@@ -70,8 +68,8 @@ function NiumaHeader() {
       <IconButton
         aria-label="back"
         onClick={handleBack}
-        colorScheme={theme}
-        variant={buttonVariant}
+        colorPalette={theme}
+        variant='ghost'
       >
         <VscArrowLeft size='24px'/>
       </IconButton>

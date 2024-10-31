@@ -16,7 +16,7 @@ interface BaseTagProps {
 const BaseTag = ({ color, text, icon: Icon }: BaseTagProps) => (
   <Tag
     size="md"
-    colorScheme={color}
+    colorPalette={color}
     startElement={Icon === undefined ? null : <Icon/>}
   >
     {text}

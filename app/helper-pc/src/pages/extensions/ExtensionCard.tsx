@@ -48,7 +48,7 @@ function ExtensionCard(props: ExtensionCardProp) {
             <Box>
               <Text fontWeight="bold">
                 {ctx.name}
-                <Badge ml="1" colorScheme={badgeColor}>
+                <Badge ml="1" colorPalette={badgeColor}>
                   {badgeText}
                 </Badge>
               </Text>
@@ -57,17 +57,17 @@ function ExtensionCard(props: ExtensionCardProp) {
           </Flex>
           <Group>
             {pluginStatus === WxxPluginStatus.Stopped && (
-              <Button variant="ghost" colorScheme="green" onClick={start}>
+              <Button variant="solid" colorPalette="green" onClick={start}>
                 启用
               </Button>
             )}
             {pluginStatus === WxxPluginStatus.Started && (
-              <Button variant="ghost" colorScheme="gray" onClick={restart}>
+              <Button variant="ghost" colorPalette="gray" onClick={restart}>
                 重新加载
               </Button>
             )}
             {pluginStatus === WxxPluginStatus.Started && (
-              <Button variant="ghost" colorScheme="red" onClick={shutdown}>
+              <Button variant="solid" colorPalette="red" onClick={shutdown}>
                 停用
               </Button>
             )}

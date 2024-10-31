@@ -63,6 +63,32 @@ Denies the lcu_fetch command without any pre-configured scope.
 <tr>
 <td>
 
+`wxx-core:allow-read-cached-matches`
+
+</td>
+<td>
+
+Enables the read_cached_matches command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:deny-read-cached-matches`
+
+</td>
+<td>
+
+Denies the read_cached_matches command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `wxx-core:allow-read-config`
 
 </td>

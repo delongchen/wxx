@@ -315,6 +315,16 @@
           "const": "deny-lcu-fetch"
         },
         {
+          "description": "Enables the read_cached_matches command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-read-cached-matches"
+        },
+        {
+          "description": "Denies the read_cached_matches command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-read-cached-matches"
+        },
+        {
           "description": "Enables the read_config command without any pre-configured scope.",
           "type": "string",
           "const": "allow-read-config"

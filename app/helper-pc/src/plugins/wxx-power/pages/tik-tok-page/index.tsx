@@ -12,7 +12,7 @@ function Page() {
           <Text>WXX`s Magical Toolbox</Text>
         </Box>
 
-        <Stack spacing="24px">
+        <Stack>
           <TikTokHelper />
         </Stack>
       </Box>

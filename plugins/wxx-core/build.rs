@@ -5,6 +5,7 @@ const COMMANDS: &[&str] = &[
     "fetch_match_history",
     "read_local_summoners",
     "record_summoner",
+    "read_cached_matches",
 ];
 
 fn main() {

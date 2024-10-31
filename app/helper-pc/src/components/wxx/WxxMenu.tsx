@@ -34,9 +34,8 @@ const renderMenuItems = (routes: WxxRoute[], theme: string) => {
         <IconButton
           mt="1"
           key={path}
-          colorScheme={theme}
-          disabled={active}
-          variant={theme === 'gray' ? 'ghost' : 'solid'}
+          colorPalette={theme}
+          variant={active ? 'solid' : 'ghost'}
           aria-label={path}
           onClick={() => navigate(path)}
         >
@@ -45,8 +44,6 @@ const renderMenuItems = (routes: WxxRoute[], theme: string) => {
       );
     });
 };
-
-const LightThemeSet = new Set(['yellow', 'cyan']);
 
 function WxxSideMenu(props: { routes: WxxRoute[] }) {
   const allRoutes = props.routes;
@@ -59,8 +56,7 @@ function WxxSideMenu(props: { routes: WxxRoute[] }) {
 
   const globalState = useAppSelector(selectGlobal);
   const theme = globalState.theme;
-  const bgColorDeep = LightThemeSet.has(theme) ? 400 : 500;
-  const bg = [theme, bgColorDeep].join('.');
+  const bg = [theme, 400].join('.');
 
   return (
     <Flex flexDirection="column" bg={bg} className={Style.menu}>

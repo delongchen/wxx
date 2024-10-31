@@ -16,6 +16,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             v2::commands::request::fetch_match_history::fetch_match_history,
             v2::commands::users::summoner::record_summoner,
             v2::commands::users::summoner::read_local_summoners,
+            v2::commands::users::summoner::read_cached_matches,
         ])
         .setup(|app, _api| {
             app.manage(AppState::empty());

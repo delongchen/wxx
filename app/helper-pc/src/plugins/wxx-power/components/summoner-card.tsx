@@ -10,6 +10,8 @@ import {
   Spacer,
   Heading,
   IconButton,
+  Float,
+  Circle,
 } from '@chakra-ui/react';
 import { VscMenu } from 'react-icons/vsc';
 import { GameflowPhaseEnum } from 'wxx-protobufs/lcu.gameflow';
@@ -99,7 +101,14 @@ function SummonerCard({ info, phase }: SummonerState) {
               name={info.base?.gameName}
               src={`http://localhost:11460/profile-icon/${info.base?.profileIconId}`}
             >
-              <AvatarBadge boxSize="1em" bg={`${phaseInfo.color}.500`} />
+              <Float placement="bottom-end" offsetX="1" offsetY="1">
+                <Circle
+                  bg={`${phaseInfo.color}.500`}
+                  size="8px"
+                  outline="0.2em solid"
+                  outlineColor="bg"
+                />
+              </Float>
             </Avatar>
 
             <Box>
