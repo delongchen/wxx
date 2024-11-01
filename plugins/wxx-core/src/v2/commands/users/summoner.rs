@@ -1,6 +1,8 @@
 use crate::v2::app_states::AppState;
 use crate::v2::commands::utils::{need_app_data_dir, need_lcu_process_info};
-use crate::v2::consts::dir_names::{MATCH_CACHE_FILE_NAME, SUMMONER_DATA_DIR_NAME, SUMMONER_INFO_FILE_NAME};
+use crate::v2::consts::dir_names::{
+    MATCH_CACHE_FILE_NAME, SUMMONER_DATA_DIR_NAME, SUMMONER_INFO_FILE_NAME,
+};
 use crate::v2::errors::lcu_fetch_error::LcuFetchError;
 use crate::v2::models::lcu_summoner_info::SummonerInfo;
 use crate::v2::models::rest::LcuFetcher;
@@ -8,16 +10,13 @@ use crate::v2::utils::create_dir_if_not_exists;
 use serde_json::Value;
 use std::path::{Path, PathBuf};
 use tauri::{command, AppHandle, Runtime, State};
-use tokio::io::{AsyncBufReadExt, AsyncWriteExt};
-use crate::v2::models::lcu_match_history::Game;
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
 pub async fn record_summoner_into_local(
     data_dir_path: PathBuf,
     info: &SummonerInfo,
 ) -> tokio::io::Result<()> {
-    let summoner_dir = data_dir_path
-        .join(SUMMONER_DATA_DIR_NAME)
-        .join(&info.puuid);
+    let summoner_dir = data_dir_path.join(SUMMONER_DATA_DIR_NAME).join(&info.puuid);
 
     create_dir_if_not_exists(&summoner_dir).await?;
 
@@ -129,38 +128,29 @@ pub async fn read_local_summoners<R: Runtime>(
 pub async fn read_cached_matches<R: Runtime>(
     app_handle: AppHandle<R>,
     puuid: String,
-) -> Result<Vec<Game>, Value> {
+) -> Result<tauri::ipc::Response, Value> {
     let matches_file_path = need_app_data_dir(&app_handle)
         .join(SUMMONER_DATA_DIR_NAME)
         .join(&puuid)
         .join(MATCH_CACHE_FILE_NAME);
-    
+
     if !matches_file_path.is_file() {
-        return Err(serde_json::json!({ 
+        return Err(serde_json::json!({
             "msg": "File not found"
         }));
     }
-    
-    let matches_file = tokio::fs::OpenOptions::new()
+
+    let mut matches_file = tokio::fs::OpenOptions::new()
         .read(true)
         .open(matches_file_path)
         .await
         .map_err(|err| serde_json::json!({ "msg": err.to_string() }))?;
 
-    let line_reader = tokio::io::BufReader::new(matches_file);
-    let mut lines = line_reader.lines();
-    
-    let mut games: Vec<Game> = vec![];
-    while let Some(line) = lines
-        .next_line()
+    let mut array_buffer: Vec<u8> = vec![];
+    matches_file
+        .read_to_end(&mut array_buffer)
         .await
-        .map_err(|err| serde_json::json!({ "msg": err.to_string() }))?
-    {
-        let game = serde_json::from_str::<Game>(&line)
-            .map_err(|err| serde_json::json!({ "msg": err.to_string() }))?;
-        
-        games.push(game);
-    }
-    
-    Ok(games)
+        .map_err(|err| serde_json::json!({ "msg": err.to_string() }))?;
+
+    Ok(tauri::ipc::Response::new(array_buffer))
 }

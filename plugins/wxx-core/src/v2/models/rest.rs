@@ -89,9 +89,11 @@ impl LcuRestClient {
             HeaderValue::from_str(format!("Basic {}", auth_token).as_str()).unwrap(),
         );
 
-        let timeout_millis = Duration::from_millis(
-            if timeout <= 0 { DEFAULT_TIMEOUT_MILLIS } else { timeout }
-        );
+        let timeout_millis = Duration::from_millis(if timeout <= 0 {
+            DEFAULT_TIMEOUT_MILLIS
+        } else {
+            timeout
+        });
 
         Ok(req.timeout(timeout_millis))
     }

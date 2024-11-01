@@ -1667,6 +1667,11 @@
           "const": "wxx-core:allow-lcu-fetch"
         },
         {
+          "description": "Enables the read_cached_matches command without any pre-configured scope.",
+          "type": "string",
+          "const": "wxx-core:allow-read-cached-matches"
+        },
+        {
           "description": "Enables the read_config command without any pre-configured scope.",
           "type": "string",
           "const": "wxx-core:allow-read-config"
@@ -1695,6 +1700,11 @@
           "description": "Denies the lcu_fetch command without any pre-configured scope.",
           "type": "string",
           "const": "wxx-core:deny-lcu-fetch"
+        },
+        {
+          "description": "Denies the read_cached_matches command without any pre-configured scope.",
+          "type": "string",
+          "const": "wxx-core:deny-read-cached-matches"
         },
         {
           "description": "Denies the read_config command without any pre-configured scope.",

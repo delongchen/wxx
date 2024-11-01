@@ -1,6 +1,65 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { NiumaContext } from './ctx';
+import MatchesParserWorker from '../workers/matches-parser?worker';
 
 export const useNiumaContext = () => {
   return useContext(NiumaContext);
 };
+
+type TaskHandler<T = unknown> = [(value: T | Promise<T>) => void, (reason?: unknown) => void];
+
+let TaskID = 0
+const TaskMap: Map<number, TaskHandler> = new Map
+const handleWorkerMessage = (msg: MessageEvent<{id: number, data: unknown, ok: boolean}>) => {
+  const { data: { id, data, ok } } = msg
+  const existHandler = TaskMap.get(id)
+  if (existHandler !== undefined) {
+    const [ resolve, reject ] = existHandler
+    if (ok) {
+      resolve(data)
+    } else {
+      reject(data)
+    }
+  }
+  TaskMap.delete(id)
+}
+
+export const useMatchesParserWorker = () => {
+  const workerRef = useRef<Worker | null>(null);
+
+  useEffect(() => {
+    const worker = new MatchesParserWorker
+    worker.onmessage = handleWorkerMessage
+    workerRef.current = worker
+
+    return () => {
+      worker.terminate()
+      workerRef.current = null
+    }
+  }, [])
+
+  const invoke = <T, P = unknown>(
+    cmd: string,
+    payload?: P
+  ) => {
+    return new Promise<T>((resolve, reject) => {
+      if (workerRef.current !== null) {
+        const taskID = TaskID++
+
+        workerRef.current.postMessage({
+          cmd,
+          payload,
+          id: taskID,
+        })
+
+        TaskMap.set(taskID, [resolve, reject] as TaskHandler)
+      } else {
+        reject()
+      }
+    })
+  }
+
+  return {
+    invoke
+  }
+}
