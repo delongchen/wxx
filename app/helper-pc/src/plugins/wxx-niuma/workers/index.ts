@@ -1,3 +1,5 @@
+import { analyzeMatches } from './analyze'
+
 const handlers: Record<string, (payload: unknown) => Promise<unknown> | unknown> = {}
 
 const timeout = (ms: number) => new Promise((_, reject) => {
@@ -48,10 +50,4 @@ const handleIncomingMessage = async (
 
 self.onmessage = handleIncomingMessage
 
-handlers['parse'] = (buffer: unknown) => {
-  if (!(buffer instanceof ArrayBuffer)) {
-    throw new Error('not an ArrayBuffer')
-  }
-
-  return buffer.byteLength
-}
+handlers['analyze'] = analyzeMatches

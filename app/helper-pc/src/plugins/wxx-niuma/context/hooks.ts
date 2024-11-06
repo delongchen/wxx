@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from 'react';
 import { NiumaContext } from './ctx';
-import MatchesParserWorker from '../workers/matches-parser?worker';
+import MatchesParserWorker from '../workers?worker';
 
 export const useNiumaContext = () => {
   return useContext(NiumaContext);
@@ -14,14 +14,10 @@ const handleWorkerMessage = (msg: MessageEvent<{id: number, data: unknown, ok: b
   const { data: { id, data, ok } } = msg
   const existHandler = TaskMap.get(id)
   if (existHandler !== undefined) {
-    const [ resolve, reject ] = existHandler
-    if (ok) {
-      resolve(data)
-    } else {
-      reject(data)
-    }
+    const [ resolve, reject ] = existHandler;
+    (ok ? resolve : reject)(data)
+    TaskMap.delete(id)
   }
-  TaskMap.delete(id)
 }
 
 export const useMatchesParserWorker = () => {
@@ -35,6 +31,7 @@ export const useMatchesParserWorker = () => {
     return () => {
       worker.terminate()
       workerRef.current = null
+      TaskMap.clear()
     }
   }, [])
 
@@ -46,15 +43,15 @@ export const useMatchesParserWorker = () => {
       if (workerRef.current !== null) {
         const taskID = TaskID++
 
+        TaskMap.set(taskID, [resolve, reject] as TaskHandler)
+
         workerRef.current.postMessage({
           cmd,
           payload,
           id: taskID,
         })
-
-        TaskMap.set(taskID, [resolve, reject] as TaskHandler)
       } else {
-        reject()
+        reject(new Error('worker not available'))
       }
     })
   }
