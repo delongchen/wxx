@@ -37,7 +37,7 @@
   ],
   "definitions": {
     "Capability": {
-      "description": "A grouping and boundary mechanism developers can use to isolate access to the IPC layer.\n\nIt controls application windows fine grained access to the Tauri core, application, or plugin commands. If a window is not matching any capability then it has no access to the IPC layer at all.\n\nThis can be done to create groups of windows, based on their required system access, which can reduce impact of frontend vulnerabilities in less privileged windows. Windows can be added to a capability by exact name (e.g. `main-window`) or glob patterns like `*` or `admin-*`. A Window can have none, one, or multiple associated capabilities.\n\n## Example\n\n```json { \"identifier\": \"main-user-files-write\", \"description\": \"This capability allows the `main` window on macOS and Windows access to `filesystem` write related commands and `dialog` commands to enable programatic access to files selected by the user.\", \"windows\": [ \"main\" ], \"permissions\": [ \"core:default\", \"dialog:open\", { \"identifier\": \"fs:allow-write-text-file\", \"allow\": [{ \"path\": \"$HOME/test.txt\" }] }, \"platforms\": [\"macOS\",\"windows\"] } ```",
+      "description": "A grouping and boundary mechanism developers can use to isolate access to the IPC layer.\n\nIt controls application windows fine grained access to the Tauri core, application, or plugin commands. If a window is not matching any capability then it has no access to the IPC layer at all.\n\nThis can be done to create groups of windows, based on their required system access, which can reduce impact of frontend vulnerabilities in less privileged windows. Windows can be added to a capability by exact name (e.g. `main-window`) or glob patterns like `*` or `admin-*`. A Window can have none, one, or multiple associated capabilities.\n\n## Example\n\n```json { \"identifier\": \"main-user-files-write\", \"description\": \"This capability allows the `main` window on macOS and Windows access to `filesystem` write related commands and `dialog` commands to enable programatic access to files selected by the user.\", \"windows\": [ \"main\" ], \"permissions\": [ \"core:default\", \"dialog:open\", { \"identifier\": \"fs:allow-write-text-file\", \"allow\": [{ \"path\": \"$HOME/test.txt\" }] }, ], \"platforms\": [\"macOS\",\"windows\"] } ```",
       "type": "object",
       "required": [
         "identifier",
@@ -1657,9 +1657,19 @@
           "const": "core:window:deny-unminimize"
         },
         {
+          "description": "Enables the fetch_match_history command without any pre-configured scope.",
+          "type": "string",
+          "const": "wxx-core:allow-fetch-match-history"
+        },
+        {
           "description": "Enables the lcu_fetch command without any pre-configured scope.",
           "type": "string",
           "const": "wxx-core:allow-lcu-fetch"
+        },
+        {
+          "description": "Enables the read_cached_matches command without any pre-configured scope.",
+          "type": "string",
+          "const": "wxx-core:allow-read-cached-matches"
         },
         {
           "description": "Enables the read_config command without any pre-configured scope.",
@@ -1667,9 +1677,24 @@
           "const": "wxx-core:allow-read-config"
         },
         {
+          "description": "Enables the read_local_summoners command without any pre-configured scope.",
+          "type": "string",
+          "const": "wxx-core:allow-read-local-summoners"
+        },
+        {
+          "description": "Enables the record_summoner command without any pre-configured scope.",
+          "type": "string",
+          "const": "wxx-core:allow-record-summoner"
+        },
+        {
           "description": "Enables the write_config command without any pre-configured scope.",
           "type": "string",
           "const": "wxx-core:allow-write-config"
+        },
+        {
+          "description": "Denies the fetch_match_history command without any pre-configured scope.",
+          "type": "string",
+          "const": "wxx-core:deny-fetch-match-history"
         },
         {
           "description": "Denies the lcu_fetch command without any pre-configured scope.",
@@ -1677,9 +1702,24 @@
           "const": "wxx-core:deny-lcu-fetch"
         },
         {
+          "description": "Denies the read_cached_matches command without any pre-configured scope.",
+          "type": "string",
+          "const": "wxx-core:deny-read-cached-matches"
+        },
+        {
           "description": "Denies the read_config command without any pre-configured scope.",
           "type": "string",
           "const": "wxx-core:deny-read-config"
+        },
+        {
+          "description": "Denies the read_local_summoners command without any pre-configured scope.",
+          "type": "string",
+          "const": "wxx-core:deny-read-local-summoners"
+        },
+        {
+          "description": "Denies the record_summoner command without any pre-configured scope.",
+          "type": "string",
+          "const": "wxx-core:deny-record-summoner"
         },
         {
           "description": "Denies the write_config command without any pre-configured scope.",

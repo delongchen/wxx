@@ -5,14 +5,14 @@ export type CancellableService = () => CancelFn;
 
 export const concat =
   (...services: CancellableService[]): CancellableService =>
-  () => {
-    const cancelFns = services.map(it => it());
+    () => {
+      const cancelFns = services.map((it) => it());
 
-    return () => {
-      cancelFns.forEach(cancel => cancel());
-      cancelFns.length = 0;
+      return () => {
+        cancelFns.forEach((cancel) => cancel());
+        cancelFns.length = 0;
+      };
     };
-  };
 
 export const createSubscriptionManager = () => {
   const subscriptions: Subscription[] = [];

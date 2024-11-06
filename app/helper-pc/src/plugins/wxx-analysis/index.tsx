@@ -1,8 +1,9 @@
-import { WxxPluginRaw } from '@/app/plugin/types'
+import { WxxPluginRaw } from '@/app/plugin/types';
 
 const wxxAnalysis: WxxPluginRaw = {
   name: 'wxx-analysis',
-  async install() {},
+  async install() {
+  },
 };
 
 export default wxxAnalysis;

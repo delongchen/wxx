@@ -9,21 +9,21 @@ import { selectGlobal } from '@/store/modules/global';
 import { useWxxRoutes } from '@/router';
 
 function WxxLayout() {
-  const routes = useWxxRoutes()
+  const routes = useWxxRoutes();
 
   const globalState = useAppSelector(selectGlobal);
 
   if (globalState.isFullPage) {
-    return <AppContent routes={routes}/>
+    return <AppContent routes={routes} />;
   }
 
   return (
     <Flex flexDirection={'column'} className={Style.panel}>
       <WxxHeader />
       <Spacer className={Style.center}>
-        <WxxMenu routes={routes}/>
+        <WxxMenu routes={routes} />
         <Spacer>
-          <AppContent routes={routes}/>
+          <AppContent routes={routes} />
         </Spacer>
         <WxxToolBar />
       </Spacer>

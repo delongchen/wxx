@@ -4,7 +4,7 @@ version = "0.0.0"
 authors = [ "MaoKing" ]
 description = ""
 edition = "2021"
-rust-version = "1.81.0"
+rust-version = "1.82.0"
 exclude = ["/examples", "/webview-dist", "/webview-src", "/node_modules"]
 links = "tauri-plugin-wxx-core"
 
@@ -19,13 +19,13 @@ log = "0.4.21"
 base64 = "0.22.1"
 reqwest = "0.12.5"
 native-tls = "0.2.12"
-tokio-tungstenite = { version = "0.23.1", features = ["native-tls"] }
+tokio-tungstenite = { version = "0.24.0", features = ["native-tls"] }
 
 [dev-dependencies]
 tokio = "1.38.1"
 
 [dependencies.sysinfo]
-version = "0.31.2"
+version = "0.32.0"
 
 [build-dependencies]
 tauri-plugin = { version = "2.0.0-beta.17", features = ["build"] }

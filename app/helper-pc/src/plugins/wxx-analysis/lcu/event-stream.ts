@@ -5,8 +5,6 @@
 
 import {
   GameflowPhase,
-  SummonerInfo,
-  BallotLegacy,
   TauriEvent,
   LcuEventType,
   listenLcuEvent,
@@ -15,7 +13,7 @@ import {
 import { Subject, Observable, filter, map, share } from 'rxjs';
 
 const lcuEventBus = new Subject<TauriEvent<LcuEventType>>();
-listenLcuEvent(ev => lcuEventBus.next(ev)).catch(console.error);
+listenLcuEvent((ev) => lcuEventBus.next(ev)).catch(console.error);
 
 export const createSubStream = <T = unknown>(
   uri: string,
@@ -28,7 +26,7 @@ export const createSubStream = <T = unknown>(
   const checker = customTypeSet.has('All')
     ? (ev: TauriEvent<LcuEventType>) => ev.payload.uri === uri
     : (ev: TauriEvent<LcuEventType>) =>
-        ev.payload.uri === uri && customTypeSet.has(ev.payload.eventType);
+      ev.payload.uri === uri && customTypeSet.has(ev.payload.eventType);
 
   mapper ??= (ev: TauriEvent<LcuEventType>) => {
     return ev.payload.data as T;

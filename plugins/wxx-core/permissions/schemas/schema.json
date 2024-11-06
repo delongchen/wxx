@@ -295,6 +295,16 @@
       "type": "string",
       "oneOf": [
         {
+          "description": "Enables the fetch_match_history command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-fetch-match-history"
+        },
+        {
+          "description": "Denies the fetch_match_history command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-fetch-match-history"
+        },
+        {
           "description": "Enables the lcu_fetch command without any pre-configured scope.",
           "type": "string",
           "const": "allow-lcu-fetch"
@@ -305,6 +315,16 @@
           "const": "deny-lcu-fetch"
         },
         {
+          "description": "Enables the read_cached_matches command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-read-cached-matches"
+        },
+        {
+          "description": "Denies the read_cached_matches command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-read-cached-matches"
+        },
+        {
           "description": "Enables the read_config command without any pre-configured scope.",
           "type": "string",
           "const": "allow-read-config"
@@ -313,6 +333,26 @@
           "description": "Denies the read_config command without any pre-configured scope.",
           "type": "string",
           "const": "deny-read-config"
+        },
+        {
+          "description": "Enables the read_local_summoners command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-read-local-summoners"
+        },
+        {
+          "description": "Denies the read_local_summoners command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-read-local-summoners"
+        },
+        {
+          "description": "Enables the record_summoner command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-record-summoner"
+        },
+        {
+          "description": "Denies the record_summoner command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-record-summoner"
         },
         {
           "description": "Enables the write_config command without any pre-configured scope.",

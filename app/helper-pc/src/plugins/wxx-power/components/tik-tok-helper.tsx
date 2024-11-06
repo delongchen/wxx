@@ -1,18 +1,9 @@
 import { useAppDispatch, useAppSelector } from '@/store';
 import { selectGlobal } from '@/store/modules/global';
 import { selectWxxPower, setStateAsync } from '@/store/modules/wxx-power';
-import { memo, useCallback, ChangeEvent } from 'react';
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  FormControl,
-  FormLabel,
-  Heading,
-  SimpleGrid,
-  Switch,
-  Tooltip,
-} from '@chakra-ui/react';
+import { memo, useCallback, useId } from 'react';
+import { Card, Heading, Stack } from '@chakra-ui/react';
+import { Switch } from '@/components/ui/switch'
 
 function TikTokHelper() {
   const { theme } = useAppSelector(selectGlobal);
@@ -20,23 +11,26 @@ function TikTokHelper() {
 
   const { autoAcceptMatch, autoNextMatch, autoBallot } = useAppSelector(selectWxxPower);
 
-  const handleClick = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
-    const id = ev.target.id;
-    if (id === 'wxx-power-auto-accept-match') {
+  const AutoAcceptID = useId()
+  const AutoNextMatchID = useId()
+  const AutoBallotID = useId()
+
+  const handleSwitch = useCallback((id: string) => {
+    if (id === AutoAcceptID) {
       dispatch(
-        setStateAsync(prev => ({
+        setStateAsync((prev) => ({
           autoAcceptMatch: !prev.autoAcceptMatch,
         })),
       );
-    } else if (id === 'wxx-power-auto-next-match') {
+    } else if (id === AutoNextMatchID) {
       dispatch(
-        setStateAsync(prev => ({
+        setStateAsync((prev) => ({
           autoNextMatch: !prev.autoNextMatch,
         })),
       );
-    } else if (id === 'wxx-power-auto-ballot') {
+    } else if (id === AutoBallotID) {
       dispatch(
-        setStateAsync(prev => ({
+        setStateAsync((prev) => ({
           autoBallot: !prev.autoBallot,
         })),
       );
@@ -44,40 +38,39 @@ function TikTokHelper() {
   }, []);
 
   return (
-    <Card>
-      <CardHeader>
-        <Tooltip label="游戏中途还能刷抖音 我测 简直太酷了! 赞美吴翔!" placement="top-start">
-          <Heading size="md">刷抖音助手</Heading>
-        </Tooltip>
-      </CardHeader>
-      <CardBody>
-        <FormControl as={SimpleGrid} columns={{ base: 2, md: 4 }}>
-          <FormLabel htmlFor="wxx-power-auto-accept-match">自动接受对局</FormLabel>
-          <Switch
-            id="wxx-power-auto-accept-match"
-            isChecked={autoAcceptMatch}
-            colorScheme={theme}
-            onChange={handleClick}
-          />
+    <Card.Root>
+      <Card.Header>
+        <Heading>刷抖音助手</Heading>
+      </Card.Header>
 
-          <FormLabel htmlFor="wxx-power-auto-next-match">自动再来一把</FormLabel>
+      <Card.Body>
+        <Stack>
           <Switch
-            id="wxx-power-auto-next-match"
-            isChecked={autoNextMatch}
-            colorScheme={theme}
-            onChange={handleClick}
-          />
+            size='lg'
+            fontWeight='bold'
+            checked={autoAcceptMatch}
+            colorPalette={theme}
+            onCheckedChange={() => { handleSwitch(AutoAcceptID) }}
+          >自动接受对局</Switch>
 
-          <FormLabel htmlFor="wxx-power-auto-ballot">自动点赞</FormLabel>
           <Switch
-            id="wxx-power-auto-ballot"
-            isChecked={autoBallot}
-            colorScheme={theme}
-            onChange={handleClick}
-          />
-        </FormControl>
-      </CardBody>
-    </Card>
+            size='lg'
+            fontWeight='bold'
+            checked={autoNextMatch}
+            colorPalette={theme}
+            onCheckedChange={() => { handleSwitch(AutoNextMatchID) }}
+          >自动下一局</Switch>
+
+          <Switch
+            size='lg'
+            fontWeight='bold'
+            checked={autoBallot}
+            colorPalette={theme}
+            onCheckedChange={() => { handleSwitch(AutoBallotID) }}
+          >自动投票</Switch>
+        </Stack>
+      </Card.Body>
+    </Card.Root>
   );
 }
 

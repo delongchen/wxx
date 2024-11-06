@@ -19,7 +19,7 @@ const initReducer = combineSlices({
 
 const store = configureStore({
   reducer: initReducer,
-  middleware: getDefaultMiddleware => {
+  middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(thunk);
   },
 });

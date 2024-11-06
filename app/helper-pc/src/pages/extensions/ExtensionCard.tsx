@@ -1,19 +1,17 @@
 import { WxxPluginContext, WxxPluginStatus } from '@/app/plugin/types';
 import { useAppTheme } from '@/app/context/app-context.tsx';
+import { Avatar } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import {
-  Avatar,
   Badge,
   Box,
-  Button,
-  ButtonGroup,
   Card,
-  CardBody,
-  CardHeader,
   Flex,
   Text,
+  Group,
 } from '@chakra-ui/react';
 import { memo, useState } from 'react';
-import { useSubscribe } from '@/utils/rx';
+import { useSubscribe } from 'tauri-plugin-wxx-core/hooks';
 
 interface ExtensionCardProp {
   ctx: WxxPluginContext<unknown>;
@@ -22,13 +20,13 @@ interface ExtensionCardProp {
 const mapPluginStatus = (status: WxxPluginStatus): [string, string] => {
   switch (status) {
     case WxxPluginStatus.Started:
-      return ['green', '已启用']
+      return ['green', '已启用'];
     case WxxPluginStatus.Stopped:
       return ['red', '已停用'];
     default:
-      return ['yellow', '正在操作']
+      return ['yellow', '正在操作'];
   }
-}
+};
 
 function ExtensionCard(props: ExtensionCardProp) {
   const theme = useAppTheme();
@@ -39,52 +37,52 @@ function ExtensionCard(props: ExtensionCardProp) {
   const [pluginStatus, setPluginStatus] = useState<WxxPluginStatus>(statusSubject.getValue());
   useSubscribe(statusSubject, setPluginStatus);
 
-  const [badgeColor, badgeText] = mapPluginStatus(pluginStatus)
+  const [badgeColor, badgeText] = mapPluginStatus(pluginStatus);
 
   return (
-    <Card colorScheme={theme}>
-      <CardHeader>
+    <Card.Root colorScheme={theme} mb="4">
+      <Card.Header>
         <Flex>
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
             <Avatar name={ctx.name} src={cover} />
             <Box>
               <Text fontWeight="bold">
                 {ctx.name}
-                <Badge ml="1" colorScheme={badgeColor}>
+                <Badge ml="1" colorPalette={badgeColor}>
                   {badgeText}
                 </Badge>
               </Text>
               {version && <Text>v{version}</Text>}
             </Box>
           </Flex>
-          <ButtonGroup>
+          <Group>
             {pluginStatus === WxxPluginStatus.Stopped && (
-              <Button variant="ghost" colorScheme="green" onClick={start}>
+              <Button variant="solid" colorPalette="green" onClick={start}>
                 启用
               </Button>
             )}
             {pluginStatus === WxxPluginStatus.Started && (
-              <Button variant="ghost" colorScheme="gray" onClick={restart}>
+              <Button variant="ghost" colorPalette="gray" onClick={restart}>
                 重新加载
               </Button>
             )}
             {pluginStatus === WxxPluginStatus.Started && (
-              <Button variant="ghost" colorScheme="red" onClick={shutdown}>
+              <Button variant="solid" colorPalette="red" onClick={shutdown}>
                 停用
               </Button>
             )}
-          </ButtonGroup>
+          </Group>
         </Flex>
-      </CardHeader>
+      </Card.Header>
 
       {description.length !== 0 && (
-        <CardBody>
+        <Card.Body>
           {description.map((line, index) => (
             <Text key={index}>{line}</Text>
           ))}
-        </CardBody>
+        </Card.Body>
       )}
-    </Card>
+    </Card.Root>
   );
 }
 

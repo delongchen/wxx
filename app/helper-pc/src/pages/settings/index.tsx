@@ -1,6 +1,7 @@
 import { memo, useCallback } from 'react';
 import Style from './index.module.sass';
-import { Card, CardBody, CardHeader, Heading, Box, Wrap, WrapItem, Button } from '@chakra-ui/react';
+import { Card, Heading, Box, Group } from '@chakra-ui/react';
+import { Button } from '@/components/ui/button';
 import { setGlobalThemeAsync } from '@/store/modules/global';
 import { useAppDispatch } from '@/store';
 
@@ -25,22 +26,20 @@ function ThemeSetting() {
   }, []);
 
   return (
-    <Card>
-      <CardHeader>
+    <Card.Root>
+      <Card.Header>
         <Heading size="xl">主题颜色</Heading>
-      </CardHeader>
-      <CardBody>
-        <Wrap spacing={4}>
-          {AllowColor.map(it => (
-            <WrapItem key={it}>
-              <Button colorScheme={it} onClick={() => handleClick(it)}>
-                {it}
-              </Button>
-            </WrapItem>
+      </Card.Header>
+      <Card.Body>
+        <Group>
+          {AllowColor.map((it) => (
+            <Button key={it} colorPalette={it} onClick={() => handleClick(it)}>
+              {it}
+            </Button>
           ))}
-        </Wrap>
-      </CardBody>
-    </Card>
+        </Group>
+      </Card.Body>
+    </Card.Root>
   );
 }
 

@@ -1,4 +1,5 @@
-const FromVoidToVoid = () => {};
+const FromVoidToVoid = () => {
+};
 
 export class WxxWebSocket {
   private ws: WebSocket | null = null;
@@ -7,7 +8,8 @@ export class WxxWebSocket {
   constructor(
     private baseUrl: string,
     private reconnectIntervalMs: number = 3000,
-  ) {}
+  ) {
+  }
 
   private reconnect(group: string) {
     if (this.ws !== null) {
@@ -26,14 +28,15 @@ export class WxxWebSocket {
     if (this.ws !== null && this.ws.readyState === WebSocket.OPEN) return;
 
     const ws = new WebSocket(`${this.baseUrl}/group/${group}`);
-    ws.onopen = () => {};
-    ws.onerror = ev => {
+    ws.onopen = () => {
+    };
+    ws.onerror = (ev) => {
       console.log(`[error] ${this.baseUrl}/group/${group}: `, ev);
     };
     ws.onclose = () => {
       this.reconnect(group);
     };
-    ws.onmessage = ev => {
+    ws.onmessage = (ev) => {
       this.onmessage(ev);
     };
 

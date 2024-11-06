@@ -1,8 +1,12 @@
 use crate::v2::consts::RIOT_GAMES_PEM_BYTES;
+use crate::v2::errors::lcu_fetch_error::LcuFetchError;
 use reqwest::header::HeaderValue;
 use reqwest::{Certificate, ClientBuilder, RequestBuilder};
+use serde::de::DeserializeOwned;
 use serde_json::Value;
 use std::time::Duration;
+
+const DEFAULT_TIMEOUT_MILLIS: u64 = 20000;
 
 pub enum LcuRestError {
     MethodNotAllow,
@@ -16,8 +20,8 @@ enum LcuRestAllowMethod {
 }
 
 impl LcuRestAllowMethod {
-    fn from(raw: String) -> Option<Self> {
-        match raw.as_str() {
+    fn from(raw: &str) -> Option<Self> {
+        match raw {
             "get" | "GET" => Some(Self::GET),
             "post" | "POST" => Some(Self::POST),
             "put" | "PUT" => Some(Self::PUT),
@@ -37,7 +41,6 @@ impl LcuRestClient {
 
         let client = ClientBuilder::new()
             .add_root_certificate(cert)
-            .timeout(Duration::from_millis(500))
             .build()
             .unwrap();
 
@@ -46,11 +49,12 @@ impl LcuRestClient {
 
     pub fn create_request(
         &self,
-        method: String,
-        endpoint: String,
-        body: Value,
-        port: String,
-        auth_token: String,
+        method: &str,
+        endpoint: &str,
+        body: &Value,
+        port: &str,
+        auth_token: &str,
+        timeout: u64,
     ) -> Result<RequestBuilder, LcuRestError> {
         let method = {
             match LcuRestAllowMethod::from(method) {
@@ -67,14 +71,14 @@ impl LcuRestClient {
             LcuRestAllowMethod::POST => {
                 let req = self.client.post(url);
                 match body {
-                    Value::Object(body) => req.json(&body),
+                    Value::Object(body) => req.json(body),
                     _ => req,
                 }
             }
             LcuRestAllowMethod::PUT => {
                 let req = self.client.put(url);
                 match body {
-                    Value::Object(body) => req.json(&body),
+                    Value::Object(body) => req.json(body),
                     _ => req,
                 }
             }
@@ -85,6 +89,66 @@ impl LcuRestClient {
             HeaderValue::from_str(format!("Basic {}", auth_token).as_str()).unwrap(),
         );
 
-        Ok(req)
+        let timeout_millis = Duration::from_millis(if timeout <= 0 {
+            DEFAULT_TIMEOUT_MILLIS
+        } else {
+            timeout
+        });
+
+        Ok(req.timeout(timeout_millis))
+    }
+}
+
+pub struct LcuFetcher<'this> {
+    client: &'this LcuRestClient,
+    port: &'this str,
+    auth_token: &'this str,
+}
+
+impl<'this> LcuFetcher<'this> {
+    pub fn of(client: &'this LcuRestClient, port: &'this str, auth_token: &'this str) -> Self {
+        LcuFetcher {
+            client,
+            port,
+            auth_token,
+        }
+    }
+
+    pub async fn fetch<T: DeserializeOwned>(
+        &self,
+        method: &str,
+        endpoint: String,
+        timeout: u64,
+        body: &Value,
+    ) -> Result<T, LcuFetchError> {
+        let req = self
+            .client
+            .create_request(method, &endpoint, body, self.port, self.auth_token, timeout)
+            .map_err(|_| LcuFetchError::CreateRequestError)?;
+
+        let res = match req.send().await {
+            Ok(res) => res,
+            Err(e) => return Err(LcuFetchError::SendRequestError(e.to_string())),
+        };
+
+        if !res.status().is_success() {
+            return Err(LcuFetchError::RequestNotSuccess(
+                res.json::<Value>().await.unwrap_or(Value::Null),
+            ));
+        }
+
+        match res.json::<T>().await {
+            Ok(parsed) => Ok(parsed),
+            Err(e) => Err(LcuFetchError::ResponseDeserializationError(e.to_string())),
+        }
+    }
+
+    pub async fn fetch_without_payload<T: DeserializeOwned>(
+        &self,
+        endpoint: String,
+        timeout: u64,
+    ) -> Result<T, LcuFetchError> {
+        self.fetch::<T>("get", endpoint, timeout, &Value::Null)
+            .await
     }
 }

@@ -17,21 +17,25 @@ const wxxPower: WxxPluginRaw = {
     '赞美wx',
   ],
   async install(ctx) {
-    const { page, statusBar, quit } = ctx
+    const { page, statusBar, quit } = ctx;
 
-    page('tik-tok', TikTokPage, () => <VscTools size="24px" />);
+    page({
+      name: 'tik-tok',
+      component: TikTokPage,
+      icon: () => <VscTools size="24px" />,
+    });
 
     statusBar('lcu-status', LcuStatusTag);
 
     store.dispatch(
       syncToLocalConfig(() => {
         startServices();
-      })
+      }),
     );
 
     quit(async () => {
       console.log('quit');
-    })
+    });
   },
 };
 

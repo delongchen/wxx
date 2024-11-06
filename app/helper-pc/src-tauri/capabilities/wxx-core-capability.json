@@ -8,6 +8,10 @@
   "permissions": [
     "wxx-core:allow-read-config",
     "wxx-core:allow-lcu-fetch",
-    "wxx-core:allow-write-config"
+    "wxx-core:allow-write-config",
+    "wxx-core:allow-fetch-match-history",
+    "wxx-core:allow-read-local-summoners",
+    "wxx-core:allow-record-summoner",
+    "wxx-core:allow-read-cached-matches"
   ]
 }

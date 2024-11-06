@@ -66,7 +66,7 @@ export interface CurrentGameParticipant {
   // The ID of the profile icon used by this participant
   profileIconId: number,
 
-  // Flag indicating whether or not this participant is a bot
+  // Flag indicating whether not this participant is a bot
   bot: boolean,
 
   // The team ID of this participant, indicating the participant's team
@@ -156,7 +156,7 @@ export interface FeaturedGameInfo {
 
 export interface Participant {
 
-  // Flag indicating whether or not this participant is a bot
+  // Flag indicating whether not this participant is a bot
   bot: boolean,
 
   // The ID of the second summoner spell used by this participant

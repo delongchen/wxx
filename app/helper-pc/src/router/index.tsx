@@ -1,7 +1,7 @@
 import { WxxRoute } from '@/types/router';
 import { useState } from 'react';
-import { Subject } from 'rxjs'
-import { useSubscribe } from '@/utils/rx';
+import { Subject } from 'rxjs';
+import { useSubscribe } from 'tauri-plugin-wxx-core/hooks';
 
 const routeModules = import.meta.glob(['./modules/**/*.ts', './modules/**/*.tsx'], { eager: true });
 
@@ -33,29 +33,29 @@ const staticRoutes: WxxRoute[] = [
 ];
 const internalRoutes = [...staticRoutes, ...flatModules(routeModules)];
 
-const outerRoutes: Map<string, WxxRoute> = new Map
+const outerRoutes: Map<string, WxxRoute> = new Map();
 export const registerRoute = (route: WxxRoute) => {
   outerRoutes.set(route.path, route);
 };
 export const unregisterRoute = (path: string) => {
   outerRoutes.delete(path);
-}
+};
 
 const getAllRoutes = () => {
-  return [...internalRoutes, ...outerRoutes.values()]
-}
+  return [...internalRoutes, ...outerRoutes.values()];
+};
 
-export const RoutesChangeEmitter = new Subject<void>()
+export const RoutesChangeEmitter = new Subject<void>();
 export const emitRoutesChange = () => {
-  RoutesChangeEmitter.next()
-}
+  RoutesChangeEmitter.next();
+};
 
 export const useWxxRoutes = () => {
-  const [routes, setRoutes] = useState<WxxRoute[]>(getAllRoutes())
+  const [routes, setRoutes] = useState<WxxRoute[]>(getAllRoutes());
 
   useSubscribe(RoutesChangeEmitter, () => {
-    setRoutes(getAllRoutes())
-  })
+    setRoutes(getAllRoutes());
+  });
 
-  return routes
-}
+  return routes;
+};

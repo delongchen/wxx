@@ -118,14 +118,14 @@ export const api = <E extends string>(endpoint: E) => {
   const parsed = parseTemplate(endpoint);  // 解析 endpoint 模板
 
   // 无请求体的 HTTP 方法
-  const noPayload = <T = unknown>(method: LcuAllowedMethod) => {
+  const noPayload = <T = unknown>(method: LcuAllowedMethod, timeout?: number) => {
     if (typeof parsed === 'string') {  // 如果没有参数
       return (() => lcuFetch(endpoint, { method })) as FetchType<E, T>;
     }
 
     // 如果有参数，返回接收参数对象的函数
     return (
-      (params: ParamsObject<E>) => lcuFetch(parsed(params), { method })
+      (params: ParamsObject<E>) => lcuFetch(parsed(params), { method, timeout })
     ) as FetchType<E, T>;
   };
 
@@ -133,7 +133,7 @@ export const api = <E extends string>(endpoint: E) => {
   const withPayload = <
     T = unknown,
     P extends RequestBody = {}
-  >(method: LcuAllowedMethod) => {
+  >(method: LcuAllowedMethod, timeout?: number) => {
     if (typeof parsed === 'string') {  // 如果没有参数
       return (
         (payload: P) => lcuFetch<T>(endpoint, {
@@ -150,6 +150,7 @@ export const api = <E extends string>(endpoint: E) => {
         {
           method,
           body: payload,
+          timeout,
         },
       )
     ) as FetchWithPayloadType<E, P, T>;

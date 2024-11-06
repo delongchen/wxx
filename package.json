@@ -14,26 +14,26 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tauri-apps/api": "^2.0.0-beta.13",
+    "@tauri-apps/api": "^2.0.3",
     "@tauri-apps/cli": "2.0.0-beta.20",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
-    "@types/node": "^20.14.10",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "@typescript-eslint/parser": "^7.3.1",
-    "eslint": "^8.57.0",
+    "@types/node": "^20.17.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-jsx-a11y": "^6.9.0",
-    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.1",
+    "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "prettier": "^3.3.3",
-    "rollup": "^4.9.6",
-    "turbo": "^2.1.2",
-    "typescript": "^5.5.4"
+    "rollup": "^4.24.0",
+    "turbo": "^2.2.3",
+    "typescript": "^5.6.3"
   },
-  "packageManager": "pnpm@9.3.0+sha1.d4f1da7af76dbdb4ab1a08f6b5add602ffad6fd4"
+  "packageManager": "pnpm@9.12.2+sha512.22721b3a11f81661ae1ec68ce1a7b879425a1ca5b991c975b074ac220b187ce56c708fe5db69f4c962c989452eee76c82877f4ee80f474cebd61ee13461b6228"
 }

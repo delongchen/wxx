@@ -4,7 +4,7 @@ import store from '@/store';
 import { accept } from 'tauri-plugin-wxx-core/lcu-api/match-making';
 
 const gameReadyCheckStream = gameFlowPhaseStream.pipe(
-  filter(phase => phase === 'ReadyCheck'),
+  filter((phase) => phase === 'ReadyCheck'),
   debounceTime(200),
 );
 

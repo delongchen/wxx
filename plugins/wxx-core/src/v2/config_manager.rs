@@ -1,4 +1,4 @@
-use crate::v2::utils::create_dir_if_not_exists;
+use crate::v2::utils::create_dir_if_not_exists_sync;
 use std::ops::Add;
 use std::path::PathBuf;
 
@@ -44,7 +44,7 @@ pub fn resolve_config_file(
     data_path.push(CONFIG_DIR);
     data_path.push(namespace);
 
-    create_dir_if_not_exists(&data_path).expect("create error");
+    create_dir_if_not_exists_sync(&data_path).expect("create error");
 
     data_path.push(config_type.with_filename(config_name));
 

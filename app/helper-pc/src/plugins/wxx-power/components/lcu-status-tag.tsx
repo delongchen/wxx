@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import { Tag, TagLabel, TagLeftIcon } from '@chakra-ui/react';
+import { Tag } from '@/components/ui/tag'
 import { VscInfo, VscError, VscEllipsis } from 'react-icons/vsc';
 import { IconType } from 'react-icons';
-import { useCurrentSummoner, useLcuProcessStatus } from '../hooks/common';
+import { useCurrentSummoner, useLcuProcessStatus } from 'tauri-plugin-wxx-core/hooks';
 import { LcuProcessStatus } from 'tauri-plugin-wxx-core/events';
 
 type TagAllowedColor = 'red' | 'green' | 'yellow';
@@ -13,10 +13,13 @@ interface BaseTagProps {
   icon?: IconType;
 }
 
-const BaseTag = ({ color, text, icon }: BaseTagProps) => (
-  <Tag size="md" colorScheme={color}>
-    {icon === undefined ? null : <TagLeftIcon as={icon} />}
-    <TagLabel>{text}</TagLabel>
+const BaseTag = ({ color, text, icon: Icon }: BaseTagProps) => (
+  <Tag
+    size="md"
+    colorPalette={color}
+    startElement={Icon === undefined ? null : <Icon/>}
+  >
+    {text}
   </Tag>
 );
 

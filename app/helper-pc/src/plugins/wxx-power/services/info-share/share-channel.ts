@@ -3,9 +3,9 @@ import { Subject, Observable } from 'rxjs';
 import { BasicMessage } from 'wxx-protobufs/common';
 import { BinaryReader, BinaryWriter } from '@bufbuild/protobuf/wire';
 
-interface Serializer<T = unknown> {
-  encode: (message: T, writer?: BinaryWriter) => BinaryWriter;
-  decode: (input: BinaryReader | Uint8Array, length?: number) => T;
+interface Serializer<T> {
+  encode(message: T, writer?: BinaryWriter): BinaryWriter;
+  decode(input: BinaryReader | Uint8Array, length?: number): T;
 }
 
 const isBlob = (value: unknown): value is Blob => value instanceof Blob;
@@ -18,7 +18,7 @@ export const setEnable = (value: boolean) => {
 };
 
 const ws = new WxxWebSocket('ws://localhost:11460');
-ws.onmessage = async ev => {
+ws.onmessage = async (ev) => {
   if (!enable) return;
 
   const data = ev.data;
@@ -45,7 +45,7 @@ export const shareWithEndpoint = (endpoint: string, body: Uint8Array) => {
 
 export const shareChannel = <T>(endpoint: string, serializer: Serializer<T>) => {
   const subject = new Subject<T>();
-  const subscription = incomingChannel.subscribe(message => {
+  const subscription = incomingChannel.subscribe((message) => {
     if (message.header?.endpoint === endpoint) {
       try {
         const data = serializer.decode(message.body);
@@ -63,7 +63,7 @@ export const shareChannel = <T>(endpoint: string, serializer: Serializer<T>) => 
   };
 
   const sendOn = <M = T>(outlet: Observable<M>, adapter: (source: M) => T | undefined) =>
-    outlet.subscribe(source => {
+    outlet.subscribe((source) => {
       const result = adapter(source);
 
       if (result !== undefined) {
