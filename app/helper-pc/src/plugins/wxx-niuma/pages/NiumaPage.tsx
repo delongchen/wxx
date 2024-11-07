@@ -22,6 +22,7 @@ function NiumaDashboard({ puuid }: NiumaDashboardProps) {
 
   useEffect(() => {
     const fn = async () => {
+      const start = performance.now();
       const buf = await readLocalMatches(puuid)
         .catch(() => null);
 
@@ -32,6 +33,8 @@ function NiumaDashboard({ puuid }: NiumaDashboardProps) {
           puuid,
           matchesBuffer: buf,
         })
+        console.log(performance.now() - start);
+        console.log(result);
         setChartData(result)
       }
     }
@@ -52,7 +55,7 @@ function NiumaDashboard({ puuid }: NiumaDashboardProps) {
   }
 
   return (
-    <Box>{JSON.stringify(chartData)}</Box>
+    <Box></Box>
   )
 }
 

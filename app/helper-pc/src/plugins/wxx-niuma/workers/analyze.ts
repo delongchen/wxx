@@ -1,73 +1,62 @@
-import type { Game, Participant, Stats } from 'tauri-plugin-wxx-core'
+import type { Game, Participant, Stats, ParticipantIdentity } from 'tauri-plugin-wxx-core'
 import { parseMatchesBuffer } from './parse'
 
-type KeysOfValueType<T, V> = {
+type KeysByValueType<T, V> = {
   [K in keyof T]: T[K] extends V ? K : never;
 }[keyof T];
-type GameNumStatsKeys = KeysOfValueType<Stats, number>
-const TeamStatsKeys: GameNumStatsKeys[] = [
-  // KDA
+type GameNumStatsKey = KeysByValueType<Stats, number>
+type ParticipantExt = [ParticipantIdentity, Participant]
+const TeamStatsKeys: GameNumStatsKey[] = [
+  /** KDA */
   'kills',
   'deaths',
   'assists',
-  //
-  'damageDealtToObjectives',
+  /** Turrets & Obj Damage */
   'damageDealtToTurrets',
-  'damageSelfMitigated',
-  //
+  // 'damageDealtToObjectives',
+
+  /** About Gold */
   'goldSpent',
   'goldEarned',
-  //
+
+  /** Live Time */
   'longestTimeSpentLiving',
-  //
-  'magicDamageDealt',
+
+  /** Magic Damage */
   'magicDamageDealtToChampions',
-  'magicalDamageTaken',
-  //
-  'physicalDamageDealt',
+  // 'magicDamageDealt',
+  // 'magicalDamageTaken',
+
+  /* Physical Damage */
   'physicalDamageDealtToChampions',
-  'physicalDamageTaken',
-  //
-  'trueDamageDealt',
-  'trueDamageDealtToChampions',
-  'trueDamageTaken',
-  //
-  'totalDamageDealt',
+  // 'physicalDamageDealt',
+  // 'physicalDamageTaken',
+
+  /** True Damage */
+  // 'trueDamageDealtToChampions',
+  // 'trueDamageDealt',
+  // 'trueDamageTaken',
+
+  /** Total Damage */
   'totalDamageDealtToChampions',
-  'totalDamageTaken',
-  //
+  // 'totalDamageDealt',
+  // 'totalDamageTaken',
+
+  /** Other */
   'totalHeal',
   'totalMinionsKilled',
-  'totalTimeCrowdControlDealt',
+  // 'damageSelfMitigated',
+  // 这两个有什么区别 还待研究
+  // 'totalTimeCrowdControlDealt',
   'timeCCingOthers',
-]
-
-class GameHelper {
-  private participantMap: Map<string, Participant> = new Map()
-
-  constructor(private readonly game: Game) {
-    const idMap = new Map(game.participants.map(p => [p.participantId, p]))
-
-    for (const { player, participantId } of this.game.participantIdentities) {
-      this.participantMap.set(
-        player.puuid,
-        idMap.get(participantId)!,
-      )
-    }
-  }
-
-  public getParticipantByPuuid(puuid: string) {
-    return this.participantMap.get(puuid) ?? null
-  }
-}
+] as const;
 
 export interface NiumaChartDataType {
-  duration: number
 }
 
 interface NiumaAnalyzeContext {
   mainPuuid: string
-  games: GameHelper[]
+  reports: MatchReport[]
 }
 
 export interface NiumaAnalyzeProps {
@@ -75,17 +64,114 @@ export interface NiumaAnalyzeProps {
   matchesBuffer: ArrayBuffer
 }
 
+interface MatchReport {
+  puuid: string,
+  championId: number,
+  win: boolean,
+  teammates: string[],
+  gameDataRaw: Record<string, number>,
+  gameCreation: number,
+  gameId: number,
+}
+
+class MatchAnalyzeHelper {
+  private participantMap: Map<string, ParticipantExt> = new Map()
+  private teamMap: Map<string, ParticipantExt[]> = new Map()
+
+  constructor(private readonly game: Game) {
+    // idMap and teamIdMap are just temp variable
+    const idMap = new Map(
+      this.game.participants.map(p => [p.participantId, p])
+    )
+    // build puuid to participant map
+    for (const id of this.game.participantIdentities) {
+      this.participantMap.set(
+        id.player.puuid,
+        [id, idMap.get(id.participantId)!],
+      )
+    }
+    // build puuid to team map
+    const teamIdMap = new Map<number, ParticipantExt[]>
+    for (const pair of this.participantMap.values()) {
+      const team = teamIdMap.get(pair[1].teamId)
+      if (team === undefined) {
+        teamIdMap.set(pair[1].teamId, [pair])
+      } else {
+        team.push(pair)
+      }
+    }
+    for (const [id, participant] of this.participantMap.values()) {
+      this.teamMap.set(id.player.puuid, teamIdMap.get(participant.teamId)!)
+    }
+  }
+
+  private getParticipantByPuuid(puuid: string) {
+    return this.participantMap.get(puuid) ?? null
+  }
+
+  //
+  private getTeamStatSum(puuid: string, keys: GameNumStatsKey[] = TeamStatsKeys) {
+    const team = this.teamMap.get(puuid)
+    if (team === undefined || team.length === 0) return null
+
+    const result = {} as Record<GameNumStatsKey, number>
+    for (const [, { stats }] of team) {
+      for (const key of keys) {
+        result[key] = (result[key] ?? 0) + stats[key]
+      }
+    }
+
+    return result
+  }
+
+  public genMatchReport(puuid: string): MatchReport | null {
+    const participant = this.getParticipantByPuuid(puuid)
+    if (participant === null) return null
+
+    const [, { stats, championId }] = participant
+    const { gameCreation, gameId } = this.game
+    const { win } = stats
+    const teamStatSumRecord = this.getTeamStatSum(puuid)!
+    const teammates = this.teamMap
+      .get(puuid)!
+      .map(([id]) => id.player.puuid)
+      .filter(uid => uid !== puuid)
+    const gameDataRaw: Record<string, number> = {}
+
+    for (const key of TeamStatsKeys) {
+      gameDataRaw[key] = stats[key]
+      gameDataRaw[`$${key}`] = stats[key] / teamStatSumRecord[key]
+    }
+
+    return {
+      puuid,
+      championId,
+      win,
+      teammates,
+      gameDataRaw,
+      gameCreation,
+      gameId,
+    }
+  }
+}
+
 export const analyzeMatches = (props: NiumaAnalyzeProps): NiumaChartDataType => {
   const { puuid, matchesBuffer } = props
-
-  const taskStart = performance.now()
   const rawGames = parseMatchesBuffer(matchesBuffer)
-  const games = rawGames.map(it => new GameHelper(it))
-  const taskEnd = performance.now()
+  const games = rawGames.map(it => new MatchAnalyzeHelper(it))
+  const reports = games
+    .map(game => game.genMatchReport(puuid))
+    .filter(report => report !== null) as MatchReport[]
 
-  console.log(games[games.length - 1].getParticipantByPuuid(puuid));
+  const ctx: NiumaAnalyzeContext = {
+    reports,
+    mainPuuid: puuid,
+  }
+
+  console.log(ctx);
 
   return {
-    duration: taskEnd - taskStart,
+    puuid,
+    reports,
   }
 }
