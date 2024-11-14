@@ -52,11 +52,14 @@ const TeamStatsKeys: GameNumStatsKey[] = [
 ] as const;
 
 export interface NiumaChartDataType {
+  dataVecMap: Record<string, number[]>
+  creationVec: number[]
 }
 
 interface NiumaAnalyzeContext {
   mainPuuid: string
   reports: MatchReport[]
+  result: NiumaChartDataType
 }
 
 export interface NiumaAnalyzeProps {
@@ -70,6 +73,7 @@ interface MatchReport {
   win: boolean,
   teammates: string[],
   gameDataRaw: Record<string, number>,
+  gameDataExt: Record<string, number>,
   gameCreation: number,
   gameId: number,
 }
@@ -143,14 +147,41 @@ class MatchAnalyzeHelper {
       gameDataRaw[`$${key}`] = stats[key] / teamStatSumRecord[key]
     }
 
+    const gameDataExt: Record<string, number> = {}
+
     return {
       puuid,
       championId,
       win,
       teammates,
       gameDataRaw,
+      gameDataExt,
       gameCreation,
       gameId,
+    }
+  }
+}
+
+const analyze = (ctx: NiumaAnalyzeContext) => {
+  const {
+    reports,
+    result: {
+      dataVecMap,
+      creationVec,
+    },
+  } = ctx
+
+  for (const { gameDataRaw, gameCreation } of reports) {
+    creationVec.push(gameCreation)
+
+    const keys = Object.keys(gameDataRaw)
+    for (const key of keys) {
+      const exist = dataVecMap[key]
+      if (exist === undefined) {
+        dataVecMap[key] = [gameDataRaw[key]]
+      } else {
+        exist.push(gameDataRaw[key])
+      }
     }
   }
 }
@@ -166,12 +197,13 @@ export const analyzeMatches = (props: NiumaAnalyzeProps): NiumaChartDataType => 
   const ctx: NiumaAnalyzeContext = {
     reports,
     mainPuuid: puuid,
+    result: {
+      dataVecMap: {},
+      creationVec: [],
+    }
   }
 
-  console.log(ctx);
+  analyze(ctx)
 
-  return {
-    puuid,
-    reports,
-  }
+  return ctx.result
 }

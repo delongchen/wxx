@@ -1,7 +1,7 @@
 import type { WxxPluginPageInfo } from '@/app/plugin/types';
 import { NiumaContextProvider } from './context/provider.tsx';
 import NiumaMainLayout from './components/NiumaMainLayout.tsx';
-import NiumaPage from './pages/NiumaPage.tsx';
+import NiumaPage from './pages/NiumaPage/index.tsx';
 import HistoryFetchPage from './pages/HistoryFetchPage.tsx';
 
 export const mainPageChildren: WxxPluginPageInfo[] = [
