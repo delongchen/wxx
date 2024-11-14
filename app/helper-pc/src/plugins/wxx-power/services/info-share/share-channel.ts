@@ -5,6 +5,7 @@ import { BinaryReader, BinaryWriter } from '@bufbuild/protobuf/wire';
 
 interface Serializer<T> {
   encode(message: T, writer?: BinaryWriter): BinaryWriter;
+
   decode(input: BinaryReader | Uint8Array, length?: number): T;
 }
 

@@ -17,4 +17,4 @@ echarts.use([
   // components
   GridComponent,
   TitleComponent,
-])
+]);

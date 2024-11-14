@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react';
-import { Avatar } from '@/components/ui/avatar'
-import { Tag } from '@/components/ui/tag'
-import { ProgressBar, ProgressRoot } from '@/components/ui/progress'
+import { Avatar } from '@/components/ui/avatar';
+import { Tag } from '@/components/ui/tag';
+import { ProgressBar, ProgressRoot } from '@/components/ui/progress';
 import {
   Card,
   Flex,
@@ -124,10 +124,10 @@ function SummonerCard({ info, phase }: SummonerState) {
                 roll点: {info.rerollPoints!.numberOfRolls}/{info.rerollPoints!.maxRolls}
               </Text>
               <ProgressRoot
-                maxW='96px'
+                maxW="96px"
                 value={((info.rerollPoints!.currentPoints % 250) * 100) / 250}
               >
-                <ProgressBar/>
+                <ProgressBar />
               </ProgressRoot>
             </Flex>
           </Flex>

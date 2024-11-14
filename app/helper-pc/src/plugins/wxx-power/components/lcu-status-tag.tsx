@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Tag } from '@/components/ui/tag'
+import { Tag } from '@/components/ui/tag';
 import { VscInfo, VscError, VscEllipsis } from 'react-icons/vsc';
 import { IconType } from 'react-icons';
 import { useCurrentSummoner, useLcuProcessStatus } from 'tauri-plugin-wxx-core/hooks';
@@ -17,7 +17,7 @@ const BaseTag = ({ color, text, icon: Icon }: BaseTagProps) => (
   <Tag
     size="md"
     colorPalette={color}
-    startElement={Icon === undefined ? null : <Icon/>}
+    startElement={Icon === undefined ? null : <Icon />}
   >
     {text}
   </Tag>

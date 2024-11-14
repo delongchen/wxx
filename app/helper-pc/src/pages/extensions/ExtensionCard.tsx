@@ -1,7 +1,7 @@
 import { WxxPluginContext, WxxPluginStatus } from '@/app/plugin/types';
 import { useAppTheme } from '@/app/context/app-context.tsx';
-import { Avatar } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
+import { Avatar } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   Badge,
   Box,

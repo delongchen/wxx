@@ -1,4 +1,4 @@
-import './components/charts/init'
+import './components/charts/init';
 
 import { WxxPluginRaw } from '@/app/plugin/types';
 import { mainPage } from './routes';

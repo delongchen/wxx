@@ -8,8 +8,8 @@ import {
 } from 'tauri-plugin-wxx-core/events';
 
 interface FetchingState {
-  all: number
-  fetched: number
+  all: number;
+  fetched: number;
 }
 
 interface FetchingContext {
@@ -30,19 +30,19 @@ const newTask = (puuid: string) => {
     status: { finished: false, ok: false },
     fetchingState: null,
     summonerInfo: null,
-    scanningState: null
-  })
-}
+    scanningState: null,
+  });
+};
 const getCtxArray = () => [...FetchingContextMap.values()];
 const needPrevCtx = (puuid: string, cb?: (ctx: FetchingContext) => void) => {
   const exist = FetchingContextMap.get(puuid);
   if (exist !== undefined && !exist.status.finished) {
     cb && cb(exist);
-    return true
+    return true;
   }
 
   return false;
-}
+};
 
 function MHFTaskCardContent({ ctx }: { ctx: FetchingContext }) {
   return (
@@ -57,10 +57,10 @@ function MHFTaskList() {
 
   const reRender = useCallback(() => {
     setCtxArray(getCtxArray());
-  }, [])
+  }, []);
 
   useEffect(() => {
-    reRender()
+    reRender();
 
     const listener = listenFetchMatchHistoryTask(({ payload }) => {
       const { stage, puuid } = payload;
@@ -72,35 +72,35 @@ function MHFTaskList() {
         }
       } else if (stage === FetchMatchHistoryStage.FetchedSummoner) {
         needPrevCtx(puuid, ctx => {
-          ctx.summonerInfo = payload.data
-          reRender()
-        })
+          ctx.summonerInfo = payload.data;
+          reRender();
+        });
       } else if (stage === FetchMatchHistoryStage.ScanningIndex) {
         needPrevCtx(puuid, ctx => {
-          ctx.scanningState = payload.data
-          reRender()
-        })
+          ctx.scanningState = payload.data;
+          reRender();
+        });
       } else if (stage === FetchMatchHistoryStage.FetchingMatchDetail) {
         needPrevCtx(puuid, ctx => {
           ctx.fetchingState = {
             all: payload.data.indexCount,
             fetched: 0,
-          }
-          reRender()
-        })
+          };
+          reRender();
+        });
       } else if (stage === FetchMatchHistoryStage.FetchedMatchDetail) {
         needPrevCtx(puuid, ctx => {
           if (ctx.fetchingState !== null) {
-            ctx.fetchingState.fetched += payload.data.fetched
-            reRender()
+            ctx.fetchingState.fetched += payload.data.fetched;
+            reRender();
           }
-        })
+        });
       } else if (stage === FetchMatchHistoryStage.EndTask) {
         needPrevCtx(puuid, ctx => {
           ctx.status.finished = true;
           ctx.status.ok = payload.data.ok;
-          reRender()
-        })
+          reRender();
+        });
       }
     });
 

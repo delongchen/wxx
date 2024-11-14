@@ -24,7 +24,7 @@ function NiumaSelector({ onPuuidClick }: NiumaSelectorProps) {
           <Button
             colorPalette={theme}
             onClick={() => {
-              onPuuidClick && onPuuidClick(summoner.puuid)
+              onPuuidClick && onPuuidClick(summoner.puuid);
             }}
           >select</Button>
         </Box>

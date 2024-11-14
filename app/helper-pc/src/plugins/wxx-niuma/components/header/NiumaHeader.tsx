@@ -69,9 +69,9 @@ function NiumaHeader() {
         aria-label="back"
         onClick={handleBack}
         colorPalette={theme}
-        variant='ghost'
+        variant="ghost"
       >
-        <VscArrowLeft size='24px'/>
+        <VscArrowLeft size="24px" />
       </IconButton>
       <Spacer>
         <Flex alignItems="center" justifyContent="center" h="100%">
