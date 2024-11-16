@@ -1,6 +1,11 @@
 import { GameNumStatsKey, type MatchReport, type ParticipantExt, TeamStatsKeys } from '../types';
 import type { Game } from 'tauri-plugin-wxx-core';
 
+const roundToKDecimals = (n: number, k: number) => {
+  const factor = 10 ** k;
+  return Math.round(n * factor) / factor;
+};
+
 export class MatchAnalyzeHelper {
   private participantMap: Map<string, ParticipantExt> = new Map();
   private teamMap: Map<string, ParticipantExt[]> = new Map();
@@ -67,10 +72,8 @@ export class MatchAnalyzeHelper {
 
     for (const key of TeamStatsKeys) {
       gameDataRaw[key] = stats[key];
-      gameDataRaw[`$${key}`] = stats[key] / teamStatSumRecord[key];
+      gameDataRaw[`%${key}`] = roundToKDecimals(100 * stats[key] / teamStatSumRecord[key], 2);
     }
-
-    const gameDataExt: Record<string, number> = {};
 
     return {
       puuid,
@@ -78,7 +81,6 @@ export class MatchAnalyzeHelper {
       win,
       teammates,
       gameDataRaw,
-      gameDataExt,
       gameCreation,
       gameId,
     };

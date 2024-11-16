@@ -50,15 +50,23 @@ export const TeamStatsKeys: GameNumStatsKey[] = [
   'timeCCingOthers',
 ] as const;
 
+export interface DataStatistic {
+
+}
+
 export interface NiumaChartDataType {
   dataVecMap: Record<string, number[]>;
-  creationVec: number[];
+  state: Record<string, unknown>;
+  dataStatisticMap: Record<string, DataStatistic>;
 }
 
 export interface NiumaAnalyzeContext {
   mainPuuid: string;
   reports: MatchReport[];
   result: NiumaChartDataType;
+
+  mapReportsAndSave: (to: string, fn: (report: MatchReport) => number) => void;
+  statistical: (key: string) => void;
 }
 
 export interface NiumaAnalyzeProps {
@@ -72,7 +80,6 @@ export interface MatchReport {
   win: boolean,
   teammates: string[],
   gameDataRaw: Record<string, number>,
-  gameDataExt: Record<string, number>,
   gameCreation: number,
   gameId: number,
 }

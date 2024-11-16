@@ -3,7 +3,6 @@ import { useNiumaContext } from '@/plugins/wxx-niuma/context/hooks.ts';
 import { NiumaAnalyzeProps, NiumaChartDataType } from '../../workers/types';
 import { readLocalMatches } from 'tauri-plugin-wxx-core/api';
 import { Box } from '@chakra-ui/react';
-import BaseLineChart from '../../components/charts/BaseLineChart';
 
 interface NiumaDashboardProps {
   puuid: string;
@@ -60,9 +59,7 @@ function NiumaDashboard({ puuid }: NiumaDashboardProps) {
   }
 
   return (
-    <Box>
-      <BaseLineChart xData={chartData.creationVec} yData={chartData.dataVecMap['kills']} />
-    </Box>
+    <Box></Box>
   );
 }
 
