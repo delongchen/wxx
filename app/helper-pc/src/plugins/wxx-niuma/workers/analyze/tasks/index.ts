@@ -14,20 +14,27 @@ const gatherBaseInfo: AnalyzeTask = ctx => {
   }
 };
 
-const calculateChampionUsage: AnalyzeTask = ctx => {
+const countChampions: AnalyzeTask = ctx => {
   const { state, dataVecMap } = ctx.result;
 
-  state['championUsage'] = countMatch(dataVecMap['champion'], dataVecMap['win'], it => it);
+  state['championUsage'] = countMatch(
+    dataVecMap['champion'],
+    dataVecMap['win'],
+    it => it,
+    true,
+  );
 };
 
 const countTeammates: AnalyzeTask = ctx => {
   const { state, dataVecMap } = ctx.result;
+  const teammatesVec = ctx.reports.map(report => report.teammates);
 
   state['teammates'] = countMatch(
-    ctx.reports.map(r => r.teammates),
+    teammatesVec,
     dataVecMap['win'],
     it => it,
-  );
+    true,
+  ).filter(count => count[1] !== 1);
 };
 
 const countGamesByDay: AnalyzeTask = ctx => {
@@ -43,7 +50,7 @@ const countGamesByDay: AnalyzeTask = ctx => {
 export const invokeTasks = (ctx: NiumaAnalyzeContext) => {
   [
     gatherBaseInfo,
-    calculateChampionUsage,
+    countChampions,
     countTeammates,
     countGamesByDay,
   ].forEach(task => task(ctx));

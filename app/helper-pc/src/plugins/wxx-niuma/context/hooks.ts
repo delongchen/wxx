@@ -1,6 +1,8 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { NiumaContext } from './ctx';
 import MatchesParserWorker from '../workers?worker';
+import { readLocalMatches } from 'tauri-plugin-wxx-core/api';
+import { NiumaChartDataType } from '../workers/types';
 
 export const useNiumaContext = () => {
   return useContext(NiumaContext);
@@ -58,5 +60,40 @@ export const useMatchesParserWorker = () => {
 
   return {
     invoke,
+  };
+};
+
+export const useNiumaChartData = (puuid: string) => {
+  const { invoke } = useNiumaContext();
+  const [pending, setPending] = useState(false);
+  const [chartData, setChartData] = useState<NiumaChartDataType | null>(null);
+
+  const refresh = useCallback(() => {
+    if (pending || puuid === '') return;
+
+    const task = async () => {
+      const dataBuffer = await readLocalMatches(puuid)
+        .catch(() => null);
+
+      if (dataBuffer !== null) {
+        const parsed = await invoke<NiumaChartDataType>('analyze', {
+          puuid,
+          matchesBuffer: dataBuffer,
+        }).catch(() => null);
+
+        setChartData(parsed);
+      }
+    };
+
+    setPending(true);
+    task().finally(() => setPending(false));
+  }, [puuid]);
+
+  useEffect(refresh, []);
+
+  return {
+    pending,
+    chartData,
+    refresh,
   };
 };

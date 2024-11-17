@@ -1,11 +1,11 @@
 import { useEffect, useRef, useCallback } from 'react';
-import * as echarts from 'echarts/core';
+import { init, type EChartsType, type ComposeOption } from 'echarts/core';
 
-export const useEChart = (initOptions?: echarts.ComposeOption<never>) => {
+export const useEChart = <T extends ComposeOption<never>>(initOptions?: T) => {
   const chartRef = useRef<HTMLDivElement | null>(null);
-  const chartInstance = useRef<echarts.EChartsType | null>(null);
+  const chartInstance = useRef<EChartsType | null>(null);
 
-  const setOptions = useCallback((options: echarts.ComposeOption<never>) => {
+  const setOptions = useCallback((options: T) => {
     if (chartInstance.current !== null) {
       chartInstance.current.setOption(options);
     }
@@ -14,7 +14,7 @@ export const useEChart = (initOptions?: echarts.ComposeOption<never>) => {
   useEffect(() => {
     if (chartRef.current === null) return;
 
-    const instance = echarts.init(chartRef.current);
+    const instance = init(chartRef.current);
     instance.setOption(initOptions ?? {});
     chartInstance.current = instance;
 

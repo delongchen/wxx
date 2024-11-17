@@ -31,6 +31,7 @@ export const countMatch = <T>(
   keyVec: T[],
   winVec: number[],
   keysMapper: (key: T) => StrNum | StrNum[],
+  sort: boolean = false,
 ): CountTuple[] => {
   const map: Map<StrNum, MatchCounter> = new Map();
 
@@ -55,5 +56,12 @@ export const countMatch = <T>(
     }
   }
 
-  return [...map.values()].map(({ key, count, win }) => [key, count, win]);
+  const tuples = [...map.values()]
+    .map(({ key, count, win }) => [key, count, win] as CountTuple)
+
+  if (sort) {
+    tuples.sort((a, b) => b[1] - a[1]);
+  }
+
+  return tuples;
 };
