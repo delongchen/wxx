@@ -1,5 +1,6 @@
 import { NiumaAnalyzeContext, TeamStatsKeys } from '../../types';
-import { formatTimestamp, countMatch } from './utils';
+import { formatTimestamp, countMatch, encodePlayerTuple } from './utils';
+import type { Player } from 'tauri-plugin-wxx-core';
 
 type AnalyzeTask = (ctx: NiumaAnalyzeContext) => void
 
@@ -32,9 +33,9 @@ const countTeammates: AnalyzeTask = ctx => {
   state['teammates'] = countMatch(
     teammatesVec,
     dataVecMap['win'],
-    it => it,
+    players => players.map(player => player.puuid),
     true,
-  ).filter(count => count[1] !== 1);
+  ).filter(count => count[1] >= 5);
 };
 
 const countGamesByDay: AnalyzeTask = ctx => {
@@ -47,11 +48,27 @@ const countGamesByDay: AnalyzeTask = ctx => {
   );
 };
 
+const reducePlayers: AnalyzeTask = ctx => {
+  const { reports } = ctx;
+  const { state } = ctx.result;
+  const playerMap: Map<string, Player> = new Map;
+
+  for (const { teammates } of reports) {
+    for (const mate of teammates) {
+      playerMap.set(mate.puuid, mate);
+    }
+  }
+
+  state['players'] = [...playerMap.values()]
+    .map(encodePlayerTuple);
+};
+
 export const invokeTasks = (ctx: NiumaAnalyzeContext) => {
   [
     gatherBaseInfo,
     countChampions,
     countTeammates,
     countGamesByDay,
+    reducePlayers,
   ].forEach(task => task(ctx));
 };

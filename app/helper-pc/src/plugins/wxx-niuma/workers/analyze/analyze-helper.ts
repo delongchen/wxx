@@ -66,8 +66,8 @@ export class MatchAnalyzeHelper {
     const teamStatSumRecord = this.getTeamStatSum(puuid)!;
     const teammates = this.teamMap
       .get(puuid)!
-      .map(([id]) => id.player.puuid)
-      .filter(uid => uid !== puuid);
+      .map(([id]) => id.player)
+      .filter(player => player.puuid !== puuid);
     const gameDataRaw: Record<string, number> = {};
 
     for (const key of TeamStatsKeys) {

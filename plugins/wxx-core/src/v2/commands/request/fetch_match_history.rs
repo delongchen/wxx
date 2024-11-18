@@ -311,7 +311,7 @@ pub async fn fetch_match_history<R: Runtime>(
         (match_index_buffer, match_cache_buffer)
     };
 
-    // last stage: write fetched data
+    // last stage: save fetched data
     {
         append_content(
             summoner_data_dir_path.join(MATCH_CACHE_FILE_NAME),

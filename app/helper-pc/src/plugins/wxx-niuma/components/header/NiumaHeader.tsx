@@ -55,6 +55,7 @@ function NiumaHeader() {
   return (
     <Flex
       position="fixed"
+      zIndex={1000}
       left="0"
       right="0"
       top="0"

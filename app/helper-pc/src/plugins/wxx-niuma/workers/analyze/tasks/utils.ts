@@ -1,3 +1,6 @@
+import type { Player } from 'tauri-plugin-wxx-core';
+import type { PlayerTuple } from '../../types';
+
 export function zip<T, U>(arr1: T[], arr2: U[]): [T, U][] {
   const length = Math.min(arr1.length, arr2.length);
   const result: [T, U][] = [];
@@ -21,6 +24,7 @@ export function formatTimestamp(timestamp: number) {
 
 type StrNum = string | number;
 type CountTuple = [StrNum, number, number];
+
 interface MatchCounter {
   key: StrNum;
   count: number;
@@ -57,11 +61,67 @@ export const countMatch = <T>(
   }
 
   const tuples = [...map.values()]
-    .map(({ key, count, win }) => [key, count, win] as CountTuple)
+    .map(({ key, count, win }) => [key, count, win] as CountTuple);
 
   if (sort) {
     tuples.sort((a, b) => b[1] - a[1]);
   }
 
   return tuples;
+};
+
+export const encodePlayerTuple = ({
+                                    accountId,
+                                    currentAccountId,
+                                    currentPlatformId,
+                                    matchHistoryUri,
+                                    platformId,
+                                    profileIcon,
+                                    summonerId,
+                                    puuid,
+                                    gameName,
+                                    tagLine,
+                                    summonerName,
+                                  }: Player): PlayerTuple => [
+  accountId,
+  currentAccountId,
+  currentPlatformId,
+  matchHistoryUri,
+  platformId,
+  profileIcon,
+  summonerId,
+  puuid,
+  gameName,
+  tagLine,
+  summonerName,
+];
+
+export const decodePlayerTuple = (tuple: PlayerTuple): Player => {
+  const [
+    accountId,
+    currentAccountId,
+    currentPlatformId,
+    matchHistoryUri,
+    platformId,
+    profileIcon,
+    summonerId,
+    puuid,
+    gameName,
+    tagLine,
+    summonerName,
+  ] = tuple;
+
+  return {
+    accountId,
+    currentAccountId,
+    currentPlatformId,
+    matchHistoryUri,
+    platformId,
+    profileIcon,
+    summonerId,
+    puuid,
+    gameName,
+    tagLine,
+    summonerName,
+  };
 };

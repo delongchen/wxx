@@ -1,4 +1,4 @@
-import type { Participant, ParticipantIdentity, Stats } from 'tauri-plugin-wxx-core';
+import type { Participant, ParticipantIdentity, Stats, Player } from 'tauri-plugin-wxx-core';
 
 type KeysByValueType<T, V> = {
   [K in keyof T]: T[K] extends V ? K : never;
@@ -78,8 +78,10 @@ export interface MatchReport {
   puuid: string,
   championId: number,
   win: boolean,
-  teammates: string[],
+  teammates: Player[],
   gameDataRaw: Record<string, number>,
   gameCreation: number,
   gameId: number,
 }
+
+export type PlayerTuple = [number, number, string, string, string, number, number, string, string, string, string]

@@ -71,22 +71,12 @@ export const useNiumaChartData = (puuid: string) => {
   const refresh = useCallback(() => {
     if (pending || puuid === '') return;
 
-    const task = async () => {
-      const dataBuffer = await readLocalMatches(puuid)
-        .catch(() => null);
-
-      if (dataBuffer !== null) {
-        const parsed = await invoke<NiumaChartDataType>('analyze', {
-          puuid,
-          matchesBuffer: dataBuffer,
-        }).catch(() => null);
-
-        setChartData(parsed);
-      }
-    };
-
     setPending(true);
-    task().finally(() => setPending(false));
+    readLocalMatches(puuid)
+      .then(matchesBuffer => invoke<NiumaChartDataType>('analyze', { puuid, matchesBuffer }))
+      .then(setChartData)
+      .catch(() => setChartData(null))
+      .finally(() => setPending(false));
   }, [puuid]);
 
   useEffect(refresh, []);
