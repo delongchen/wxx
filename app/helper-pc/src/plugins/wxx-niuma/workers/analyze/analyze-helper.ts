@@ -1,4 +1,10 @@
-import { GameNumStatsKey, type MatchReport, type ParticipantExt, TeamStatsKeys } from '../types';
+import {
+  GameNumStatsKey,
+  type MatchReport,
+  type ItemTuple,
+  type ParticipantExt,
+  TeamStatsKeys
+} from '../types';
 import type { Game } from 'tauri-plugin-wxx-core';
 
 const roundToKDecimals = (n: number, k: number) => {
@@ -61,24 +67,27 @@ export class MatchAnalyzeHelper {
     if (participant === null) return null;
 
     const [, { stats, championId }] = participant;
-    const { gameCreation, gameId } = this.game;
-    const { win } = stats;
     const teamStatSumRecord = this.getTeamStatSum(puuid)!;
     const teammates = this.teamMap
       .get(puuid)!
       .map(([id]) => id.player)
       .filter(player => player.puuid !== puuid);
-    const gameDataRaw: Record<string, number> = {};
 
+    const gameDataRaw: Record<string, number> = {};
     for (const key of TeamStatsKeys) {
       gameDataRaw[key] = stats[key];
       gameDataRaw[`%${key}`] = roundToKDecimals(100 * stats[key] / teamStatSumRecord[key], 2);
     }
 
+    const { gameCreation, gameId, gameVersion } = this.game;
+    const { win, item0, item1, item2, item3, item4, item5, item6 } = stats;
+    const items: ItemTuple = [gameVersion, item0, item1, item2, item3, item4, item5, item6];
+
     return {
       puuid,
       championId,
       win,
+      items,
       teammates,
       gameDataRaw,
       gameCreation,

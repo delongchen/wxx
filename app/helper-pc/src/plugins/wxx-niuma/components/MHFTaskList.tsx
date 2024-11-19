@@ -1,11 +1,13 @@
 /** MHF = Match History Fetching */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useTransition } from 'react';
 import { SummonerInfoWithoutReRoll } from 'tauri-plugin-wxx-core';
 import {
   listenFetchMatchHistoryTask,
   FetchMatchHistoryStage,
   ScanningIndexData,
 } from 'tauri-plugin-wxx-core/events';
+import ContentCard from './ContentCard';
+import { Text } from '@chakra-ui/react';
 
 interface FetchingState {
   all: number;
@@ -45,18 +47,45 @@ const needPrevCtx = (puuid: string, cb?: (ctx: FetchingContext) => void) => {
 };
 
 function MHFTaskCardContent({ ctx }: { ctx: FetchingContext }) {
+  const { summonerInfo, scanningState, fetchingState, status, puuid } = ctx
+
+  if (status.finished) {
+    return <Text>task: {puuid} {status.ok ? 'ok': 'fail'}</Text>
+  }
+
+  if (fetchingState !== null) {
+    const { all, fetched } = fetchingState;
+    return (
+      <Text>all: {all} fetched: {fetched}</Text>
+    )
+  }
+
+  if (scanningState !== null) {
+    const { begIndex, endIndex } = scanningState;
+    return (
+      <Text>scanning match history: {begIndex} - {endIndex}</Text>
+    )
+  }
+
+  if (summonerInfo !== null) {
+    return (
+      <Text>summoner: {summonerInfo.gameName}#{summonerInfo.tagLine}</Text>
+    )
+  }
+
   return (
-    <div>
-      <pre>{JSON.stringify(ctx)}</pre>
-    </div>
+    <Text>fetching summoner info: {puuid}</Text>
   );
 }
 
 function MHFTaskList() {
   const [ctxArray, setCtxArray] = useState<FetchingContext[]>([]);
+  const [, startTransition] = useTransition()
 
   const reRender = useCallback(() => {
-    setCtxArray(getCtxArray());
+    startTransition(() => {
+      setCtxArray(getCtxArray());
+    })
   }, []);
 
   useEffect(() => {
@@ -110,7 +139,9 @@ function MHFTaskList() {
   }, []);
 
   return ctxArray.map(ctx => (
-    <MHFTaskCardContent key={ctx.puuid} ctx={ctx} />
+    <ContentCard key={ctx.puuid}>
+      <MHFTaskCardContent ctx={ctx} />
+    </ContentCard>
   ));
 }
 

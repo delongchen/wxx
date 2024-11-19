@@ -74,10 +74,13 @@ export interface NiumaAnalyzeProps {
   matchesBuffer: ArrayBuffer;
 }
 
+export type ItemTuple = [string, number, number, number, number, number, number, number]
+
 export interface MatchReport {
   puuid: string,
   championId: number,
   win: boolean,
+  items: ItemTuple,
   teammates: Player[],
   gameDataRaw: Record<string, number>,
   gameCreation: number,

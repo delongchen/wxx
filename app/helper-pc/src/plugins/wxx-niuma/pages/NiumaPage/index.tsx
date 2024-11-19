@@ -1,23 +1,16 @@
-import { memo, useEffect, useState } from 'react';
-import { useCurrentSummoner } from 'tauri-plugin-wxx-core/hooks';
+import { memo, useState } from 'react';
+import type { SummonerInfoWithoutReRoll } from 'tauri-plugin-wxx-core';
 import NiumaSelector from './NiumaSelector.tsx';
 import NiumaDashboard from './NiumaDashboard.tsx';
 
 
 function NiumaPage() {
-  const [activatingPuuid, setActivatingPuuid] = useState('');
-  const currentSummoner = useCurrentSummoner();
+  const [activatingSummoner, setActivatingSummoner] = useState<SummonerInfoWithoutReRoll | null>(null);
 
-  useEffect(() => {
-    if (currentSummoner !== null && activatingPuuid === '') {
-      setActivatingPuuid(currentSummoner.puuid);
-    }
-  }, [activatingPuuid, currentSummoner]);
-
-  return activatingPuuid === '' ? (
-    <NiumaSelector onPuuidClick={setActivatingPuuid} />
+  return activatingSummoner === null ? (
+    <NiumaSelector onPuuidClick={setActivatingSummoner} />
   ) : (
-    <NiumaDashboard puuid={activatingPuuid} />
+    <NiumaDashboard summoner={activatingSummoner} />
   );
 }
 

@@ -10,6 +10,9 @@ export const getSummoner = api('/lol-summoner/v1/summoners/:id')
 export const getSummonerByPuuid = api('/lol-summoner/v2/summoners/puuid/:puuid')
   .noPayload<SummonerInfo>('get');
 
+export const getSummonerByName = api('/lol-summoner/v1/summoners?name')
+  .noPayload<SummonerInfo>('get')
+
 export const updateSummonerProfile = api('/lol-summoner/v1/current-summoner/summoner-profile')
   .withPayload<void, {
     key: string;

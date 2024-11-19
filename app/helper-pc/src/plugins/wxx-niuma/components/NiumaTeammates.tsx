@@ -1,4 +1,4 @@
-import { Box, Grid, Text, Flex } from '@chakra-ui/react';
+import { Grid, Text, Flex } from '@chakra-ui/react';
 import type { NiumaChartDataType, PlayerTuple } from '../workers/types';
 import { decodePlayerTuple } from '@/plugins/wxx-niuma/workers/analyze/tasks/utils.ts';
 import PlayerPersona from '../components/PlayerPersona.tsx';
@@ -14,7 +14,9 @@ function NiumaTeammates(props: NiumaTeammatesProps) {
 
   if (teammateTuples.length === 0) {
     return (
-      <Box>朋友是游戏最高的配置</Box>
+      <ContentCard>
+        <Text textAlign="center">朋友是游戏的最高配置</Text>
+      </ContentCard>
     );
   }
 
@@ -36,7 +38,7 @@ function NiumaTeammates(props: NiumaTeammatesProps) {
     {
       title: '最熟悉的队友',
       mate: maxCountMate,
-      desc: '肯定是WX',
+      desc: '肯定是WXX',
     },
     {
       title: '最佳战友',
@@ -46,33 +48,37 @@ function NiumaTeammates(props: NiumaTeammatesProps) {
     {
       title: '最牛马队友',
       mate: minWinRateMate,
-      desc: '要不歇了?'
-    }
-  ]
+      desc: '要不歇了?',
+    },
+  ];
 
   return (
-    <Grid templateColumns="repeat(3, 1fr)" m='4'>
+    <Grid templateColumns="repeat(3, 1fr)" m="4">
       {items.map(({ title, mate, desc }, index) => {
         const player = playerMap.get(mate[0]);
         if (player === undefined) return null;
 
-        const winRate = (100 * mate[2] / mate[1]) << 0
+        const winRate = (100 * mate[2] / mate[1]) << 0;
         const winRateColor = winRate === 50 ? 'blue'
           :
-          winRate < 50 ? 'red' : 'green'
+          winRate < 50 ? 'red' : 'green';
 
         return (
           <ContentCard key={index}>
             <Flex flexDirection="column" alignItems="center">
-              <Text textStyle='xl'>{title}</Text>
-              <PlayerPersona player={player} />
+              <Text textStyle="xl">{title}</Text>
+              <PlayerPersona
+                profileIcon={player.profileIcon}
+                gameName={player.gameName}
+                tagLine={player.tagLine}
+              />
               <Text>{mate[1]}场
-                胜率<span style={{color: winRateColor}}>{winRate}</span>%
+                胜率<span style={{ color: winRateColor }}>{winRate}</span>%
               </Text>
               <Text color="fg.muted" textStyle="sm">{desc}</Text>
             </Flex>
           </ContentCard>
-        )
+        );
       })}
     </Grid>
   );

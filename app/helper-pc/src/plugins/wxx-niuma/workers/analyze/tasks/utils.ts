@@ -70,19 +70,21 @@ export const countMatch = <T>(
   return tuples;
 };
 
-export const encodePlayerTuple = ({
-                                    accountId,
-                                    currentAccountId,
-                                    currentPlatformId,
-                                    matchHistoryUri,
-                                    platformId,
-                                    profileIcon,
-                                    summonerId,
-                                    puuid,
-                                    gameName,
-                                    tagLine,
-                                    summonerName,
-                                  }: Player): PlayerTuple => [
+export const encodePlayerTuple = (
+  {
+    accountId,
+    currentAccountId,
+    currentPlatformId,
+    matchHistoryUri,
+    platformId,
+    profileIcon,
+    summonerId,
+    puuid,
+    gameName,
+    tagLine,
+    summonerName,
+  }: Player,
+): PlayerTuple => [
   accountId,
   currentAccountId,
   currentPlatformId,

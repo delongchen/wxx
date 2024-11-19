@@ -10,14 +10,14 @@ export const mainPageChildren: WxxPluginPageInfo[] = [
     component: NiumaPage,
     isIndexPage: true,
     meta: {
-      text: '我是牛马',
+      text: '牛马人才库',
     },
   },
   {
     name: 'history-fetch',
     component: HistoryFetchPage,
     meta: {
-      text: '成为牛马',
+      text: '寻找牛马',
     },
   },
 ];

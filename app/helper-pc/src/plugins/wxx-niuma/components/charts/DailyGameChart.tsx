@@ -8,6 +8,7 @@ import type {
 } from 'echarts/components';
 import { Box } from '@chakra-ui/react';
 import type { HeatmapSeriesOption } from 'echarts/charts';
+import { useEffect } from 'react';
 
 type DailyGameChartOption = ComposeOption<
   | TitleComponentOption
@@ -91,9 +92,16 @@ const getOption = (tuples: DailyTuple[]): DailyGameChartOption => {
 };
 
 function DailyGameChart(props: DailyGameChartProps) {
-  const { chartRef } = useEChart(getOption(props.tuples));
+  const { chartRef, setOptions } = useEChart();
 
-  return <Box ref={chartRef} h="400px" />;
+  const option = getOption(props.tuples);
+  const series = option.series as [] ?? [];
+
+  useEffect(() => {
+    setOptions(option);
+  }, []);
+
+  return <Box ref={chartRef} h={`${series.length * 250}px`} />;
 }
 
 export default DailyGameChart;
