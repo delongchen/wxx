@@ -20,8 +20,8 @@ enum LcuRestAllowMethod {
 }
 
 impl LcuRestAllowMethod {
-    fn from(raw: &str) -> Option<Self> {
-        match raw {
+    fn from(method: &str) -> Option<Self> {
+        match method {
             "get" | "GET" => Some(Self::GET),
             "post" | "POST" => Some(Self::POST),
             "put" | "PUT" => Some(Self::PUT),
@@ -56,12 +56,8 @@ impl LcuRestClient {
         auth_token: &str,
         timeout: u64,
     ) -> Result<RequestBuilder, LcuRestError> {
-        let method = {
-            match LcuRestAllowMethod::from(method) {
-                None => return Err(LcuRestError::MethodNotAllow),
-                Some(method) => method,
-            }
-        };
+        let method = LcuRestAllowMethod::from(method)
+            .ok_or(LcuRestError::MethodNotAllow)?;
 
         let url = format!("https://127.0.0.1:{}{}", port, endpoint);
 
@@ -101,16 +97,24 @@ impl LcuRestClient {
 
 pub struct LcuFetcher<'this> {
     client: &'this LcuRestClient,
-    port: &'this str,
-    auth_token: &'this str,
+    port: String,
+    auth_token: String,
 }
 
 impl<'this> LcuFetcher<'this> {
-    pub fn of(client: &'this LcuRestClient, port: &'this str, auth_token: &'this str) -> Self {
-        LcuFetcher {
+    pub fn from(client: &'this LcuRestClient, port: String, auth_token: String) -> Self {
+        Self {
             client,
             port,
             auth_token,
+        }
+    }
+    
+    pub fn from_ref(client: &'this LcuRestClient, port: &'this str, auth_token: &'this str) -> Self {
+        Self {
+            client,
+            port: port.to_string(),
+            auth_token: auth_token.to_string(),
         }
     }
 
@@ -123,7 +127,7 @@ impl<'this> LcuFetcher<'this> {
     ) -> Result<T, LcuFetchError> {
         let req = self
             .client
-            .create_request(method, &endpoint, body, self.port, self.auth_token, timeout)
+            .create_request(method, &endpoint, body, &self.port, &self.auth_token, timeout)
             .map_err(|_| LcuFetchError::CreateRequestError)?;
 
         let res = match req.send().await {

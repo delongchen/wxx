@@ -5,6 +5,7 @@ import { Flex, Grid, Text, Badge } from '@chakra-ui/react';
 import { Button } from '@/components/ui/button.tsx';
 import PlayerPersona from '../../components/PlayerPersona';
 import ContentCard from '../../components/ContentCard.tsx';
+import CenterBox from '../../components/CenterBox';
 
 interface NiumaSelectorProps {
   onPuuidClick?: (summoner: SummonerInfoWithoutReRoll) => void;
@@ -21,10 +22,12 @@ function NiumaSelector({ onPuuidClick }: NiumaSelectorProps) {
 
   if (localSummoners.length === 0) {
     return (
-      <Flex mt='30vh' flexDirection='column' alignItems='center'>
-        <Text textStyle='2xl'>人才库空空如也</Text>
-        <Text>先去查找牛马吧</Text>
-      </Flex>
+      <CenterBox>
+        <Flex flexDirection="column" alignItems="center" justifyContent="space-between">
+          <Text textStyle='2xl'>人才库空空如也</Text>
+          <Text>先去寻找牛马吧</Text>
+        </Flex>
+      </CenterBox>
     )
   }
 

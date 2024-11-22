@@ -1,6 +1,6 @@
 use crate::v2::app_states::AppState;
 use crate::v2::commands::users::summoner::record_summoner_into_local;
-use crate::v2::commands::utils::{need_app_data_dir, need_lcu_process_info};
+use crate::v2::commands::utils::{need_app_data_dir};
 use crate::v2::consts::{
     dir_names::{MATCH_CACHE_FILE_NAME, MATCH_INDEX_FILE_NAME, SUMMONER_DATA_DIR_NAME},
     events::LCU_MATCH_HISTORY_TASK,
@@ -8,7 +8,6 @@ use crate::v2::consts::{
 use crate::v2::errors::lcu_fetch_error::LcuFetchError;
 use crate::v2::models::lcu_match_history::{Game, MatchHistory};
 use crate::v2::models::lcu_summoner_info::SummonerInfo;
-use crate::v2::models::rest::LcuFetcher;
 use crate::v2::utils::create_dir_if_not_exists;
 use serde::Serialize;
 use serde_json::{json, Value};
@@ -138,17 +137,11 @@ pub async fn fetch_match_history<R: Runtime>(
 
     emitter.stage(FetchMatchHistoryStage::StartTask, Value::Null);
 
-    // before fetching data, lcu must be started
-    let process_info = need_lcu_process_info(&state)
-        .await
-        .map_err(|_| LcuFetchError::LcuNotStarted)?;
-
     // create an api-helper
-    let fetcher = LcuFetcher::of(
-        &state.rest_client,
-        &process_info.port,
-        &process_info.auth_token,
-    );
+    let fetcher = state
+        .get_fetcher()
+        .await
+        .ok_or(LcuFetchError::LcuNotStarted)?;
 
     let app_data_dir_path = need_app_data_dir(&app_handle);
     // path: {APP_DATA_PATH}/wxsb/summoners/{puuid}

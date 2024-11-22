@@ -1,11 +1,10 @@
 use crate::v2::app_states::AppState;
-use crate::v2::commands::utils::{need_app_data_dir, need_lcu_process_info};
+use crate::v2::commands::utils::{need_app_data_dir};
 use crate::v2::consts::dir_names::{
     MATCH_CACHE_FILE_NAME, SUMMONER_DATA_DIR_NAME, SUMMONER_INFO_FILE_NAME,
 };
 use crate::v2::errors::lcu_fetch_error::LcuFetchError;
 use crate::v2::models::lcu_summoner_info::SummonerInfo;
-use crate::v2::models::rest::LcuFetcher;
 use crate::v2::utils::create_dir_if_not_exists;
 use serde_json::Value;
 use std::path::{Path, PathBuf};
@@ -85,15 +84,10 @@ pub async fn record_summoner<R: Runtime>(
     app_handle: AppHandle<R>,
     state: State<'_, AppState>,
 ) -> Result<Value, LcuFetchError> {
-    let process_info = need_lcu_process_info(&state)
+    let fetcher = state
+        .get_fetcher()
         .await
-        .map_err(|_| LcuFetchError::LcuNotStarted)?;
-
-    let fetcher = LcuFetcher::of(
-        &state.rest_client,
-        &process_info.port,
-        &process_info.auth_token,
-    );
+        .ok_or(LcuFetchError::LcuNotStarted)?;
 
     let current_summoner_info = fetcher
         .fetch_without_payload::<SummonerInfo>(

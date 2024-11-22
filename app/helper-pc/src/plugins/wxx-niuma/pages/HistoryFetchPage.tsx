@@ -1,4 +1,4 @@
-import { Box, Button, Input, Flex } from '@chakra-ui/react';
+import { Box, Button, Input, Flex, Text } from '@chakra-ui/react';
 import { createMatchHistoryFetchingTask } from 'tauri-plugin-wxx-core/api';
 import type { SummonerInfo } from 'tauri-plugin-wxx-core';
 import { getSummonerByName } from 'tauri-plugin-wxx-core/lcu-api/summoner';
@@ -8,10 +8,8 @@ import { useNiumaContext } from '@/plugins/wxx-niuma/context/hooks';
 import { Tooltip } from '@/components/ui/tooltip.tsx';
 import { Field } from '@/components/ui/field.tsx';
 import ContentCard from '@/plugins/wxx-niuma/components/ContentCard.tsx';
+import CenterBox from '@/plugins/wxx-niuma/components/CenterBox.tsx';
 
-function NoSummoner() {
-  return <div>start lol first</div>;
-}
 
 const checkTagLine = (tagLine: string): boolean => {
   if (tagLine.length !== 5) return false;
@@ -48,7 +46,18 @@ function HistoryFetchPage() {
   };
 
   if (currentSummoner === null) {
-    return <NoSummoner />;
+    return (
+      <CenterBox>
+        <Flex
+          flexDirection="column"
+          alignItems="center"
+        >
+          <Text textStyle='2xl'>连接不上游戏捏</Text>
+          <Text textStyle='sm'>可能是没启动游戏</Text>
+          <Text textStyle='sm'>或者是没有以管理员身份运行</Text>
+        </Flex>
+      </CenterBox>
+    )
   }
 
   return (
