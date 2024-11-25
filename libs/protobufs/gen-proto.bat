@@ -1,5 +1,5 @@
 set "BASE_DIR=%CD%"
-set "SORUCE_DIR=%BASE_DIR%\src"
+set "SORUCE_DIR=%BASE_DIR%\src_proto"
 
 del %BASE_DIR%\lib_js\*
 

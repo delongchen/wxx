@@ -5,7 +5,8 @@ authors = [ "MaoKing" ]
 description = ""
 edition = "2021"
 rust-version = "1.82.0"
-exclude = ["/examples", "/webview-dist", "/webview-src", "/node_modules"]
+# exclude = ["/examples", "/webview-dist", "/webview-src", "/node_modules"]
+include = ["src/**/*", "Cargo.toml"]
 links = "tauri-plugin-wxx-core"
 
 [dependencies]
