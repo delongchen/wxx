@@ -7,4 +7,5 @@
 
 export * as gameflow from "./index.lcu.gameflow";
 export * as lobby from "./index.lcu.lobby";
+export * as matchHistory from "./index.lcu.matchHistory";
 export * as summoner from "./index.lcu.summoner";
