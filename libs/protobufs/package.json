@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "./lib/index.ts",
+  "main": "./lib_js/index.js",
   "exports": {
     ".": {
-      "types": "./lib/index.ts",
-      "import": "./lib/index.js"
+      "types": "./lib_js/index.ts",
+      "import": "./lib_js/index.js"
     },
     "./*": {
-      "types": "./lib/index.*.ts",
-      "import": "./lib/index.*.js"
+      "types": "./lib_js/index.*.ts",
+      "import": "./lib_js/index.*.js"
     }
   },
   "scripts": {
