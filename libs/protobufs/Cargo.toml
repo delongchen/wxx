@@ -11,6 +11,7 @@ path = "lib_rs/lib.rs"
 
 [dependencies]
 prost = "0.13.3"
+serde.workspace = true
 
 [build-dependencies]
 prost-build = "0.13.3"

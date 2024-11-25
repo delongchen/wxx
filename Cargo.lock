@@ -3797,6 +3797,7 @@ dependencies = [
  "futures-util",
  "log",
  "native-tls",
+ "prost",
  "reqwest",
  "serde",
  "serde_json",
@@ -5086,6 +5087,7 @@ version = "0.1.0"
 dependencies = [
  "prost",
  "prost-build",
+ "serde",
 ]
 
 [[package]]

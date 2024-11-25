@@ -5,6 +5,7 @@ use tauri::{
 };
 
 pub mod v2;
+pub mod v3;
 
 //  Initializes the plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {

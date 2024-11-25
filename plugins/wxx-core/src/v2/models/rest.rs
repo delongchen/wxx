@@ -110,14 +110,6 @@ impl<'this> LcuFetcher<'this> {
         }
     }
     
-    pub fn from_ref(client: &'this LcuRestClient, port: &'this str, auth_token: &'this str) -> Self {
-        Self {
-            client,
-            port: port.to_string(),
-            auth_token: auth_token.to_string(),
-        }
-    }
-
     pub async fn fetch<T: DeserializeOwned>(
         &self,
         method: &str,
