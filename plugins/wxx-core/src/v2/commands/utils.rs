@@ -1,4 +1,4 @@
-use crate::v2::consts::dir_names::WXX_DATA_DIR_NAME;
+use crate::consts::dir_names::WXX_DATA_DIR_NAME;
 use std::path::PathBuf;
 use tauri::{AppHandle, Manager, Runtime};
 

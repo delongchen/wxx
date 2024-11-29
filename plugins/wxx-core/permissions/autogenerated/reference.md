@@ -89,32 +89,6 @@ Denies the read_cached_matches command without any pre-configured scope.
 <tr>
 <td>
 
-`wxx-core:allow-read-config`
-
-</td>
-<td>
-
-Enables the read_config command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`wxx-core:deny-read-config`
-
-</td>
-<td>
-
-Denies the read_config command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
 `wxx-core:allow-read-local-summoners`
 
 </td>
@@ -160,32 +134,6 @@ Enables the record_summoner command without any pre-configured scope.
 <td>
 
 Denies the record_summoner command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`wxx-core:allow-write-config`
-
-</td>
-<td>
-
-Enables the write_config command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`wxx-core:deny-write-config`
-
-</td>
-<td>
-
-Denies the write_config command without any pre-configured scope.
 
 </td>
 </tr>

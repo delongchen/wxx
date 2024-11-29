@@ -1,10 +1,6 @@
-use crate::v2::app_states::AppState;
+use crate::v3::models::app::states::AppState;
 use crate::v2::commands::users::summoner::record_summoner_into_local;
-use crate::v2::commands::utils::{need_app_data_dir};
-use crate::v2::consts::{
-    dir_names::{MATCH_CACHE_FILE_NAME, MATCH_INDEX_FILE_NAME, SUMMONER_DATA_DIR_NAME},
-    events::LCU_MATCH_HISTORY_TASK,
-};
+use crate::v2::commands::utils::need_app_data_dir;
 use crate::v2::errors::lcu_fetch_error::LcuFetchError;
 use crate::v2::models::lcu_match_history::{Game, MatchHistory};
 use crate::v2::models::lcu_summoner_info::SummonerInfo;
@@ -15,6 +11,8 @@ use std::path::PathBuf;
 use tauri::{command, AppHandle, Emitter, Runtime, State};
 use tokio::fs::OpenOptions;
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt};
+use crate::consts::dir_names::{MATCH_CACHE_FILE_NAME, MATCH_INDEX_FILE_NAME, SUMMONER_DATA_DIR_NAME};
+use crate::consts::events::LCU_MATCH_HISTORY_TASK;
 
 const HISTORY_WINDOW_WIDTH_WIDE: u32 = 200;
 const HISTORY_WINDOW_WIDTH_NARROW: u32 = 20;

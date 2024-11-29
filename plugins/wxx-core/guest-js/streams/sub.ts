@@ -13,6 +13,7 @@ export const currentSummonerUpdateStream = createSubStream<SummonerInfo>(
   ['Update']
 );
 
-export const gameBallotStream = createSubStream<BallotLegacy>('/lol-honor-v2/v1/ballot', [
-  'Create',
-]);
+export const gameBallotStream = createSubStream<BallotLegacy>(
+  '/lol-honor-v2/v1/ballot', 
+  ['Create']
+);

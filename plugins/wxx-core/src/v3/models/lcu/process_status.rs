@@ -6,7 +6,7 @@ pub enum LcuProcessStatus {
 }
 
 impl LcuProcessStatus {
-    pub fn as_code(&self) -> u8 {
+    pub fn to_code(&self) -> u8 {
         match self {
             LcuProcessStatus::NotStarted => 1,
             LcuProcessStatus::NotStartedWithAdmin => 2,
@@ -17,6 +17,6 @@ impl LcuProcessStatus {
 
 #[derive(PartialEq, Debug, Clone)]
 pub struct LcuProcessInfo {
-    pub port: String,
+    pub api_port: String,
     pub auth_token: String,
 }

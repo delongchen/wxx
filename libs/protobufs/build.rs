@@ -7,14 +7,8 @@ fn main() -> Result<()> {
     config.out_dir("lib_rs/lcu");
 
     config.type_attribute(".", "#[derive(serde::Serialize, serde::Deserialize)]");
-    config.field_attribute(".", "#[serde(rename = \"camelCase\")]");
 
-    config.compile_protos(
-        &[
-            "src_proto/lcu/match-history.proto",
-        ],
-        &["src_proto"],
-    )?;
+    config.compile_protos(&["src_proto/lcu/match-history.proto"], &["src_proto"])?;
 
     Ok(())
 }

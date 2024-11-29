@@ -1,6 +1,6 @@
-use crate::v2::app_states::AppState;
+use crate::v3::models::app::states::AppState;
 use crate::v2::commands::utils::{need_app_data_dir};
-use crate::v2::consts::dir_names::{
+use crate::consts::dir_names::{
     MATCH_CACHE_FILE_NAME, SUMMONER_DATA_DIR_NAME, SUMMONER_INFO_FILE_NAME,
 };
 use crate::v2::errors::lcu_fetch_error::LcuFetchError;
@@ -84,16 +84,15 @@ pub async fn record_summoner<R: Runtime>(
     app_handle: AppHandle<R>,
     state: State<'_, AppState>,
 ) -> Result<Value, LcuFetchError> {
-    let fetcher = state
-        .get_fetcher()
-        .await
-        .ok_or(LcuFetchError::LcuNotStarted)?;
-
-    let current_summoner_info = fetcher
-        .fetch_without_payload::<SummonerInfo>(
-            "/lol-summoner/v1/current-summoner".to_string(),
+    let current_summoner_info = state
+        .lcu_fetch(
+            "get",
+            "/lol-summoner/v1/current-summoner",
+            &Value::Null,
             2000,
         )
+        .await?
+        .json::<SummonerInfo>()
         .await?;
 
     let data_dir = need_app_data_dir(&app_handle);
@@ -129,9 +128,7 @@ pub async fn read_cached_matches<R: Runtime>(
         .join(MATCH_CACHE_FILE_NAME);
 
     if !matches_file_path.is_file() {
-        return Err(serde_json::json!({
-            "msg": "File not found"
-        }));
+        return Err(serde_json::json!({"msg": "File not found"}));
     }
 
     let mut matches_file = tokio::fs::OpenOptions::new()

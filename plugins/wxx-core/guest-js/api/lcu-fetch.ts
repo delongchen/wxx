@@ -43,8 +43,25 @@ export const lcuFetch = async <T = unknown>(
 ) => {
   const { method = 'get', body = null, timeout = 0 } = options;
 
-  return await invoke<T>(
+  const response = await invoke<unknown>(
     CMD_LCU_FETCH,
     { endpoint, method, body, timeout },
   );
+
+  if (response instanceof ArrayBuffer) {
+    const decoder = new TextDecoder()
+    const text = decoder.decode(response)
+    
+    try {
+      return JSON.parse(text) as T
+    } catch (e) {
+      throw new Error('parse response failed')
+    }
+  }
+  
+  if (typeof response === 'object') {
+    throw response
+  }
+  
+  throw new Error('unknown response type')
 };

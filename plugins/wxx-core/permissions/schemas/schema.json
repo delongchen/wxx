@@ -325,16 +325,6 @@
           "const": "deny-read-cached-matches"
         },
         {
-          "description": "Enables the read_config command without any pre-configured scope.",
-          "type": "string",
-          "const": "allow-read-config"
-        },
-        {
-          "description": "Denies the read_config command without any pre-configured scope.",
-          "type": "string",
-          "const": "deny-read-config"
-        },
-        {
           "description": "Enables the read_local_summoners command without any pre-configured scope.",
           "type": "string",
           "const": "allow-read-local-summoners"
@@ -353,16 +343,6 @@
           "description": "Denies the record_summoner command without any pre-configured scope.",
           "type": "string",
           "const": "deny-record-summoner"
-        },
-        {
-          "description": "Enables the write_config command without any pre-configured scope.",
-          "type": "string",
-          "const": "allow-write-config"
-        },
-        {
-          "description": "Denies the write_config command without any pre-configured scope.",
-          "type": "string",
-          "const": "deny-write-config"
         }
       ]
     }

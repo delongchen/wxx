@@ -1,2 +1,5 @@
 pub mod commands;
-mod models;
+pub mod errors;
+pub mod models;
+pub mod services;
+pub mod utils;
