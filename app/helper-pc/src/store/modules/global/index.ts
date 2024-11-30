@@ -1,14 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '@/store';
-import { createConfigHandle } from 'tauri-plugin-wxx-core';
+import { createConfigHelper } from '@/utils/config-helper';
 
 const namespace = 'global';
 
 interface WxxAppConfig {
   theme: string;
 }
-
-const configHandle = createConfigHandle<WxxAppConfig>('app', 'app.config');
 
 const initialWxxAppConfig: WxxAppConfig = {
   theme: 'gray',
@@ -38,23 +36,22 @@ const globalSlice = createSlice({
 
 export const { switchFullPage, setGlobalTheme } = globalSlice.actions;
 
-export const fetchLocalConfig = (): AppThunk => async (dispatch) => {
-  const localConfig = await configHandle.readWithInit(initialWxxAppConfig).catch(() => null);
+const configHelper = createConfigHelper('app');
+const { transaction } = configHelper.open(namespace, () => initialWxxAppConfig)
 
-  if (localConfig !== null) {
-    dispatch(setGlobalTheme(localConfig.theme));
-  }
+export const fetchLocalConfig = (): AppThunk => async (dispatch) => {
+  await transaction(({ peek }) => {
+    dispatch(setGlobalTheme(peek().theme))
+  })
 };
 
-export const setGlobalThemeAsync =
-  (theme: string): AppThunk =>
-    async (dispatch) => {
-      const config = await configHandle.write({ theme });
-
-      if (config !== null) {
-        dispatch(setGlobalTheme(config.theme));
-      }
-    };
+export const setGlobalThemeAsync = (theme: string): AppThunk => async (dispatch) => {
+  await transaction(({ add }) => {
+    add({ theme })
+  }).then(() => {
+    dispatch(setGlobalTheme(theme));
+  })
+};
 
 export const selectGlobal = (state: RootState) => state.global;
 export default globalSlice.reducer;

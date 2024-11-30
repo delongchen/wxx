@@ -75,30 +75,23 @@ pub fn spawn_lcu_process_watcher<R: Runtime>(
     let handle = tauri::async_runtime::spawn(async move {
         let state = app.state::<AppState>();
 
-        let mut cur_status = LcuProcessStatus::NotStarted;
-        
         loop {
-            if let LcuProcessStatus::Started(process_info) = cur_status.clone() {
-                if let Err(_) = process_info_sender.send(process_info).await {}
-            }
+            let cur_status = get_lcu_status();
 
-            cur_status = get_lcu_status();
-            
-            let updated = {
+            {
                 let mut prev_status = state.lcu_process.write().await;
                 if cur_status != *prev_status {
                     *prev_status = cur_status.clone();
-                    true
-                } else {
-                    false
                 }
-            };
-
-            if updated {
-                let status_code = cur_status.to_code();
-                app.emit(LCU_PROCESS_STATUS_EVENT, status_code).unwrap();
             }
+
+            let status_code = cur_status.to_code();
+            app.emit(LCU_PROCESS_STATUS_EVENT, status_code).unwrap();
             
+            if let LcuProcessStatus::Started(process_info) = cur_status {
+                if let Err(_) = process_info_sender.send(process_info).await {}
+            }
+
             sleep(Duration::from_millis(interval_ms)).await;
         }
     });

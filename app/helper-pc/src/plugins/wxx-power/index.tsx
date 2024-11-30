@@ -1,7 +1,7 @@
 import { WxxPluginRaw } from '@/app/plugin/types';
 import LcuStatusTag from './components/lcu-status-tag.tsx';
 import store from '@/store';
-import { syncToLocalConfig } from '@/store/modules/wxx-power';
+import { syncConfig } from '@/store/modules/wxx-power';
 import { VscTools } from 'react-icons/vsc';
 import { startServices } from './services';
 import TikTokPage from './pages/tik-tok-page';
@@ -28,13 +28,13 @@ const wxxPower: WxxPluginRaw = {
     statusBar('lcu-status', LcuStatusTag);
 
     store.dispatch(
-      syncToLocalConfig(() => {
+      syncConfig(() => {
         startServices();
       }),
     );
 
     quit(async () => {
-      console.log('quit');
+      console.log('wxx-power has been uninstalled!');
     });
   },
 };

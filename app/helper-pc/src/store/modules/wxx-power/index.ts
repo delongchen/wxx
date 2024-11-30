@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk, RootState } from '@/store';
-import { createConfigHandle } from 'tauri-plugin-wxx-core';
+import { createConfigHelper } from '@/utils/config-helper.ts';
 
-const namespace = 'wxx-power';
+const namespace = 'wxx_power';
 
 interface WxxPowerState {
   autoAcceptMatch: boolean;
@@ -10,13 +10,11 @@ interface WxxPowerState {
   autoBallot: boolean;
 }
 
-const configHandle = createConfigHandle<WxxPowerState>('wxx-power', 'tik-tok-helper');
-
 const initialState: WxxPowerState = {
   autoAcceptMatch: false,
   autoNextMatch: false,
   autoBallot: false,
-};
+} as const;
 
 const wxxPowerSlice = createSlice({
   name: namespace,
@@ -39,34 +37,29 @@ export const { setStateValue } = wxxPowerSlice.actions;
 export const selectWxxPower = (state: RootState) => state.wxxPower;
 export default wxxPowerSlice.reducer;
 
-export const syncToLocalConfig =
-  (afterSync?: (state: WxxPowerState) => void): AppThunk =>
-    (dispatch) =>
-      configHandle.readWithInit(initialState).then((state) => {
-        if (afterSync !== undefined) afterSync(state);
+const configHelper = createConfigHelper('plugins')
+const { transaction } = configHelper.open(namespace, () => initialState)
 
-        const keys = Object.keys(state) as (keyof WxxPowerState)[];
+export const syncConfig = (
+  afterSync?: (state: WxxPowerState) => void
+): AppThunk => async (dispatch) => {
+  await transaction(({ peek }) => {
+    const config = peek()
 
-        for (const key of keys) {
-          dispatch(
-            setStateValue({
-              key,
-              value: state[key],
-            }),
-          );
-        }
-      });
+    for (const key of Object.keys(config) as (keyof WxxPowerState)[]) {
+      dispatch(setStateValue({ key, value: config[key] }))
+    }
 
-export const setStateAsync =
-  (cb: (prev: WxxPowerState) => Partial<WxxPowerState> | undefined): AppThunk =>
-    async (dispatch) => {
-      const prev = await configHandle.read();
-      const changed = cb(prev);
-      if (changed === undefined) return;
+    afterSync && afterSync(config)
+  })
+}
 
-      const cur = await configHandle.write(changed);
-      const changedKeys = Object.keys(changed) as (keyof WxxPowerState)[];
-      for (const key of changedKeys) {
-        dispatch(setStateValue({ key, value: cur[key] }));
-      }
-    };
+export const setStateAsync = (
+  cb: (prev: WxxPowerState) => Partial<WxxPowerState>
+): AppThunk => async (dispatch) => {
+  await transaction(({ peek, add }) => {
+    add(cb(peek()))
+  }).then(() => {
+    dispatch(syncConfig())
+  })
+};
