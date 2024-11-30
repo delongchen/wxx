@@ -3,6 +3,7 @@ use tauri::{
     Manager, Runtime,
 };
 
+mod config;
 mod consts;
 mod v3;
 

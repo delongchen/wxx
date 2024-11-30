@@ -2,6 +2,7 @@ use crate::v3::models::lcu::process_status::LcuProcessInfo;
 use tauri::{AppHandle, Runtime};
 use tokio::sync::mpsc;
 
+mod error_reporter;
 mod listen_lcu_events;
 mod listen_lcu_process;
 

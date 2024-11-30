@@ -1,7 +1,7 @@
 use sqlx::{
+    Sqlite, SqlitePool,
     query::Query,
     sqlite::{SqliteArguments, SqliteQueryResult, SqliteRow},
-    Sqlite, SqlitePool,
 };
 use std::path::Path;
 
@@ -27,27 +27,20 @@ impl WxxDB {
         Ok(rows)
     }
 
-    pub async fn execute<'q>(
-        &self,
-        query: QueryType<'q>,
-    ) -> sqlx::Result<SqliteQueryResult> {
+    pub async fn execute<'q>(&self, query: QueryType<'q>) -> sqlx::Result<SqliteQueryResult> {
         let result = query.execute(&self.0).await?;
         Ok(result)
     }
 }
 
 impl WxxDB {
-    pub async fn create_table(
+    pub async fn try_create_table(
         &self,
-        name: &str,
-        props: &[&str],
+        name: String,
+        props: Vec<String>,
     ) -> sqlx::Result<SqliteQueryResult> {
-        let sql = format!(
-            "CREATE TABLE IF NOT EXISTS {} ({})",
-            name,
-            props.join(", "),
-        );
-        
+        let sql = format!("CREATE TABLE IF NOT EXISTS {} ({})", name, props.join(","));
+
         Ok(self.execute(sqlx::query(&sql)).await?)
     }
 }
