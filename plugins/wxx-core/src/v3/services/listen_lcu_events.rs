@@ -1,11 +1,11 @@
-use crate::consts::RIOT_GAMES_PEM_BYTES;
 use crate::consts::events::LCU_WS_EVENT;
+use crate::consts::RIOT_GAMES_PEM_BYTES;
 use crate::v3::errors::LcuWSError;
 use crate::v3::models::lcu::lcu_event_stream::LcuEventStream;
 use crate::v3::models::lcu::process_status::LcuProcessInfo;
 use futures_util::{SinkExt, StreamExt};
-use tauri::{AppHandle, Emitter, Runtime};
 use tauri::async_runtime::JoinHandle;
+use tauri::{AppHandle, Emitter, Runtime};
 use tokio::sync::mpsc;
 use tokio_tungstenite::{
     connect_async_tls_with_config, tungstenite, tungstenite::client::IntoClientRequest, Connector,
@@ -56,7 +56,7 @@ pub fn spawn_lcu_events_listener<R: Runtime>(
     process_info_receiver: mpsc::Receiver<LcuProcessInfo>,
 ) -> JoinHandle<()> {
     let app_handle = app_handle.clone();
-    
+
     let handle = tauri::async_runtime::spawn(async move {
         let mut receiver = process_info_receiver;
 

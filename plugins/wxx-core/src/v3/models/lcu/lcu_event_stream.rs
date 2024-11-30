@@ -2,7 +2,7 @@ use futures_util::StreamExt;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 use tokio::net::TcpStream;
-use tokio_tungstenite::tungstenite::{Message};
+use tokio_tungstenite::tungstenite::Message;
 use tokio_tungstenite::{MaybeTlsStream, WebSocketStream};
 
 type LcuWSStream = WebSocketStream<MaybeTlsStream<TcpStream>>;

@@ -87,7 +87,7 @@ pub fn spawn_lcu_process_watcher<R: Runtime>(
 
             let status_code = cur_status.to_code();
             app.emit(LCU_PROCESS_STATUS_EVENT, status_code).unwrap();
-            
+
             if let LcuProcessStatus::Started(process_info) = cur_status {
                 if let Err(_) = process_info_sender.send(process_info).await {}
             }
