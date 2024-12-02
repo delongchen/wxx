@@ -68,12 +68,24 @@ pub enum LcuProcessError {
 }
 
 #[derive(Error, Debug, Serialize)]
+pub enum DatabaseQueryError {
+    #[error("fetch failed")]
+    FetchError(String),
+    
+    #[error("execute failed")]
+    ExecuteError(String),
+}
+
+#[derive(Error, Debug, Serialize)]
 pub enum AppInternalError {
     #[error("lcu rest error")]
     LcuRestError(#[from] LcuRestError),
 
     #[error("lcu process error")]
     LcuProcessError(#[from] LcuProcessError),
+    
+    #[error("database query error")]
+    DatabaseError(#[from] DatabaseQueryError),
 }
 
 #[derive(Error, Debug, Serialize)]

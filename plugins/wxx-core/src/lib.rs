@@ -10,7 +10,10 @@ mod v3;
 //  Initializes the plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("wxx-core")
-        .invoke_handler(tauri::generate_handler![v3::commands::core::lcu_fetch,])
+        .invoke_handler(tauri::generate_handler![
+            v3::commands::core::lcu_fetch,
+            v3::commands::tasks::sync_game_history::sync_games_by_puuid,
+        ])
         .setup(|app, _api| {
             app.manage(v3::models::app::states::AppState::default());
 

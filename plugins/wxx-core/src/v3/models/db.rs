@@ -1,16 +1,16 @@
+use crate::v3::errors::DatabaseQueryError;
 use sqlx::{
-    Sqlite, SqlitePool,
-    query::Query,
+    query::{Query, QueryAs, QueryScalar},
     sqlite::{SqliteArguments, SqliteQueryResult, SqliteRow},
+    FromRow, Sqlite, SqlitePool, Transaction,
 };
 use std::path::Path;
 
 type QueryType<'q> = Query<'q, Sqlite, SqliteArguments<'q>>;
 
-pub struct WxxDB(SqlitePool);
-
-impl WxxDB {
-    pub fn new(pool: SqlitePool) -> Self {
+pub struct WxxSqlite(SqlitePool);
+impl WxxSqlite {
+    fn new(pool: SqlitePool) -> Self {
         Self(pool)
     }
 
@@ -19,28 +19,83 @@ impl WxxDB {
 
         let pool = SqlitePool::connect(&format!("sqlite:{}", db_file_path.display())).await?;
 
-        Ok(WxxDB::new(pool))
-    }
-
-    pub async fn fetch<'q>(&self, query: QueryType<'q>) -> sqlx::Result<Vec<SqliteRow>> {
-        let rows = query.fetch_all(&self.0).await?;
-        Ok(rows)
-    }
-
-    pub async fn execute<'q>(&self, query: QueryType<'q>) -> sqlx::Result<SqliteQueryResult> {
-        let result = query.execute(&self.0).await?;
-        Ok(result)
+        Ok(WxxSqlite::new(pool))
     }
 }
 
-impl WxxDB {
-    pub async fn try_create_table(
+pub trait WxxDB {
+    async fn fetch<'q, T>(
         &self,
-        name: String,
-        props: Vec<String>,
-    ) -> sqlx::Result<SqliteQueryResult> {
-        let sql = format!("CREATE TABLE IF NOT EXISTS {} ({})", name, props.join(","));
+        query: QueryAs<'q, Sqlite, T, SqliteArguments<'q>>,
+    ) -> Result<Vec<T>, DatabaseQueryError>
+    where
+        T: Send + Unpin + for<'r> FromRow<'r, SqliteRow>;
 
-        Ok(self.execute(sqlx::query(&sql)).await?)
+    async fn execute<'q>(
+        &self,
+        query: QueryType<'q>,
+    ) -> Result<SqliteQueryResult, DatabaseQueryError>;
+
+    async fn scalar<'q, T>(
+        &self,
+        query: QueryScalar<'q, Sqlite, T, SqliteArguments<'q>>,
+    ) -> Result<Option<T>, DatabaseQueryError>
+    where
+        T: Send + Unpin,
+        (T,): Send + Unpin + for<'r> FromRow<'r, SqliteRow>;
+
+    async fn transaction(&self) -> Result<Transaction<Sqlite>, DatabaseQueryError>;
+}
+
+impl WxxDB for WxxSqlite {
+    async fn fetch<'q, T>(
+        &self,
+        query: QueryAs<'q, Sqlite, T, SqliteArguments<'q>>,
+    ) -> Result<Vec<T>, DatabaseQueryError>
+    where
+        T: Send + Unpin + for<'r> FromRow<'r, SqliteRow>,
+    {
+        let rows = query
+            .fetch_all(&self.0)
+            .await
+            .map_err(|e| DatabaseQueryError::FetchError(e.to_string()))?;
+
+        Ok(rows)
+    }
+
+    async fn execute<'q>(
+        &self,
+        query: QueryType<'q>,
+    ) -> Result<SqliteQueryResult, DatabaseQueryError> {
+        let result = query
+            .execute(&self.0)
+            .await
+            .map_err(|e| DatabaseQueryError::ExecuteError(e.to_string()))?;
+
+        Ok(result)
+    }
+
+    async fn scalar<'q, T>(
+        &self,
+        query: QueryScalar<'q, Sqlite, T, SqliteArguments<'q>>,
+    ) -> Result<Option<T>, DatabaseQueryError>
+    where
+        T: Send + Unpin,
+        (T,): Send + Unpin + for<'r> FromRow<'r, SqliteRow>,
+    {
+        let result = query
+            .fetch_optional(&self.0)
+            .await
+            .map_err(|e| DatabaseQueryError::ExecuteError(e.to_string()))?;
+
+        Ok(result)
+    }
+
+    async fn transaction(&self) -> Result<Transaction<Sqlite>, DatabaseQueryError> {
+        Ok(self
+            .0
+            .begin()
+            .await
+            .map_err(|e| DatabaseQueryError::ExecuteError(e.to_string()))?)
     }
 }

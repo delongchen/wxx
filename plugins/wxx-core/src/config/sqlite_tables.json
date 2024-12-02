@@ -1,13 +1,38 @@
 [
   [
-    "games", [
-      "ID     INT PRIMARY KEY NOT NULL",
-      "DEPT   CHAR(50)        NOT NULL",
-      "EMP_ID INT             NOT NULL"
+    "games",
+    [
+      "id INTEGER PRIMARY KEY NOT NULL",
+      "body BLOB NOT NULL"
     ]
   ],
   [
-    "summoners", [
+    "game_creations",
+    [
+      "game_id INTEGER PRIMARY KEY NOT NULL",
+      "creation INTEGER"
+    ]
+  ],
+  [
+    "game_summoners",
+    [
+      "game_id INTEGER",
+      "puuid CHAR(36)",
+      "UNIQUE(game_id, puuid)"
+    ]
+  ],
+  [
+    "summoners",
+    [
+      "puuid CHAR(36) PRIMARY KEY NOT NULL",
+      "body BLOB NOT NULL"
+    ]
+  ],
+  [
+    "latest_sync",
+    [
+      "puuid CHAR(36) PRIMARY KEY NOT NULL",
+      "time INTEGER"
     ]
   ]
 ]

@@ -1,7 +1,9 @@
-use crate::v3::models::db::WxxDB;
+use crate::v3::models::db::{WxxSqlite, WxxDB};
 use serde_json::Value;
 use std::io;
+use sqlx::sqlite::SqliteQueryResult;
 use tauri::{AppHandle, Manager, Runtime};
+use crate::v3::errors::DatabaseQueryError;
 
 struct TableDefinition(String, Vec<String>);
 
@@ -13,13 +15,7 @@ fn parse_tables(value: &Value) -> Option<TableDefinition> {
                     table_name.to_string(),
                     lines
                         .iter()
-                        .filter_map(|line| {
-                            if let Value::String(str) = line {
-                                Some(str.to_string())
-                            } else {
-                                None
-                            }
-                        })
+                        .filter_map(|line| line.as_str().map(|s| s.to_string()))
                         .collect(),
                 ))
             } else {
@@ -31,12 +27,28 @@ fn parse_tables(value: &Value) -> Option<TableDefinition> {
 }
 
 fn get_tables() -> Vec<TableDefinition> {
-    if let Value::Array(root) = serde_json::from_str(include_str!("../../config/sqlite_tables.json")).unwrap() {
+    if let Value::Array(root) =
+        serde_json::from_str(include_str!("../../config/sqlite_tables.json")).unwrap()
+    {
         root.iter().filter_map(parse_tables).collect()
-    } else { 
+    } else {
         Vec::new()
     }
 }
+
+trait CreateTableHelper where Self: WxxDB {
+    async fn try_create_table(
+        &self,
+        name: String,
+        props: Vec<String>,
+    ) -> Result<SqliteQueryResult, DatabaseQueryError> {
+        let sql = format!("CREATE TABLE IF NOT EXISTS {} ({})", name, props.join(","));
+
+        Ok(self.execute(sqlx::query(&sql)).await?)
+    }
+}
+
+impl CreateTableHelper for WxxSqlite {}
 
 pub async fn init<R: Runtime>(app_handle: &AppHandle<R>) -> io::Result<()> {
     let db_file_path = app_handle
@@ -46,7 +58,7 @@ pub async fn init<R: Runtime>(app_handle: &AppHandle<R>) -> io::Result<()> {
         .join("wxsb")
         .join("db");
 
-    let pool = WxxDB::open_pool(&db_file_path, "data.db")
+    let pool = WxxSqlite::open_pool(&db_file_path, "wxsb.db")
         .await
         .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
 
@@ -55,7 +67,7 @@ pub async fn init<R: Runtime>(app_handle: &AppHandle<R>) -> io::Result<()> {
             .await
             .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
     }
-    
+
     app_handle.manage(pool);
 
     Ok(())
