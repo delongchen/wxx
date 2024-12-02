@@ -1,9 +1,6 @@
 const COMMANDS: &[&str] = &[
     "lcu_fetch",
-    "fetch_match_history",
-    "read_local_summoners",
-    "record_summoner",
-    "read_cached_matches",
+    "sync_games_by_puuid",
 ];
 
 fn main() {
