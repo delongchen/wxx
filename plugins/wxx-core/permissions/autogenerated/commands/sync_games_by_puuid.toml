@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-sync-games-by-puuid"
+description = "Enables the sync_games_by_puuid command without any pre-configured scope."
+commands.allow = ["sync_games_by_puuid"]
+
+[[permission]]
+identifier = "deny-sync-games-by-puuid"
+description = "Denies the sync_games_by_puuid command without any pre-configured scope."
+commands.deny = ["sync_games_by_puuid"]
