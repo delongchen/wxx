@@ -71,7 +71,7 @@ pub enum LcuProcessError {
 pub enum DatabaseQueryError {
     #[error("fetch failed")]
     FetchError(String),
-    
+
     #[error("execute failed")]
     ExecuteError(String),
 }
@@ -83,15 +83,15 @@ pub enum AppInternalError {
 
     #[error("lcu process error")]
     LcuProcessError(#[from] LcuProcessError),
-    
+
     #[error("database query error")]
     DatabaseError(#[from] DatabaseQueryError),
 }
 
 #[derive(Error, Debug, Serialize)]
 pub enum CommandError {
-    #[error("encode response failed")]
-    EncodeResultFailed,
+    #[error("encode response failed: `{0}`")]
+    EncodeResultFailed(String),
 
     #[error("command failed")]
     InternalError(#[from] AppInternalError),

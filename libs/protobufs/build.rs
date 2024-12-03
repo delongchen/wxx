@@ -4,11 +4,12 @@ fn main() -> Result<()> {
     let mut config = prost_build::Config::new();
 
     config.protoc_executable("./protoc.exe");
-    config.out_dir("lib_rs/lcu");
+    config.out_dir("lib_rs");
 
     config.type_attribute(".", "#[derive(serde::Serialize, serde::Deserialize)]");
+    config.type_attribute(".", "#[serde(rename_all = \"camelCase\")]");
 
-    config.compile_protos(&["src_proto/lcu/match-history.proto"], &["src_proto"])?;
+    config.compile_protos(&["src_proto/lcu/*.proto"], &["src_proto"])?;
 
     Ok(())
 }

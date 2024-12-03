@@ -11,6 +11,32 @@
 <tr>
 <td>
 
+`wxx-core:allow-fetch-game-history`
+
+</td>
+<td>
+
+Enables the fetch_game_history command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:deny-fetch-game-history`
+
+</td>
+<td>
+
+Denies the fetch_game_history command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `wxx-core:allow-lcu-fetch`
 
 </td>

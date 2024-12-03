@@ -15,10 +15,10 @@ pub struct GameWithCreation {
     pub creation: i64,
 }
 
-pub struct GameEntry(i64, Vec<String>, Vec<u8>);
+struct GameEntry(i64, Vec<String>, Vec<u8>);
 
 impl GameEntry {
-    pub fn from_game(game: &Game) -> Self {
+    fn from_game(game: &Game) -> Self {
         let mut puuid_list = Vec::new();
         for id in game.participant_identities.iter() {
             let player = id.player.as_ref().unwrap();
@@ -37,7 +37,7 @@ fn get_since_the_epoch_ms() -> i64 {
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
         .as_millis() as i64;
-    
+
     since_the_epoch_ms
 }
 
@@ -57,7 +57,10 @@ pub fn select_excepted_game_count(last_sync_time_ms: i64) -> u32 {
 }
 
 pub trait LcuDbTools: WxxDB {
-    async fn read_cached_games(&self, puuid: &str) -> Result<(i64, HashSet<i64>), AppInternalError> {
+    async fn read_cached_games(
+        &self,
+        puuid: &str,
+    ) -> Result<(i64, HashSet<i64>), AppInternalError> {
         let sql = sqlx::query_as::<Sqlite, GameWithCreation>(
             "
         SELECT gs.game_id, gc.creation
@@ -86,27 +89,38 @@ pub trait LcuDbTools: WxxDB {
     }
 
     async fn read_latest_sync_time(&self, puuid: &str) -> Result<i64, AppInternalError> {
-        let sql = sqlx::query_scalar("SELECT time FROM latest_sync WHERE puuid = $1")
-            .bind(puuid);
+        let sql = sqlx::query_scalar("SELECT time FROM latest_sync WHERE puuid = $1").bind(puuid);
 
         let result = self.scalar::<i64>(sql).await?;
 
         Ok(result.unwrap_or_default())
     }
 
-    async fn insert_games(&self, puuid: &str, games: Vec<GameEntry>) -> Result<(), AppInternalError> {
+    async fn record_latest_sync_time(&self, puuid: &str) -> Result<(), AppInternalError> {
+        let sql = sqlx::query("INSERT OR REPLACE INTO latest_sync (puuid, time) VALUES ($1, $2)")
+            .bind(puuid)
+            .bind(get_since_the_epoch_ms());
+
+        self.execute(sql).await?;
+
+        Ok(())
+    }
+
+    async fn insert_games(&self, details: &Vec<Game>) -> Result<(), AppInternalError> {
         let mut tran = self.transaction().await?;
-        
-        for game in games {
+
+        for game_detail in details {
+            let game = GameEntry::from_game(game_detail);
+
             sqlx::query("INSERT INTO games (id, body) VALUES ($1, $2)")
                 .bind(game.0)
                 .bind(&game.2)
                 .execute(&mut *tran)
                 .await
                 .map_err(|e| DatabaseQueryError::ExecuteError(e.to_string()))?;
-            
+
             for player in game.1 {
-                sqlx::query("INSERT INTO OR IGNORE game_summoners (game_id, puuid) VALUES ($1, $2)")
+                sqlx::query("INSERT INTO game_summoners (game_id, puuid) VALUES ($1, $2)")
                     .bind(game.0)
                     .bind(player)
                     .execute(&mut *tran)
@@ -114,16 +128,11 @@ pub trait LcuDbTools: WxxDB {
                     .map_err(|e| DatabaseQueryError::ExecuteError(e.to_string()))?;
             }
         }
-        
-        sqlx::query("INSERT INTO latest_sync (puuid, time) VALUES ($1, $2)")
-            .bind(puuid)
-            .bind(get_since_the_epoch_ms())
-            .execute(&mut *tran)
+
+        tran.commit()
             .await
             .map_err(|e| DatabaseQueryError::ExecuteError(e.to_string()))?;
-        
-        tran.commit().await.map_err(|e| DatabaseQueryError::ExecuteError(e.to_string()))?;
-        
+
         Ok(())
     }
 }

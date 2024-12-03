@@ -1,9 +1,9 @@
-use crate::v3::models::db::{WxxSqlite, WxxDB};
-use serde_json::Value;
-use std::io;
-use sqlx::sqlite::SqliteQueryResult;
-use tauri::{AppHandle, Manager, Runtime};
 use crate::v3::errors::DatabaseQueryError;
+use crate::v3::models::db::{WxxDB, WxxSqlite};
+use serde_json::Value;
+use sqlx::sqlite::SqliteQueryResult;
+use std::io;
+use tauri::{AppHandle, Manager, Runtime};
 
 struct TableDefinition(String, Vec<String>);
 
@@ -36,7 +36,10 @@ fn get_tables() -> Vec<TableDefinition> {
     }
 }
 
-trait CreateTableHelper where Self: WxxDB {
+trait CreateTableHelper
+where
+    Self: WxxDB,
+{
     async fn try_create_table(
         &self,
         name: String,

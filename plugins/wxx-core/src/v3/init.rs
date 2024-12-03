@@ -1,6 +1,6 @@
 use std::io;
 use tauri::async_runtime::JoinHandle;
-use tauri::{AppHandle, Runtime, Manager};
+use tauri::{AppHandle, Manager, Runtime};
 
 mod ensure_app_data_dir;
 mod init_sqlite;

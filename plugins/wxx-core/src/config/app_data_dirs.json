@@ -1,5 +1,5 @@
 [
   ["wxsb",
-    ["db", "data.db"]
+    ["db", "wxsb.db"]
   ]
 ]

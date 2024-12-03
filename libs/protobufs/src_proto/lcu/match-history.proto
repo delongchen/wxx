@@ -55,7 +55,7 @@ message Team {
   uint32 vilemawKills = 12;
   uint32 dominionVictoryScore = 13;
   string win = 14;
-  bytes bans = 15;
+  // bytes bans = 15;
 }
 
 message Participant {

@@ -36,8 +36,11 @@ impl LcuEndpoints {
             .await?
             .json::<T>()
             .await
-            .map_err(|_| CommandError::EncodeResultFailed)?;
-        
+            .map_err(|err| {
+                println!("LcuFetcher::lcu_get() error: {:?}", err);
+                CommandError::EncodeResultFailed(err.to_string())
+            })?;
+
         Ok(result)
     }
 }

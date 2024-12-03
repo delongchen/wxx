@@ -18,6 +18,6 @@ pub async fn lcu_fetch(
         .await
     {
         Ok(bytes) => Ok(tauri::ipc::Response::new(bytes.to_vec())),
-        Err(_) => Err(CommandError::EncodeResultFailed),
+        Err(e) => Err(CommandError::EncodeResultFailed(e.to_string())),
     }
 }
