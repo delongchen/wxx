@@ -3,12 +3,12 @@ import { Box } from '@chakra-ui/react';
 import { Button } from '@/components/ui/button'
 import { invoke, Channel } from '@tauri-apps/api/core'
 
-const puuid = '09e8acd6-c839-5416-b39f-645f595c0b22'
+const puuid = 'a95f3e0f-6ca3-52db-a602-9ec0a6117e31'
 
 const test1 = () => {
   const chan = new Channel<unknown>()
   chan.onmessage = console.log
-  return invoke('plugin:wxx-core|sync_games_by_puuid', { puuid, full: false, chan, test: true })
+  return invoke('plugin:wxx-core|sync_games_by_puuid', { puuid, fullUpdate: true, chan })
 }
 
 const test2 = () => {

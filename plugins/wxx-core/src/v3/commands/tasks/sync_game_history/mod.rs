@@ -1,4 +1,4 @@
-use crate::v3::errors::{AppInternalError, CommandError};
+use crate::v3::errors::CommandError;
 use crate::v3::models::app::states::AppState;
 use crate::v3::models::db::WxxSqlite;
 use tauri::ipc::Channel;
@@ -14,51 +14,55 @@ mod utils;
 use db_helper::LcuDbHelper;
 use fetch_game_details::fetch_game_details;
 use fetch_game_history::fetch_game_history;
-use models::TaskContext;
+use models::MessageSender;
 use selector::is_good_dld;
 
 #[tauri::command]
 pub async fn sync_games_by_puuid(
     db: State<'_, WxxSqlite>,
-    state: State<'_, AppState>,
+    fetcher: State<'_, AppState>,
     puuid: String,
-    full_update: bool,
     chan: Channel<serde_json::Value>,
 ) -> Result<(), CommandError> {
-    state
+    let sender = MessageSender::cover(chan);
+
+    sender.task_created(&puuid);
+
+    fetcher
         .need_lcu_process_info()
         .await
-        .map_err(|e| AppInternalError::LcuProcessError(e))?;
+        .inspect_err(|_| sender.task_end(1))?;
 
-    let fetcher: &AppState = &state;
+    let ctx = db.new_task_ctx_from_cache(&puuid).await?;
 
-    let (latest_game_creation, cached_game_id_set, last_sync_time_ms) =
-        db.get_cached_game_info(&puuid).await?;
+    let uncached_games = fetch_game_history(&ctx, &sender, &fetcher, is_good_dld).await?;
 
-    let ctx = TaskContext::new(
-        puuid.clone(),
-        full_update,
-        latest_game_creation,
-        cached_game_id_set,
-        last_sync_time_ms,
-    );
-
-    let uncached_games = fetch_game_history(fetcher, &ctx, is_good_dld).await?;
-
+    // nothing to fetch, end task
     if uncached_games.len() == 0 {
-        db.record_latest_sync_time(&puuid).await?;
+        db.insert_latest_sync_time(&puuid)
+            .await
+            .inspect_err(|_| sender.task_end(2))?;
+
+        sender.task_end(0);
         return Ok(());
     }
 
     let games_to_insert = fetch_game_details(
-        fetcher,
+        &sender,
+        &fetcher,
         uncached_games.iter().map(|game| game.game_id).collect(),
         5,
     )
     .await;
 
-    db.insert_games(&games_to_insert).await?;
-    db.record_latest_sync_time(&puuid).await?;
+    db.insert_games(&games_to_insert)
+        .await
+        .inspect_err(|_| sender.task_end(2))?;
 
+    db.insert_latest_sync_time(&puuid)
+        .await
+        .inspect_err(|_| sender.task_end(2))?;
+
+    sender.task_end(0);
     Ok(())
 }

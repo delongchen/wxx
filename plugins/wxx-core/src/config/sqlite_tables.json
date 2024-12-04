@@ -2,15 +2,9 @@
   [
     "games",
     [
-      "id INTEGER PRIMARY KEY NOT NULL",
-      "body BLOB NOT NULL"
-    ]
-  ],
-  [
-    "game_creations",
-    [
       "game_id INTEGER PRIMARY KEY NOT NULL",
-      "creation INTEGER"
+      "creation INTEGER",
+      "body BLOB NOT NULL"
     ]
   ],
   [

@@ -384,19 +384,38 @@ pub struct Timeline {
     #[prost(string, tag = "3")]
     pub role: ::prost::alloc::string::String,
     #[prost(map = "string, float", tag = "4")]
-    pub creeps_per_min_deltas: ::std::collections::HashMap<::prost::alloc::string::String, f32>,
+    pub creeps_per_min_deltas: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        f32,
+    >,
     #[prost(map = "string, float", tag = "5")]
-    pub cs_diff_per_min_deltas: ::std::collections::HashMap<::prost::alloc::string::String, f32>,
+    pub cs_diff_per_min_deltas: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        f32,
+    >,
     #[prost(map = "string, float", tag = "6")]
-    pub damage_taken_diff_per_min_deltas:
-        ::std::collections::HashMap<::prost::alloc::string::String, f32>,
+    pub damage_taken_diff_per_min_deltas: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        f32,
+    >,
     #[prost(map = "string, float", tag = "7")]
-    pub damage_taken_per_min_deltas:
-        ::std::collections::HashMap<::prost::alloc::string::String, f32>,
+    pub damage_taken_per_min_deltas: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        f32,
+    >,
     #[prost(map = "string, float", tag = "8")]
-    pub gold_per_min_deltas: ::std::collections::HashMap<::prost::alloc::string::String, f32>,
+    pub gold_per_min_deltas: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        f32,
+    >,
     #[prost(map = "string, float", tag = "9")]
-    pub xp_diff_per_min_deltas: ::std::collections::HashMap<::prost::alloc::string::String, f32>,
+    pub xp_diff_per_min_deltas: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        f32,
+    >,
     #[prost(map = "string, float", tag = "10")]
-    pub xp_per_min_deltas: ::std::collections::HashMap<::prost::alloc::string::String, f32>,
+    pub xp_per_min_deltas: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        f32,
+    >,
 }

@@ -1,4 +1,4 @@
-use crate::v3::errors::LcuProcessError;
+use crate::v3::errors::{AppInternalError, LcuProcessError};
 use crate::v3::models::{
     lcu::process_status::{LcuProcessInfo, LcuProcessStatus},
     lcu::rest_client::LcuRestClient,
@@ -24,11 +24,13 @@ impl AppState {
         self.lcu_process.read().await.clone()
     }
 
-    pub async fn need_lcu_process_info(&self) -> Result<LcuProcessInfo, LcuProcessError> {
+    pub async fn need_lcu_process_info(&self) -> Result<LcuProcessInfo, AppInternalError> {
         if let LcuProcessStatus::Started(info) = self.read_lcu_process().await {
             Ok(info)
         } else {
-            Err(LcuProcessError::NotStarted)
+            Err(AppInternalError::LcuProcessError(
+                LcuProcessError::NotStarted,
+            ))
         }
     }
 }

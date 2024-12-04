@@ -1,7 +1,9 @@
 use super::utils::select_excepted_game_count;
 use prost::Message;
+use serde_json::{json, Value};
 use sqlx::FromRow;
 use std::collections::HashSet;
+use tauri::ipc::Channel;
 use wxx_protobuf::lcu::match_history::Game;
 
 #[derive(FromRow)]
@@ -10,22 +12,34 @@ pub struct GameWithCreation {
     pub creation: i64,
 }
 
-pub struct GameEntry(pub i64, pub Vec<String>, pub Vec<u8>);
+#[derive(FromRow)]
+pub struct GameRecord {
+    pub game_id: i64,
+    pub creation: i64,
+    pub body: Vec<u8>,
+}
 
-impl GameEntry {
+impl GameRecord {
     pub fn from_game(game: &Game) -> Self {
-        let mut puuid_list = Vec::new();
-        for id in game.participant_identities.iter() {
-            let player = id.player.as_ref().unwrap();
-            puuid_list.push(player.puuid.to_string());
-        }
+        let game_id = game.game_id as i64;
+        let creation = game.game_creation as i64;
 
         let mut body: Vec<u8> = Vec::new();
         game.encode(&mut body).unwrap();
-        Self(game.game_id as i64, puuid_list, body)
+
+        Self {
+            game_id,
+            creation,
+            body,
+        }
+    }
+
+    pub fn to_game(&self) -> Game {
+        Game::decode(self.body.as_slice()).unwrap()
     }
 }
 
+#[derive(Debug)]
 pub struct TaskContext {
     pub puuid: String,
     full_update: bool,
@@ -71,5 +85,65 @@ impl TaskContext {
         } else {
             GameSelectorAction::Drop
         }
+    }
+}
+
+pub struct MessageSender(Channel<Value>);
+
+enum TaskMessage {
+    Created(String),
+    End(u8),
+    History(u8, Option<Value>),
+    Detail,
+}
+
+impl TaskMessage {
+    fn as_code(&self) -> u8 {
+        match self {
+            TaskMessage::Created(_) => 0,
+            TaskMessage::End(_) => 1,
+            TaskMessage::History(_, _) => 2,
+            TaskMessage::Detail => 3,
+        }
+    }
+
+    fn get_data_json(&self) -> Value {
+        match self {
+            TaskMessage::Created(puuid) => json!({ "puuid": puuid }),
+            TaskMessage::End(status) => json!({ "status": status }),
+            TaskMessage::History(status, value) => {
+                json!({ "status": status, "value": value })
+            }
+            TaskMessage::Detail => json!({ "detail": true }),
+        }
+    }
+
+    fn to_json(&self) -> Value {
+        json!({
+            "code": self.as_code(),
+            "data": self.get_data_json()
+        })
+    }
+}
+
+impl MessageSender {
+    pub fn cover(channel: Channel<Value>) -> Self {
+        Self(channel)
+    }
+
+    fn send(&self, message: TaskMessage) {
+        self.0.send(message.to_json()).unwrap();
+    }
+
+    pub fn task_end(&self, status: u8) {
+        self.send(TaskMessage::End(status));
+    }
+
+    pub fn task_created(&self, puuid: &str) {
+        self.send(TaskMessage::Created(puuid.to_string()));
+    }
+
+    pub fn fetching_history(&self, status: u8, value: Option<Value>) {
+        self.send(TaskMessage::History(status, value));
     }
 }
