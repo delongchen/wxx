@@ -6,7 +6,7 @@
       "creation INTEGER",
       "version char(30)",
       "body BLOB NOT NULL",
-      "PRIMARY KEY game_id"
+      "PRIMARY KEY (game_id)"
     ]
   ],
   [
