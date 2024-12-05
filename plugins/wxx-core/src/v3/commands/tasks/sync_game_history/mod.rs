@@ -47,21 +47,20 @@ pub async fn sync_games_by_puuid(
         return Ok(());
     }
 
-    let games_to_insert = fetch_game_details(
-        &sender,
-        &fetcher,
-        uncached_games.iter().map(|game| game.game_id).collect(),
-        5,
-    )
-    .await;
+    let games_to_fetch = uncached_games.iter().map(|game| game.game_id).collect();
+
+    let (games_to_insert, full_fetched) =
+        fetch_game_details(&sender, &fetcher, games_to_fetch, 5).await;
 
     db.insert_games(&games_to_insert)
         .await
         .inspect_err(|_| sender.task_end(2))?;
 
-    db.insert_latest_sync_time(&puuid)
-        .await
-        .inspect_err(|_| sender.task_end(2))?;
+    if full_fetched {
+        db.insert_latest_sync_time(&puuid)
+            .await
+            .inspect_err(|_| sender.task_end(2))?;
+    }
 
     sender.task_end(0);
     Ok(())

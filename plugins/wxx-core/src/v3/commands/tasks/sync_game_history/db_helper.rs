@@ -1,11 +1,34 @@
 use crate::v3::errors::{AppInternalError, DatabaseQueryError};
 use crate::v3::models::db::{WxxDB, WxxSqlite};
-use sqlx::Sqlite;
+use sqlx::query::Query;
+use sqlx::sqlite::SqliteArguments;
+use sqlx::{Sqlite, Transaction};
 use std::collections::HashSet;
 use wxx_protobuf::lcu::match_history::Game;
 
 use super::models::{GameRecord, GameWithCreation, TaskContext};
 use super::utils::get_since_the_epoch_ms;
+
+trait TranHelper: Sized {
+    async fn execute_by_self<'q>(
+        self,
+        query: Query<'q, Sqlite, SqliteArguments<'q>>,
+    ) -> Result<Self, DatabaseQueryError>;
+}
+
+impl<'e> TranHelper for Transaction<'e, Sqlite> {
+    async fn execute_by_self<'q>(
+        mut self,
+        query: Query<'q, Sqlite, SqliteArguments<'q>>,
+    ) -> Result<Self, DatabaseQueryError> {
+        query
+            .execute(&mut *self)
+            .await
+            .map_err(|e| DatabaseQueryError::ExecuteError(e.to_string()))?;
+
+        Ok(self)
+    }
+}
 
 pub trait LcuDbHelper: WxxDB {
     async fn query_games_by_puuid(&self, puuid: &str) -> Result<Vec<GameRecord>, AppInternalError> {
@@ -31,11 +54,11 @@ WHERE game_summoners.puuid = $1
     ) -> Result<(i64, HashSet<i64>), AppInternalError> {
         let sql = sqlx::query_as::<Sqlite, GameWithCreation>(
             "
-        SELECT game_summoners.game_id, games.creation
-        FROM game_summoners
-        JOIN games
-        ON game_summoners.game_id = games.game_id
-        WHERE game_summoners.puuid = $1",
+        SELECT games.game_id, games.creation
+        FROM games
+        JOIN game_players
+        ON game_players.game_id = games.game_id
+        WHERE game_players.puuid = $1",
         )
         .bind(puuid);
         let cached_games = self.fetch(sql).await?;
@@ -66,17 +89,14 @@ WHERE game_summoners.puuid = $1
         Ok(result.unwrap_or_default())
     }
 
-    async fn new_task_ctx_from_cache(
-        &self,
-        puuid: &str,
-    ) -> Result<TaskContext, AppInternalError> {
+    async fn new_task_ctx_from_cache(&self, puuid: &str) -> Result<TaskContext, AppInternalError> {
         let (latest_game_creation, cached_game_id_set) =
             self.query_game_creation_by_puuid(&puuid).await?;
-        
+
         let last_sync_time_ms = self.query_latest_sync_time(&puuid).await?;
-        
+
         let full_update = last_sync_time_ms == 0;
-        
+
         let ctx = TaskContext::new(
             puuid.to_string(),
             full_update,
@@ -99,37 +119,47 @@ WHERE game_summoners.puuid = $1
     }
 
     async fn insert_games(&self, details: &Vec<Game>) -> Result<(), AppInternalError> {
-        let mut tran = self.transaction().await?;
+        let mut tx = self.transaction().await?;
 
         for game_detail in details {
             let record = GameRecord::from_game(game_detail);
             let id_list = &game_detail.participant_identities;
 
-            sqlx::query(
-                "INSERT OR IGNORE INTO games (game_id, creation, body) VALUES ($1, $2, $3)",
-            )
-            .bind(record.game_id)
-            .bind(record.creation)
-            .bind(&record.body)
-            .execute(&mut *tran)
-            .await
-            .map_err(|e| DatabaseQueryError::ExecuteError(e.to_string()))?;
+            tx = tx
+                .execute_by_self(
+                    sqlx::query(
+                        "INSERT OR IGNORE INTO
+                        games (game_id, creation, version, body) 
+                        VALUES ($1, $2, $3, $4)",
+                    )
+                    .bind(record.game_id)
+                    .bind(record.creation)
+                    .bind(record.version)
+                    .bind(&record.body),
+                )
+                .await?;
 
             for id in id_list {
                 let player = id.player.as_ref().unwrap();
 
-                sqlx::query(
-                    "INSERT OR IGNORE INTO game_summoners (game_id, puuid) VALUES ($1, $2)",
-                )
-                .bind(record.game_id)
-                .bind(&player.puuid)
-                .execute(&mut *tran)
-                .await
-                .map_err(|e| DatabaseQueryError::ExecuteError(e.to_string()))?;
+                tx = tx
+                    .execute_by_self(
+                        sqlx::query("INSERT OR IGNORE INTO players (puuid) VALUES ($1)")
+                            .bind(&player.puuid),
+                    )
+                    .await?
+                    .execute_by_self(
+                        sqlx::query(
+                            "INSERT OR IGNORE INTO game_players (game_id, puuid) VALUES ($1, $2)",
+                        )
+                        .bind(record.game_id)
+                        .bind(&player.puuid),
+                    )
+                    .await?;
             }
         }
 
-        tran.commit()
+        tx.commit()
             .await
             .map_err(|e| DatabaseQueryError::ExecuteError(e.to_string()))?;
 

@@ -16,6 +16,7 @@ pub struct GameWithCreation {
 pub struct GameRecord {
     pub game_id: i64,
     pub creation: i64,
+    pub version: String,
     pub body: Vec<u8>,
 }
 
@@ -23,12 +24,14 @@ impl GameRecord {
     pub fn from_game(game: &Game) -> Self {
         let game_id = game.game_id as i64;
         let creation = game.game_creation as i64;
+        let version = game.game_version.clone();
 
         let mut body: Vec<u8> = Vec::new();
         game.encode(&mut body).unwrap();
 
         Self {
             game_id,
+            version,
             creation,
             body,
         }
@@ -94,7 +97,7 @@ enum TaskMessage {
     Created(String),
     End(u8),
     History(u8, Option<Value>),
-    Detail,
+    Detail(u8, Option<Value>),
 }
 
 impl TaskMessage {
@@ -103,7 +106,7 @@ impl TaskMessage {
             TaskMessage::Created(_) => 0,
             TaskMessage::End(_) => 1,
             TaskMessage::History(_, _) => 2,
-            TaskMessage::Detail => 3,
+            TaskMessage::Detail(_, _) => 3,
         }
     }
 
@@ -114,7 +117,9 @@ impl TaskMessage {
             TaskMessage::History(status, value) => {
                 json!({ "status": status, "value": value })
             }
-            TaskMessage::Detail => json!({ "detail": true }),
+            TaskMessage::Detail(status, value) => json!({
+                "status": status, "value": value,
+            }),
         }
     }
 
@@ -145,5 +150,9 @@ impl MessageSender {
 
     pub fn fetching_history(&self, status: u8, value: Option<Value>) {
         self.send(TaskMessage::History(status, value));
+    }
+
+    pub fn fetching_detail(&self, status: u8, value: Option<Value>) {
+        self.send(TaskMessage::Detail(status, value));
     }
 }

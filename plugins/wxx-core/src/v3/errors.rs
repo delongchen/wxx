@@ -13,6 +13,12 @@ pub enum LcuRestError {
     #[error("request failed")]
     RequestError(#[from] reqwest::Error),
 
+    #[error("request not successful")]
+    NotSuccess,
+
+    #[error("retry limit reached")]
+    RetryLimitReached,
+
     #[error("unknown error")]
     Unknown,
 }
@@ -36,6 +42,12 @@ impl Serialize for LcuRestError {
             LcuRestError::RequestError(err) => {
                 state.serialize_field("code", "REQUEST_ERROR")?;
                 state.serialize_field("message", &err.to_string())?;
+            }
+            LcuRestError::NotSuccess => {
+                state.serialize_field("code", "NOT_SUCCESS")?;
+            }
+            LcuRestError::RetryLimitReached => {
+                state.serialize_field("code", "RETRY_LIMIT_REACHED")?;
             }
             LcuRestError::Unknown => {
                 state.serialize_field("code", "UNKNOWN_ERROR")?;

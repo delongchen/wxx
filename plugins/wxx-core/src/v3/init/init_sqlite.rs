@@ -47,7 +47,7 @@ where
     ) -> Result<SqliteQueryResult, DatabaseQueryError> {
         let sql = format!("CREATE TABLE IF NOT EXISTS {} ({})", name, props.join(","));
 
-        Ok(self.execute(sqlx::query(&sql)).await?)
+        self.execute(sqlx::query(&sql)).await
     }
 }
 

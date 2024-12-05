@@ -32,7 +32,7 @@ impl LcuEndpoints {
         timeout_ms: u64,
     ) -> Result<T, CommandError> {
         let result = fetcher
-            .lcu_get(&self.to_string(), timeout_ms)
+            .lcu_get(&self.to_string(), timeout_ms, 3)
             .await?
             .json::<T>()
             .await
@@ -70,15 +70,48 @@ pub trait LcuFetcher {
             .await
             .map_err(|err| LcuRestError::RequestError(err))?;
 
-        Ok(response)
+        if !response.status().is_success() {
+            Err(AppInternalError::LcuRestError(LcuRestError::NotSuccess))
+        } else {
+            Ok(response)
+        }
+    }
+
+    async fn lcu_fetch_with_retry(
+        &self,
+        method: &str,
+        endpoint: &str,
+        body: &Value,
+        timeout_ms: u64,
+        max_retries: u32,
+    ) -> Result<reqwest::Response, AppInternalError> {
+        let mut attempt = 0;
+
+        loop {
+            let response = self.lcu_fetch(method, endpoint, body, timeout_ms).await;
+
+            match response {
+                Ok(response) => return Ok(response),
+                Err(e) => {
+                    attempt += 1;
+
+                    if attempt > max_retries {
+                        return Err(e);
+                    }
+
+                    tokio::time::sleep(Duration::from_millis(1000)).await;
+                }
+            }
+        }
     }
 
     async fn lcu_get(
         &self,
         endpoint: &str,
         timeout_ms: u64,
+        max_retries: u32,
     ) -> Result<reqwest::Response, AppInternalError> {
-        self.lcu_fetch("get", endpoint, &Value::Null, timeout_ms)
+        self.lcu_fetch_with_retry("get", endpoint, &Value::Null, timeout_ms, max_retries)
             .await
     }
 
@@ -87,8 +120,10 @@ pub trait LcuFetcher {
         endpoint: &str,
         body: &Value,
         timeout_ms: u64,
+        max_retries: u32,
     ) -> Result<reqwest::Response, AppInternalError> {
-        self.lcu_fetch("post", endpoint, body, timeout_ms).await
+        self.lcu_fetch_with_retry("post", endpoint, body, timeout_ms, max_retries)
+            .await
     }
 }
 
