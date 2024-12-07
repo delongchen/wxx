@@ -1,4 +1,4 @@
-use super::models::MessageSender;
+use crate::v3::commands::tasks::models::MessageSender;
 use crate::v3::models::app::states::AppState;
 use crate::v3::utils::LcuEndpoints;
 use futures_util::{stream, StreamExt};
@@ -38,7 +38,13 @@ pub async fn fetch_game_details(
                     if let Ok(_) =
                         temp_count.compare_exchange(20, 0, Ordering::Relaxed, Ordering::Relaxed)
                     {
-                        sender.fetching_detail(1, Some(json!({ "fetched": 20 })))
+                        sender.fetching_detail(
+                            1,
+                            Some(json!({
+                                "fetched": success_count.load(Ordering::Relaxed),
+                                "tasks": tasks_len,
+                            })),
+                        )
                     }
 
                     Some(response)
@@ -50,10 +56,13 @@ pub async fn fetch_game_details(
         .collect::<Vec<_>>()
         .await;
 
-    let rest_temp = temp_count.load(Ordering::Relaxed);
-    if rest_temp != 0 {
-        sender.fetching_detail(1, Some(json!({ "fetched": rest_temp })))
-    }
+    sender.fetching_detail(
+        1,
+        Some(json!({
+            "fetched": success_count.load(Ordering::Relaxed),
+            "tasks": tasks_len,
+        })),
+    );
 
     let full_updated = success_count.load(Ordering::Relaxed) == tasks_len;
     sender.fetching_detail(2, Some(json!({ "full": full_updated })));

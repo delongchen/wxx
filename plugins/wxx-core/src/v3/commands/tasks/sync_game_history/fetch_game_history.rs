@@ -1,4 +1,4 @@
-use super::models::{GameSelectorAction, GameWithCreation, MessageSender, TaskContext};
+use crate::v3::commands::tasks::models::{GameSelectorAction, GameWithCreation, MessageSender, TaskContext};
 use crate::v3::errors::CommandError;
 use crate::v3::models::app::states::AppState;
 use crate::v3::utils::LcuEndpoints;
@@ -24,7 +24,7 @@ pub async fn fetch_game_history(
 
     'outer: loop {
         let start_index = beg_index;
-        let end_index = beg_index + excepted_game_count;
+        let end_index = beg_index + excepted_game_count - 1;
         let puuid = ctx.puuid.to_string();
 
         sender.fetching_history(

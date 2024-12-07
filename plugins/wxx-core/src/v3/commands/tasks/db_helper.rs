@@ -6,8 +6,8 @@ use sqlx::{Sqlite, Transaction};
 use std::collections::HashSet;
 use wxx_protobuf::lcu::match_history::Game;
 
-use super::models::{GameRecord, GameWithCreation, TaskContext};
-use super::utils::get_since_the_epoch_ms;
+use crate::v3::commands::tasks::models::{GameRecord, GameWithCreation, TaskContext};
+use crate::v3::utils::get_since_the_epoch_ms;
 
 trait TranHelper: Sized {
     async fn execute_by_self<'q>(

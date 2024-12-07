@@ -40,12 +40,10 @@ function CenterButtonGroup() {
   );
 }
 
-const LightThemeSet = new Set(['yellow', 'cyan']);
-
 function NiumaHeader() {
   const { theme } = useNiumaContext();
 
-  const bg = [theme, LightThemeSet.has(theme) ? 400 : 500].join('.');
+  const bg = [theme, 400].join('.');
   const navigate = useNavigate();
 
   const handleBack = () => {

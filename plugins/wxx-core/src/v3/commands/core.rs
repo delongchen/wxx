@@ -10,9 +10,10 @@ pub async fn lcu_fetch(
     endpoint: String,
     body: serde_json::Value,
     timeout: u64,
+    retry_attempts: u32,
 ) -> Result<tauri::ipc::Response, CommandError> {
     match state
-        .lcu_fetch(&method, &endpoint, &body, timeout)
+        .lcu_fetch_with_retry(&method, &endpoint, &body, timeout, retry_attempts)
         .await?
         .bytes()
         .await

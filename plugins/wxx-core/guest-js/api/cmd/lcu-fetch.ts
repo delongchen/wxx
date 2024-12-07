@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/core';
-import { resolveCmdName } from './resolve';
+import { resolveCmdName } from '../resolve';
 
 export type LcuAllowedMethod =
   | 'get'
@@ -19,6 +19,7 @@ interface LcuFetchOptions {
   method?: LcuAllowedMethod;
   body?: RequestBody;
   timeout?: number;
+  retry?: number;
 }
 
 const CMD_LCU_FETCH = resolveCmdName('lcu_fetch')
@@ -41,11 +42,11 @@ export const lcuFetch = async <T = unknown>(
   endpoint: string,
   options: LcuFetchOptions = {},
 ) => {
-  const { method = 'get', body = null, timeout = 0 } = options;
+  const { method = 'get', body = null, timeout = 0, retry = 0 } = options;
 
   const response = await invoke<unknown>(
     CMD_LCU_FETCH,
-    { endpoint, method, body, timeout },
+    { endpoint, method, body, timeout, retryAttempts: retry },
   );
 
   if (response instanceof ArrayBuffer) {

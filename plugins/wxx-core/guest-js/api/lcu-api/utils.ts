@@ -1,4 +1,4 @@
-import { LcuAllowedMethod, lcuFetch, RequestBody } from '../lcu-fetch';
+import { LcuAllowedMethod, lcuFetch, RequestBody } from '../cmd/lcu-fetch';
 
 
 // 提取 URL 路径中的参数名，例如 "/users/:id/posts/:postId" 提取为 "id" 和 "postId"
@@ -120,7 +120,7 @@ export const api = <E extends string>(endpoint: E) => {
   // 无请求体的 HTTP 方法
   const noPayload = <T = unknown>(method: LcuAllowedMethod, timeout?: number) => {
     if (typeof parsed === 'string') {  // 如果没有参数
-      return (() => lcuFetch(endpoint, { method })) as FetchType<E, T>;
+      return (() => lcuFetch(endpoint, { method, timeout })) as FetchType<E, T>;
     }
 
     // 如果有参数，返回接收参数对象的函数
@@ -139,6 +139,7 @@ export const api = <E extends string>(endpoint: E) => {
         (payload: P) => lcuFetch<T>(endpoint, {
           method,
           body: payload,
+          timeout,
         })
       ) as FetchWithPayloadType<E, P, T>;
     }

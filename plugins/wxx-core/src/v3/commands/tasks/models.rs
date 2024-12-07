@@ -1,10 +1,14 @@
-use super::utils::select_excepted_game_count;
 use prost::Message;
 use serde_json::{json, Value};
 use sqlx::FromRow;
 use std::collections::HashSet;
 use tauri::ipc::Channel;
 use wxx_protobuf::lcu::match_history::Game;
+use crate::v3::utils::get_since_the_epoch_ms;
+
+const H_MS: i64 = 60 * 60 * 1000;
+pub const MAX_SAFE_EXCEPTED_GAME_COUNT: u32 = 200;
+pub const GOOD_EXCEPTED_GAME_COUNT: u32 = 10;
 
 #[derive(FromRow)]
 pub struct GameWithCreation {
@@ -75,7 +79,18 @@ impl TaskContext {
     }
 
     pub fn get_excepted_game_count(&self) -> u32 {
-        select_excepted_game_count(self.last_sync_time_ms, self.full_update)
+        if self.last_sync_time_ms <= 0 || self.full_update {
+            return MAX_SAFE_EXCEPTED_GAME_COUNT;
+        }
+
+        let since_last_sync_ms = get_since_the_epoch_ms() - self.last_sync_time_ms;
+        let since_last_sync_h = (since_last_sync_ms / H_MS) as u32;
+
+        match since_last_sync_h {
+            0..GOOD_EXCEPTED_GAME_COUNT => GOOD_EXCEPTED_GAME_COUNT,
+            GOOD_EXCEPTED_GAME_COUNT..MAX_SAFE_EXCEPTED_GAME_COUNT => since_last_sync_h,
+            _ => MAX_SAFE_EXCEPTED_GAME_COUNT,
+        }
     }
 
     pub fn select_game(&self, game: &Game) -> GameSelectorAction {

@@ -4,18 +4,19 @@ use crate::v3::models::db::WxxSqlite;
 use tauri::ipc::Channel;
 use tauri::State;
 
-mod db_helper;
 mod fetch_game_details;
 mod fetch_game_history;
-mod models;
 mod selector;
-mod utils;
 
-use db_helper::LcuDbHelper;
+use crate::v3::commands::tasks::db_helper::LcuDbHelper;
 use fetch_game_details::fetch_game_details;
 use fetch_game_history::fetch_game_history;
-use models::MessageSender;
+use crate::v3::commands::tasks::models::MessageSender;
 use selector::is_good_dld;
+
+const END_WITHOUT_ERROR: u8 = 0;
+const LCU_NOT_FOUND: u8 = 1;
+const END_WITH_ERROR: u8 = 2;
 
 #[tauri::command]
 pub async fn sync_games_by_puuid(
@@ -31,7 +32,7 @@ pub async fn sync_games_by_puuid(
     fetcher
         .need_lcu_process_info()
         .await
-        .inspect_err(|_| sender.task_end(1))?;
+        .inspect_err(|_| sender.task_end(LCU_NOT_FOUND))?;
 
     let ctx = db.new_task_ctx_from_cache(&puuid).await?;
 
@@ -41,9 +42,9 @@ pub async fn sync_games_by_puuid(
     if uncached_games.len() == 0 {
         db.insert_latest_sync_time(&puuid)
             .await
-            .inspect_err(|_| sender.task_end(2))?;
+            .inspect_err(|_| sender.task_end(END_WITH_ERROR))?;
 
-        sender.task_end(0);
+        sender.task_end(END_WITHOUT_ERROR);
         return Ok(());
     }
 
@@ -54,14 +55,14 @@ pub async fn sync_games_by_puuid(
 
     db.insert_games(&games_to_insert)
         .await
-        .inspect_err(|_| sender.task_end(2))?;
+        .inspect_err(|_| sender.task_end(END_WITH_ERROR))?;
 
     if full_fetched {
         db.insert_latest_sync_time(&puuid)
             .await
-            .inspect_err(|_| sender.task_end(2))?;
+            .inspect_err(|_| sender.task_end(END_WITH_ERROR))?;
     }
 
-    sender.task_end(0);
+    sender.task_end(END_WITHOUT_ERROR);
     Ok(())
 }

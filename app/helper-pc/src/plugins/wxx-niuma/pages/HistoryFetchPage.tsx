@@ -1,33 +1,36 @@
-import { Box, Button, Input, Flex, Text } from '@chakra-ui/react';
-import { createMatchHistoryFetchingTask } from 'tauri-plugin-wxx-core/api';
+import { Box, Button, Flex, Input, Text } from '@chakra-ui/react';
+import { ChangeEvent, memo, useCallback, useEffect, useState } from 'react';
 import type { SummonerInfo } from 'tauri-plugin-wxx-core';
 import { getSummonerByName } from 'tauri-plugin-wxx-core/lcu-api/summoner';
-import { useCallback, useState, ChangeEvent } from 'react';
-import MHFTaskList from '../components/MHFTaskList.tsx';
 import { useNiumaContext } from '@/plugins/wxx-niuma/context/hooks';
-import { Tooltip } from '@/components/ui/tooltip.tsx';
 import { Field } from '@/components/ui/field.tsx';
-import ContentCard from '@/plugins/wxx-niuma/components/ContentCard.tsx';
 import CenterBox from '@/plugins/wxx-niuma/components/CenterBox.tsx';
+import { SummonerStore } from '../core/niuma-task-manager';
+import GameSyncTaskCard from '../components/GameSyncTask.tsx'
 
 
 const checkTagLine = (tagLine: string): boolean => {
-  if (tagLine.length !== 5) return false;
-
-  return ![...tagLine]
-    .map(n => +n)
-    .some(isNaN);
+  return tagLine.length === 5 && ![...tagLine].map(n => +n).some(window.isNaN);
 };
 
-function HistoryFetchPage() {
-  const { theme, currentSummoner } = useNiumaContext();
-  const [checkedSummoner, setCheckedSummoner] = useState<SummonerInfo | null>(null);
+const LcuUnusable = (
+  <CenterBox>
+    <Flex
+      flexDirection="column"
+      alignItems="center"
+    >
+      <Text textStyle='2xl'>连接不上游戏捏</Text>
+      <Text textStyle='sm'>可能是没启动游戏</Text>
+      <Text textStyle='sm'>或者是没有以管理员身份运行</Text>
+    </Flex>
+  </CenterBox>
+)
+
+function SummonerFinder(props: { onNameSubmit: (name: string) => void }) {
+  const { theme } = useNiumaContext();
+
   const [summonerName, setSummonerName] = useState<string>('');
   const [tagLine, setTagLine] = useState<string>('');
-
-  const handleClick = useCallback((puuid: string) => {
-    createMatchHistoryFetchingTask(puuid, console.error);
-  }, []);
 
   const handleNameInput = useCallback((ev: ChangeEvent) => {
     setSummonerName(Reflect.get(ev.target, 'value') as string);
@@ -37,85 +40,75 @@ function HistoryFetchPage() {
     setTagLine(Reflect.get(ev.target, 'value') as string);
   }, []);
 
-  const checkSummoner = (name: string, tag: string) => {
-    getSummonerByName({ name: encodeURIComponent(`${name}#${tag}`) })
-      .then(setCheckedSummoner)
-      .catch(() => {
-        setCheckedSummoner(null);
-      });
-  };
-
-  if (currentSummoner === null) {
-    return (
-      <CenterBox>
-        <Flex
-          flexDirection="column"
-          alignItems="center"
-        >
-          <Text textStyle='2xl'>连接不上游戏捏</Text>
-          <Text textStyle='sm'>可能是没启动游戏</Text>
-          <Text textStyle='sm'>或者是没有以管理员身份运行</Text>
-        </Flex>
-      </CenterBox>
-    )
+  const handleCheckClick = () => {
+    props.onNameSubmit(encodeURIComponent(`${summonerName}#${tagLine}`));
+    setSummonerName('');
+    setTagLine('');
   }
 
   return (
+    <Flex p="2" gap="2" alignItems="center" justifyContent="center">
+      <Field
+        required
+        label="Name"
+        errorText="summoner name cannot be empty!"
+        invalid={summonerName === ''}
+      >
+        <Input onChange={handleNameInput} value={summonerName} />
+      </Field>
+
+      <Field
+        required
+        label="Tag"
+        errorText="tag must be five numbers!"
+        invalid={!checkTagLine(tagLine)}
+      >
+        <Input onChange={handleTagInput} value={tagLine} />
+      </Field>
+
+      <Button
+        onClick={handleCheckClick}
+        colorPalette={theme}
+        disabled={!checkTagLine(tagLine)}
+      >check</Button>
+    </Flex>
+  )
+}
+
+function HistoryFetchPage() {
+  const { currentSummoner } = useNiumaContext();
+  const [summoners, setSummoners] = useState<SummonerInfo[]>([])
+
+  useEffect(() => {
+    SummonerStore.syncToLocal()
+    setSummoners(SummonerStore.readAsArray())
+  }, []);
+
+  useEffect(() => {
+    if (currentSummoner !== null) {
+      SummonerStore.fetchAndCache(async () => currentSummoner)
+    }
+  }, [currentSummoner]);
+
+  const handleFinderSubmit = useCallback(async (name: string) => {
+    await SummonerStore.fetchAndCache(() => getSummonerByName({ name }));
+    setSummoners(SummonerStore.readAsArray())
+  }, [])
+
+  if (currentSummoner === null) return LcuUnusable
+
+  return (
     <Box p="2">
-      <Flex p="2" gap="2" alignItems="center" justifyContent="center">
-        <Field
-          required
-          label="Name"
-          errorText="summoner name cannot be empty!"
-          invalid={summonerName === ''}
-        >
-          <Input onChange={handleNameInput} />
-        </Field>
-
-        <Field
-          required
-          label="Tag"
-          errorText="tag must be five numbers!"
-          invalid={!checkTagLine(tagLine)}
-        >
-          <Input
-            onChange={handleTagInput}
-          />
-        </Field>
-
-        <Button
-          onClick={() => {
-            checkSummoner(summonerName, tagLine);
-          }}
-          colorPalette={theme}
-          disabled={!checkTagLine(tagLine)}
-        >check</Button>
-
-        <Tooltip
-          content="check name first!"
-          disabled={checkedSummoner !== null}
-          openDelay={100}
-          closeDelay={100}
-        >
-          <Button
-            colorPalette={theme}
-            disabled={checkedSummoner === null}
-            onClick={() => {
-              handleClick(checkedSummoner!.puuid)
-            }}
-          >fetch</Button>
-        </Tooltip>
-      </Flex>
-
-      {checkedSummoner !== null && (
-        <ContentCard>
-          <p>{checkedSummoner.gameName}#{checkedSummoner.tagLine}</p>
-        </ContentCard>
-      )}
-
-      <MHFTaskList />
+      <GameSyncTaskCard summoner={currentSummoner} main={true} />
+      <SummonerFinder onNameSubmit={handleFinderSubmit} />
+      {summoners
+        .filter(summoner => summoner.puuid !== currentSummoner.puuid)
+        .map(summoner => (
+          <GameSyncTaskCard key={summoner.puuid} summoner={summoner} />
+        ))
+      }
     </Box>
   );
 }
 
-export default HistoryFetchPage;
+export default memo(HistoryFetchPage);
