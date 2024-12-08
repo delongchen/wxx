@@ -1,4 +1,4 @@
-import { load, type Store } from '@tauri-apps/plugin-store'
+import { load, type Store } from '@tauri-apps/plugin-store';
 
 interface ConfigTransaction<T> {
   peek: () => T,
@@ -6,56 +6,56 @@ interface ConfigTransaction<T> {
   replace: (state: T) => void,
 }
 
-const ConfigFileDir = 'configs'
+const ConfigFileDir = 'configs';
 
 export const createConfigHelper = (namespace: string) => {
-  let store: Store | null = null
+  let store: Store | null = null;
 
   const getStore = async () => {
     if (store === null) {
-      store = await load(`${ConfigFileDir}/${namespace}.json`, { autoSave: false })
+      store = await load(`${ConfigFileDir}/${namespace}.json`, { autoSave: false });
     }
-    return store
-  }
+    return store;
+  };
 
   const open = <T>(key: string, initFn: () => T) => {
     const transaction = async (
-      task: (tran: ConfigTransaction<T>) => void
+      task: (tran: ConfigTransaction<T>) => void,
     ) => {
-      const store = await getStore()
-      const prev = await store.get<T>(key)
+      const store = await getStore();
+      const prev = await store.get<T>(key);
 
-      let stage: T = prev ?? initFn()
-      let changed = prev === undefined
+      let stage: T = prev ?? initFn();
+      let changed = prev === undefined;
 
-      const peek = () => stage
+      const peek = () => stage;
 
       const add = (state: Partial<T>) => {
-        stage = {...stage, ...state}
-        changed = true
-      }
+        stage = { ...stage, ...state };
+        changed = true;
+      };
 
       const replace = (state: T) => {
-        stage = state
-        changed = true
-      }
+        stage = state;
+        changed = true;
+      };
 
       const commit = async () => {
-        await store.set(key, stage)
-        await store.save()
-      }
+        await store.set(key, stage);
+        await store.save();
+      };
 
-      task({ peek, add, replace })
+      task({ peek, add, replace });
 
-      if (changed) await commit()
-    }
+      if (changed) await commit();
+    };
 
     return {
-      transaction
-    }
-  }
+      transaction,
+    };
+  };
 
   return {
-    open
-  }
-}
+    open,
+  };
+};

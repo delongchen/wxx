@@ -3,7 +3,7 @@ import {
   type MatchReport,
   type ItemTuple,
   type ParticipantExt,
-  TeamStatsKeys
+  TeamStatsKeys,
 } from '../types';
 import type { Game } from 'tauri-plugin-wxx-core';
 

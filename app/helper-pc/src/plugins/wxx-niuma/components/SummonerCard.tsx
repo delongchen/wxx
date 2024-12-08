@@ -11,20 +11,20 @@ type SummonerCardProps = PropsWithChildren<{
 }>
 
 function SummonerCard({ children, summoner, main, bg = 'white' }: SummonerCardProps) {
-  const { profileIconId, gameName, tagLine } = summoner
-  const isMainCard = main === true
+  const { profileIconId, gameName, tagLine } = summoner;
+  const isMainCard = main === true;
 
   return (
-    <Flex p='2' m='4' bg={bg} borderRadius="12px" pos='relative'>
+    <Flex p="2" m="4" bg={bg} borderRadius="12px" pos="relative">
       {!isMainCard && (
-        <Box pos='absolute' right='0' top='0'>
-          <IconButton colorPalette='yellow' size='xs' ml='1'>
-            <VscStarFull color='yellow' />
+        <Box pos="absolute" right="0" top="0">
+          <IconButton colorPalette="yellow" size="xs" ml="1">
+            <VscStarFull color="yellow" />
           </IconButton>
-          <IconButton colorPalette='green' size='xs' ml='1'>
+          <IconButton colorPalette="green" size="xs" ml="1">
             <VscRefresh />
           </IconButton>
-          <IconButton colorPalette='red' size='xs' ml='1'>
+          <IconButton colorPalette="red" size="xs" ml="1">
             <VscClose />
           </IconButton>
         </Box>
@@ -33,11 +33,11 @@ function SummonerCard({ children, summoner, main, bg = 'white' }: SummonerCardPr
         profileIcon={profileIconId}
         gameName={gameName}
         tagLine={tagLine}
-        nameBadge={isMainCard ? ['green', 'online']: undefined}
+        nameBadge={isMainCard ? ['green', 'online'] : undefined}
       />
       <Spacer>{children}</Spacer>
     </Flex>
-  )
+  );
 }
 
-export default SummonerCard
+export default SummonerCard;

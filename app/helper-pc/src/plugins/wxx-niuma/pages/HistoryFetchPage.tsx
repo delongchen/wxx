@@ -6,7 +6,7 @@ import { useNiumaContext } from '@/plugins/wxx-niuma/context/hooks';
 import { Field } from '@/components/ui/field.tsx';
 import CenterBox from '@/plugins/wxx-niuma/components/CenterBox.tsx';
 import { SummonerStore } from '../core/niuma-task-manager';
-import GameSyncTaskCard from '../components/GameSyncTask.tsx'
+import GameSyncTaskCard from '../components/GameSyncTask.tsx';
 
 
 const checkTagLine = (tagLine: string): boolean => {
@@ -19,12 +19,12 @@ const LcuUnusable = (
       flexDirection="column"
       alignItems="center"
     >
-      <Text textStyle='2xl'>连接不上游戏捏</Text>
-      <Text textStyle='sm'>可能是没启动游戏</Text>
-      <Text textStyle='sm'>或者是没有以管理员身份运行</Text>
+      <Text textStyle="2xl">连接不上游戏捏</Text>
+      <Text textStyle="sm">可能是没启动游戏</Text>
+      <Text textStyle="sm">或者是没有以管理员身份运行</Text>
     </Flex>
   </CenterBox>
-)
+);
 
 function SummonerFinder(props: { onNameSubmit: (name: string) => void }) {
   const { theme } = useNiumaContext();
@@ -44,7 +44,7 @@ function SummonerFinder(props: { onNameSubmit: (name: string) => void }) {
     props.onNameSubmit(encodeURIComponent(`${summonerName}#${tagLine}`));
     setSummonerName('');
     setTagLine('');
-  }
+  };
 
   return (
     <Flex p="2" gap="2" alignItems="center" justifyContent="center">
@@ -72,30 +72,30 @@ function SummonerFinder(props: { onNameSubmit: (name: string) => void }) {
         disabled={!checkTagLine(tagLine)}
       >check</Button>
     </Flex>
-  )
+  );
 }
 
 function HistoryFetchPage() {
   const { currentSummoner } = useNiumaContext();
-  const [summoners, setSummoners] = useState<SummonerInfo[]>([])
+  const [summoners, setSummoners] = useState<SummonerInfo[]>([]);
 
   useEffect(() => {
-    SummonerStore.syncToLocal()
-    setSummoners(SummonerStore.readAsArray())
+    SummonerStore.syncToLocal();
+    setSummoners(SummonerStore.readAsArray());
   }, []);
 
   useEffect(() => {
     if (currentSummoner !== null) {
-      SummonerStore.fetchAndCache(async () => currentSummoner)
+      SummonerStore.fetchAndCache(async () => currentSummoner);
     }
   }, [currentSummoner]);
 
   const handleFinderSubmit = useCallback(async (name: string) => {
     await SummonerStore.fetchAndCache(() => getSummonerByName({ name }));
-    setSummoners(SummonerStore.readAsArray())
-  }, [])
+    setSummoners(SummonerStore.readAsArray());
+  }, []);
 
-  if (currentSummoner === null) return LcuUnusable
+  if (currentSummoner === null) return LcuUnusable;
 
   return (
     <Box p="2">

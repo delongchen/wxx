@@ -1,5 +1,5 @@
 import { NiumaAnalyzeContext, TeamStatsKeys } from '../../types';
-import { BaseItemSet } from '../../consts'
+import { BaseItemSet } from '../../consts';
 import { formatTimestamp, countMatch, encodePlayerTuple } from './utils';
 import type { Player } from 'tauri-plugin-wxx-core';
 
@@ -50,7 +50,7 @@ const countGamesByDay: AnalyzeTask = ctx => {
 };
 
 const countItems: AnalyzeTask = ctx => {
-  const { reports, result } = ctx
+  const { reports, result } = ctx;
 
   const globalMap: Map<number, number> = new Map();
   const versionMap: Map<string, Map<number, number>> = new Map();
@@ -59,27 +59,27 @@ const countItems: AnalyzeTask = ctx => {
     for (const key of keys) {
       map.set(key, (map.get(key) ?? 0) + 1);
     }
-  }
+  };
 
   const fixVersion = (raw: string) => {
     const [a, b, c] = raw.split('.');
-    return [a, b, c].join('.')
-  }
+    return [a, b, c].join('.');
+  };
 
   const filterBaseItem = ([itemId]: [number, number]): boolean => !BaseItemSet.has(itemId);
 
   for (const { items: [versionRaw, ...items] } of reports) {
-    update(globalMap, items)
+    update(globalMap, items);
 
     const version = fixVersion(versionRaw);
     const versionExist = versionMap.get(version);
     if (versionExist === undefined) {
       versionMap.set(
         version,
-        new Map(items.map(item => [item, 1]))
+        new Map(items.map(item => [item, 1])),
       );
     } else {
-      update(versionExist, items)
+      update(versionExist, items);
     }
   }
 
@@ -89,16 +89,16 @@ const countItems: AnalyzeTask = ctx => {
       [...map]
         .map((kv) => kv)
         .filter(filterBaseItem)
-        .sort((a, b) => b[1] - a[1])
-    ])
+        .sort((a, b) => b[1] - a[1]),
+    ]);
 
   result.state['items'] = {
     versions,
     all: [...globalMap]
       .filter(filterBaseItem)
       .sort((a, b) => b[1] - a[1]),
-  }
-}
+  };
+};
 
 const reducePlayers: AnalyzeTask = ctx => {
   const { reports } = ctx;

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button.tsx';
 import PlayerPersona from '../../components/PlayerPersona';
 import ContentCard from '../../components/ContentCard.tsx';
 import CenterBox from '../../components/CenterBox';
-import { SummonerInfoWithoutReRoll } from 'tauri-plugin-wxx-core'
+import { SummonerInfoWithoutReRoll } from 'tauri-plugin-wxx-core';
 
 interface NiumaSelectorProps {
   onPuuidClick?: (summoner: SummonerInfoWithoutReRoll) => void;
@@ -22,11 +22,11 @@ function NiumaSelector({ onPuuidClick }: NiumaSelectorProps) {
     return (
       <CenterBox>
         <Flex flexDirection="column" alignItems="center" justifyContent="space-between">
-          <Text textStyle='2xl'>人才库空空如也</Text>
+          <Text textStyle="2xl">人才库空空如也</Text>
           <Text>先去寻找牛马吧</Text>
         </Flex>
       </CenterBox>
-    )
+    );
   }
 
   return (
@@ -52,12 +52,12 @@ function NiumaSelector({ onPuuidClick }: NiumaSelectorProps) {
                 gameName={summoner.gameName}
                 tagLine={summoner.tagLine}
               />
-              <Text mb='1'>
+              <Text mb="1">
                 {currentSummoner !== null && summoner.puuid === currentSummoner.puuid ? (
                   <Badge
-                    variant='solid'
-                    colorPalette='green'
-                    mr='1'
+                    variant="solid"
+                    colorPalette="green"
+                    mr="1"
                   >当前登录</Badge>
                 ) : null}
                 LV.{summoner.summonerLevel}

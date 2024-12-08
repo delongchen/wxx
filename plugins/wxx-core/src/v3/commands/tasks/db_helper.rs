@@ -34,7 +34,7 @@ pub trait LcuDbHelper: WxxDB {
     async fn query_games_by_puuid(&self, puuid: &str) -> Result<Vec<GameRecord>, AppInternalError> {
         let sql = sqlx::query_as::<Sqlite, GameRecord>(
             "
-SELECT game_summoners.game_id, games.creation, games.body
+SELECT game_summoners.game_id, games.creation, games.version, games.body
 FROM game_summoners
 JOIN games
 ON game_summoners.game_id = games.game_id

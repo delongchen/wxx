@@ -2,10 +2,10 @@ import { HStack, Stack, Text, Flex, Badge } from '@chakra-ui/react';
 import { Avatar } from '@/components/ui/avatar';
 
 interface PlayerPersonaProps {
-  profileIcon: number
-  gameName: string
-  tagLine: string
-  nameBadge?: [string, string]
+  profileIcon: number;
+  gameName: string;
+  tagLine: string;
+  nameBadge?: [string, string];
 }
 
 function PlayerPersona(props: PlayerPersonaProps) {
@@ -22,7 +22,7 @@ function PlayerPersona(props: PlayerPersonaProps) {
         <Flex>
           <Text fontWeight="medium">{gameName}</Text>
           {nameBadge && (
-            <Badge ml='1' variant="solid" colorPalette={nameBadge[0]}>
+            <Badge ml="1" variant="solid" colorPalette={nameBadge[0]}>
               {nameBadge[1]}
             </Badge>
           )}

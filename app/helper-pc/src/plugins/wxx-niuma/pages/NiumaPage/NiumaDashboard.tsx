@@ -17,10 +17,10 @@ const ComponentTitle = ({ text }: PropsWithChildren<{ text: string }>) => {
     <Text
       textStyle="2xl"
       textAlign="center"
-      mt='16'
+      mt="16"
     >{text}</Text>
-  )
-}
+  );
+};
 
 function NiumaDashboard({ summoner }: NiumaDashboardProps) {
   const { puuid } = summoner;
@@ -40,15 +40,15 @@ function NiumaDashboard({ summoner }: NiumaDashboardProps) {
         <NiumaOverview chartData={chartData} mainSummoner={summoner} />
       </ContentCard>
 
-      <ComponentTitle text='牛马最爱的装备' />
+      <ComponentTitle text="牛马最爱的装备" />
       <ContentCard>
         <NiumaFavoriteItems mainSummoner={summoner} chartData={chartData} />
       </ContentCard>
 
-      <ComponentTitle text='牛马兄弟' />
+      <ComponentTitle text="牛马兄弟" />
       <NiumaTeammates chartData={chartData} />
 
-      <ComponentTitle text='牛马作息表' />
+      <ComponentTitle text="牛马作息表" />
       <ContentCard>
         <DailyGameChart tuples={chartData.state['daily'] as [string, number, number][]} />
       </ContentCard>

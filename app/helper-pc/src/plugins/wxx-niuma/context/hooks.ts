@@ -67,7 +67,8 @@ export const useNiumaChartData = (puuid: string) => {
   const [pending, setPending] = useState(false);
   const [chartData, setChartData] = useState<NiumaChartDataType | null>(null);
 
-  const refresh = useCallback(() => {}, [puuid]);
+  const refresh = useCallback(() => {
+  }, [puuid]);
 
   useEffect(refresh, []);
 

@@ -123,7 +123,7 @@ export const useSyncGameHistoryTask = (puuid: string) => {
         let tipText: string;
 
         if (endStatus === 0) {
-          SummonerStore.refreshLastSyncTime(puuid)
+          SummonerStore.refreshLastSyncTime(puuid);
           tipText = '刚刚同步';
         } else if (endStatus === 1) {
           tipText = 'LCU出错了捏';

@@ -37,20 +37,20 @@ const globalSlice = createSlice({
 export const { switchFullPage, setGlobalTheme } = globalSlice.actions;
 
 const configHelper = createConfigHelper('app');
-const { transaction } = configHelper.open(namespace, () => initialWxxAppConfig)
+const { transaction } = configHelper.open(namespace, () => initialWxxAppConfig);
 
 export const fetchLocalConfig = (): AppThunk => async (dispatch) => {
   await transaction(({ peek }) => {
-    dispatch(setGlobalTheme(peek().theme))
-  })
+    dispatch(setGlobalTheme(peek().theme));
+  });
 };
 
 export const setGlobalThemeAsync = (theme: string): AppThunk => async (dispatch) => {
   await transaction(({ add }) => {
-    add({ theme })
+    add({ theme });
   }).then(() => {
     dispatch(setGlobalTheme(theme));
-  })
+  });
 };
 
 export const selectGlobal = (state: RootState) => state.global;
