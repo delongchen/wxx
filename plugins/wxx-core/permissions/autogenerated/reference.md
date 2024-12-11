@@ -63,6 +63,32 @@ Denies the lcu_fetch command without any pre-configured scope.
 <tr>
 <td>
 
+`wxx-core:allow-query-game`
+
+</td>
+<td>
+
+Enables the query_game command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:deny-query-game`
+
+</td>
+<td>
+
+Denies the query_game command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `wxx-core:allow-sync-games-by-puuid`
 
 </td>

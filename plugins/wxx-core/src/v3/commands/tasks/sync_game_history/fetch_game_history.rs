@@ -1,4 +1,6 @@
-use crate::v3::commands::tasks::models::{GameSelectorAction, GameWithCreation, MessageSender, TaskContext};
+use crate::v3::commands::tasks::models::{
+    GameSelectorAction, GameWithCreation, MessageSender, TaskContext,
+};
 use crate::v3::errors::CommandError;
 use crate::v3::models::app::states::AppState;
 use crate::v3::utils::LcuEndpoints;

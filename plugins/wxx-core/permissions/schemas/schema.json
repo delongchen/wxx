@@ -315,6 +315,16 @@
           "const": "deny-lcu-fetch"
         },
         {
+          "description": "Enables the query_game command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-query-game"
+        },
+        {
+          "description": "Denies the query_game command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-query-game"
+        },
+        {
           "description": "Enables the sync_games_by_puuid command without any pre-configured scope.",
           "type": "string",
           "const": "allow-sync-games-by-puuid"

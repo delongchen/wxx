@@ -1812,6 +1812,11 @@
           "const": "wxx-core:allow-lcu-fetch"
         },
         {
+          "description": "Enables the query_game command without any pre-configured scope.",
+          "type": "string",
+          "const": "wxx-core:allow-query-game"
+        },
+        {
           "description": "Enables the sync_games_by_puuid command without any pre-configured scope.",
           "type": "string",
           "const": "wxx-core:allow-sync-games-by-puuid"
@@ -1825,6 +1830,11 @@
           "description": "Denies the lcu_fetch command without any pre-configured scope.",
           "type": "string",
           "const": "wxx-core:deny-lcu-fetch"
+        },
+        {
+          "description": "Denies the query_game command without any pre-configured scope.",
+          "type": "string",
+          "const": "wxx-core:deny-query-game"
         },
         {
           "description": "Denies the sync_games_by_puuid command without any pre-configured scope.",

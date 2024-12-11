@@ -5,6 +5,56 @@
 // source: common/messages.proto
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+function createBaseBytesList() {
+    return { data: [] };
+}
+export const BytesList = {
+    encode(message, writer = new BinaryWriter()) {
+        for (const v of message.data) {
+            writer.uint32(10).bytes(v);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = createBaseBytesList();
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    if (tag !== 10) {
+                        break;
+                    }
+                    message.data.push(reader.bytes());
+                    continue;
+            }
+            if ((tag & 7) === 4 || tag === 0) {
+                break;
+            }
+            reader.skip(tag & 7);
+        }
+        return message;
+    },
+    fromJSON(object) {
+        return { data: globalThis.Array.isArray(object?.data) ? object.data.map((e) => bytesFromBase64(e)) : [] };
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.data?.length) {
+            obj.data = message.data.map((e) => base64FromBytes(e));
+        }
+        return obj;
+    },
+    create(base) {
+        return BytesList.fromPartial(base ?? {});
+    },
+    fromPartial(object) {
+        const message = createBaseBytesList();
+        message.data = object.data?.map((e) => e) || [];
+        return message;
+    },
+};
 function createBaseMessageHeader() {
     return { endpoint: "" };
 }

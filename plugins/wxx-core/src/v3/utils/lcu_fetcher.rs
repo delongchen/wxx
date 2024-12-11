@@ -75,7 +75,10 @@ pub trait LcuFetcher {
         } else {
             let status = response.status().as_u16();
             let result = response.json::<Value>().await.unwrap();
-            println!("[lcu-fetch] endpoint: {}, status: {}, result: {}", endpoint, status, result);
+            println!(
+                "[lcu-fetch] endpoint: {}, status: {}, result: {}",
+                endpoint, status, result
+            );
             Err(AppInternalError::LcuRestError(LcuRestError::NotSuccess))
         }
     }

@@ -7,6 +7,10 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
+export interface BytesList {
+  data: Uint8Array[];
+}
+
 export interface MessageHeader {
   endpoint: string;
 }
@@ -15,6 +19,63 @@ export interface BasicMessage {
   header: MessageHeader | undefined;
   body: Uint8Array;
 }
+
+function createBaseBytesList(): BytesList {
+  return { data: [] };
+}
+
+export const BytesList: MessageFns<BytesList> = {
+  encode(message: BytesList, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.data) {
+      writer.uint32(10).bytes(v!);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): BytesList {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseBytesList();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.data.push(reader.bytes());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): BytesList {
+    return { data: globalThis.Array.isArray(object?.data) ? object.data.map((e: any) => bytesFromBase64(e)) : [] };
+  },
+
+  toJSON(message: BytesList): unknown {
+    const obj: any = {};
+    if (message.data?.length) {
+      obj.data = message.data.map((e) => base64FromBytes(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<BytesList>, I>>(base?: I): BytesList {
+    return BytesList.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<BytesList>, I>>(object: I): BytesList {
+    const message = createBaseBytesList();
+    message.data = object.data?.map((e) => e) || [];
+    return message;
+  },
+};
 
 function createBaseMessageHeader(): MessageHeader {
   return { endpoint: "" };

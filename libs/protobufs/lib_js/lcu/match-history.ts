@@ -60,8 +60,8 @@ export interface Team {
   riftHeraldKills: number;
   vilemawKills: number;
   dominionVictoryScore: number;
+  /** bytes bans = 15; */
   win: string;
-  bans: Uint8Array;
 }
 
 export interface Participant {
@@ -853,7 +853,6 @@ function createBaseTeam(): Team {
     vilemawKills: 0,
     dominionVictoryScore: 0,
     win: "",
-    bans: new Uint8Array(0),
   };
 }
 
@@ -900,9 +899,6 @@ export const Team: MessageFns<Team> = {
     }
     if (message.win !== "") {
       writer.uint32(114).string(message.win);
-    }
-    if (message.bans.length !== 0) {
-      writer.uint32(122).bytes(message.bans);
     }
     return writer;
   },
@@ -1012,13 +1008,6 @@ export const Team: MessageFns<Team> = {
 
           message.win = reader.string();
           continue;
-        case 15:
-          if (tag !== 122) {
-            break;
-          }
-
-          message.bans = reader.bytes();
-          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1044,7 +1033,6 @@ export const Team: MessageFns<Team> = {
       vilemawKills: isSet(object.vilemawKills) ? globalThis.Number(object.vilemawKills) : 0,
       dominionVictoryScore: isSet(object.dominionVictoryScore) ? globalThis.Number(object.dominionVictoryScore) : 0,
       win: isSet(object.win) ? globalThis.String(object.win) : "",
-      bans: isSet(object.bans) ? bytesFromBase64(object.bans) : new Uint8Array(0),
     };
   },
 
@@ -1092,9 +1080,6 @@ export const Team: MessageFns<Team> = {
     if (message.win !== "") {
       obj.win = message.win;
     }
-    if (message.bans.length !== 0) {
-      obj.bans = base64FromBytes(message.bans);
-    }
     return obj;
   },
 
@@ -1117,7 +1102,6 @@ export const Team: MessageFns<Team> = {
     message.vilemawKills = object.vilemawKills ?? 0;
     message.dominionVictoryScore = object.dominionVictoryScore ?? 0;
     message.win = object.win ?? "";
-    message.bans = object.bans ?? new Uint8Array(0);
     return message;
   },
 };
@@ -4206,31 +4190,6 @@ export const Timeline_XpPerMinDeltasEntry: MessageFns<Timeline_XpPerMinDeltasEnt
     return message;
   },
 };
-
-function bytesFromBase64(b64: string): Uint8Array {
-  if ((globalThis as any).Buffer) {
-    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
-  } else {
-    const bin = globalThis.atob(b64);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; ++i) {
-      arr[i] = bin.charCodeAt(i);
-    }
-    return arr;
-  }
-}
-
-function base64FromBytes(arr: Uint8Array): string {
-  if ((globalThis as any).Buffer) {
-    return globalThis.Buffer.from(arr).toString("base64");
-  } else {
-    const bin: string[] = [];
-    arr.forEach((byte) => {
-      bin.push(globalThis.String.fromCharCode(byte));
-    });
-    return globalThis.btoa(bin.join(""));
-  }
-}
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 

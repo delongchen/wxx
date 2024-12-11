@@ -1,12 +1,16 @@
 use crate::v3::errors::{AppInternalError, DatabaseQueryError};
 use crate::v3::models::db::{WxxDB, WxxSqlite};
+use prost::Message;
 use sqlx::query::Query;
 use sqlx::sqlite::SqliteArguments;
 use sqlx::{Sqlite, Transaction};
 use std::collections::HashSet;
 use wxx_protobuf::lcu::match_history::Game;
+use wxx_protobuf::lcu::summoner::SummonerBaseInfo;
 
-use crate::v3::commands::tasks::models::{GameRecord, GameWithCreation, TaskContext};
+use crate::v3::commands::tasks::models::{
+    GameRecord, GameWithCreation, SummonerRecord, TaskContext,
+};
 use crate::v3::utils::get_since_the_epoch_ms;
 
 trait TranHelper: Sized {
@@ -34,14 +38,24 @@ pub trait LcuDbHelper: WxxDB {
     async fn query_games_by_puuid(&self, puuid: &str) -> Result<Vec<GameRecord>, AppInternalError> {
         let sql = sqlx::query_as::<Sqlite, GameRecord>(
             "
-SELECT game_summoners.game_id, games.creation, games.version, games.body
-FROM game_summoners
+SELECT game_players.game_id, games.creation, games.version, games.body
+FROM game_players
 JOIN games
-ON game_summoners.game_id = games.game_id
-WHERE game_summoners.puuid = $1
+ON game_players.game_id = games.game_id
+WHERE game_players.puuid = $1
             ",
         )
         .bind(puuid);
+
+        let result = self.fetch(sql).await?;
+
+        Ok(result)
+    }
+
+    async fn query_available_summoners(&self) -> Result<Vec<SummonerRecord>, AppInternalError> {
+        let sql = sqlx::query_as::<Sqlite, SummonerRecord>(
+            "SELECT * FROM summoners WHERE latest_sync != 0",
+        );
 
         let result = self.fetch(sql).await?;
 
@@ -81,8 +95,29 @@ WHERE game_summoners.puuid = $1
         Ok((latest_creation, id_set))
     }
 
+    async fn insert_summoner(&self, summoner: SummonerBaseInfo) -> Result<(), AppInternalError> {
+        let mut buf: Vec<u8> = Vec::new();
+        summoner.encode(&mut buf).unwrap();
+
+        let sql = sqlx::query(
+            "
+INSERT INTO summoners (puuid, latest_sync, body) VALUES ($1, $2, $3)
+ON CONFLICT(puuid) DO UPDATE SET
+body = excluded.body
+            ",
+        )
+        .bind(&summoner.puuid)
+        .bind(0)
+        .bind(&buf);
+
+        self.execute(sql).await?;
+
+        Ok(())
+    }
+
     async fn query_latest_sync_time(&self, puuid: &str) -> Result<i64, AppInternalError> {
-        let sql = sqlx::query_scalar("SELECT time FROM latest_sync WHERE puuid = $1").bind(puuid);
+        let sql =
+            sqlx::query_scalar("SELECT latest_sync FROM summoners WHERE puuid = $1").bind(puuid);
 
         let result = self.scalar::<i64>(sql).await?;
 
@@ -109,9 +144,9 @@ WHERE game_summoners.puuid = $1
     }
 
     async fn insert_latest_sync_time(&self, puuid: &str) -> Result<(), AppInternalError> {
-        let sql = sqlx::query("INSERT OR REPLACE INTO latest_sync (puuid, time) VALUES ($1, $2)")
-            .bind(puuid)
-            .bind(get_since_the_epoch_ms());
+        let sql = sqlx::query("UPDATE summoners SET latest_sync = $1 WHERE puuid = $2")
+            .bind(get_since_the_epoch_ms())
+            .bind(puuid);
 
         self.execute(sql).await?;
 

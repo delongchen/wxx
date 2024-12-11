@@ -559,7 +559,6 @@ function createBaseTeam() {
         vilemawKills: 0,
         dominionVictoryScore: 0,
         win: "",
-        bans: new Uint8Array(0),
     };
 }
 export const Team = {
@@ -605,9 +604,6 @@ export const Team = {
         }
         if (message.win !== "") {
             writer.uint32(114).string(message.win);
-        }
-        if (message.bans.length !== 0) {
-            writer.uint32(122).bytes(message.bans);
         }
         return writer;
     },
@@ -702,12 +698,6 @@ export const Team = {
                     }
                     message.win = reader.string();
                     continue;
-                case 15:
-                    if (tag !== 122) {
-                        break;
-                    }
-                    message.bans = reader.bytes();
-                    continue;
             }
             if ((tag & 7) === 4 || tag === 0) {
                 break;
@@ -732,7 +722,6 @@ export const Team = {
             vilemawKills: isSet(object.vilemawKills) ? globalThis.Number(object.vilemawKills) : 0,
             dominionVictoryScore: isSet(object.dominionVictoryScore) ? globalThis.Number(object.dominionVictoryScore) : 0,
             win: isSet(object.win) ? globalThis.String(object.win) : "",
-            bans: isSet(object.bans) ? bytesFromBase64(object.bans) : new Uint8Array(0),
         };
     },
     toJSON(message) {
@@ -779,9 +768,6 @@ export const Team = {
         if (message.win !== "") {
             obj.win = message.win;
         }
-        if (message.bans.length !== 0) {
-            obj.bans = base64FromBytes(message.bans);
-        }
         return obj;
     },
     create(base) {
@@ -803,7 +789,6 @@ export const Team = {
         message.vilemawKills = object.vilemawKills ?? 0;
         message.dominionVictoryScore = object.dominionVictoryScore ?? 0;
         message.win = object.win ?? "";
-        message.bans = object.bans ?? new Uint8Array(0);
         return message;
     },
 };
@@ -3625,31 +3610,6 @@ export const Timeline_XpPerMinDeltasEntry = {
         return message;
     },
 };
-function bytesFromBase64(b64) {
-    if (globalThis.Buffer) {
-        return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
-    }
-    else {
-        const bin = globalThis.atob(b64);
-        const arr = new Uint8Array(bin.length);
-        for (let i = 0; i < bin.length; ++i) {
-            arr[i] = bin.charCodeAt(i);
-        }
-        return arr;
-    }
-}
-function base64FromBytes(arr) {
-    if (globalThis.Buffer) {
-        return globalThis.Buffer.from(arr).toString("base64");
-    }
-    else {
-        const bin = [];
-        arr.forEach((byte) => {
-            bin.push(globalThis.String.fromCharCode(byte));
-        });
-        return globalThis.btoa(bin.join(""));
-    }
-}
 function longToNumber(int64) {
     const num = globalThis.Number(int64.toString());
     if (num > globalThis.Number.MAX_SAFE_INTEGER) {

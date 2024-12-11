@@ -1,10 +1,10 @@
+use crate::v3::utils::get_since_the_epoch_ms;
 use prost::Message;
 use serde_json::{json, Value};
 use sqlx::FromRow;
 use std::collections::HashSet;
 use tauri::ipc::Channel;
 use wxx_protobuf::lcu::match_history::Game;
-use crate::v3::utils::get_since_the_epoch_ms;
 
 const H_MS: i64 = 60 * 60 * 1000;
 pub const MAX_SAFE_EXCEPTED_GAME_COUNT: u32 = 200;
@@ -24,14 +24,19 @@ pub struct GameRecord {
     pub body: Vec<u8>,
 }
 
+#[derive(FromRow)]
+pub struct SummonerRecord {
+    pub puuid: String,
+    pub latest_sync: i64,
+    pub body: Vec<u8>,
+}
+
 impl GameRecord {
     pub fn from_game(game: &Game) -> Self {
         let game_id = game.game_id as i64;
         let creation = game.game_creation as i64;
         let version = game.game_version.clone();
-
-        let mut body: Vec<u8> = Vec::new();
-        game.encode(&mut body).unwrap();
+        let body = game.encode_to_vec();
 
         Self {
             game_id,
@@ -41,9 +46,7 @@ impl GameRecord {
         }
     }
 
-    pub fn to_game(&self) -> Game {
-        Game::decode(self.body.as_slice()).unwrap()
-    }
+    // pub fn to_game(&self) -> Game { Game::decode(self.body.as_slice()).unwrap() }
 }
 
 #[derive(Debug)]

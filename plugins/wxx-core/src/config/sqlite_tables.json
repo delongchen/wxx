@@ -13,6 +13,7 @@
     "summoners",
     [
       "puuid CHAR(36) PRIMARY KEY NOT NULL",
+      "latest_sync INTEGER",
       "body BLOB NOT NULL"
     ]
   ],
@@ -30,13 +31,6 @@
       "PRIMARY KEY (game_id, puuid)",
       "FOREIGN KEY (game_id) REFERENCES games(game_id) ON DELETE CASCADE",
       "FOREIGN KEY (puuid) REFERENCES players(puuid) ON DELETE CASCADE"
-    ]
-  ],
-  [
-    "latest_sync",
-    [
-      "puuid CHAR(36) PRIMARY KEY NOT NULL",
-      "time INTEGER"
     ]
   ]
 ]

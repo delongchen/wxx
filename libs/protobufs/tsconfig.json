@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "rootDir": "./lib",
+    "rootDir": "./lib_js",
     "baseUrl": ".",
     "strict": true,
     "paths": {
@@ -15,7 +15,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "./lib/**/*.ts"
+    "./lib_js/**/*.ts"
   ],
   "exclude": [
     "node_modules"

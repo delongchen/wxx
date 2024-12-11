@@ -13,6 +13,8 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
         .invoke_handler(tauri::generate_handler![
             v3::commands::core::lcu_fetch,
             v3::commands::tasks::sync_game_history::sync_games_by_puuid,
+            v3::commands::tasks::query_game::query_game,
+            v3::commands::tasks::query_game::query_summoners,
         ])
         .setup(|app, _api| {
             app.manage(v3::models::app::states::AppState::default());

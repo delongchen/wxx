@@ -9,7 +9,10 @@ fn main() -> Result<()> {
     config.type_attribute(".", "#[derive(serde::Serialize, serde::Deserialize)]");
     config.type_attribute(".", "#[serde(rename_all = \"camelCase\")]");
 
-    config.compile_protos(&["src_proto/lcu/*.proto"], &["src_proto"])?;
+    config.compile_protos(
+        &["src_proto/lcu/*.proto", "src_proto/common/*.proto"],
+        &["src_proto"],
+    )?;
 
     Ok(())
 }

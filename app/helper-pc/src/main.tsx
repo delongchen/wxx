@@ -10,6 +10,7 @@ import './styles/index.css';
 
 import WxxPower from '@/plugins/wxx-power';
 import WxxNiuma from '@/plugins/wxx-niuma';
+import WxxGenshin from '@/plugins/wxx-genshin';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
@@ -32,6 +33,7 @@ const render = () => {
 const main = async () => {
   await use(WxxPower);
   await use(WxxNiuma);
+  await use(WxxGenshin);
 
   render();
 };

@@ -6,16 +6,17 @@ use tauri::State;
 
 mod fetch_game_details;
 mod fetch_game_history;
+mod fetch_summoner;
 mod selector;
 
 use crate::v3::commands::tasks::db_helper::LcuDbHelper;
+use crate::v3::commands::tasks::models::MessageSender;
 use fetch_game_details::fetch_game_details;
 use fetch_game_history::fetch_game_history;
-use crate::v3::commands::tasks::models::MessageSender;
 use selector::is_good_dld;
 
 const END_WITHOUT_ERROR: u8 = 0;
-const LCU_NOT_FOUND: u8 = 1;
+const LCU_OR_SUMMONER_NOT_FOUND: u8 = 1;
 const END_WITH_ERROR: u8 = 2;
 
 #[tauri::command]
@@ -32,7 +33,15 @@ pub async fn sync_games_by_puuid(
     fetcher
         .need_lcu_process_info()
         .await
-        .inspect_err(|_| sender.task_end(LCU_NOT_FOUND))?;
+        .inspect_err(|_| sender.task_end(LCU_OR_SUMMONER_NOT_FOUND))?;
+
+    {
+        let summoner = fetch_summoner::fetch_summoner(&fetcher, &puuid)
+            .await
+            .inspect_err(|_| sender.task_end(LCU_OR_SUMMONER_NOT_FOUND))?;
+
+        db.insert_summoner(summoner).await?;
+    };
 
     let ctx = db.new_task_ctx_from_cache(&puuid).await?;
 
