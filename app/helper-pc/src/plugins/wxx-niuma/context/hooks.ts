@@ -1,5 +1,6 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { NiumaContext } from './ctx';
+import { getGamesByPuuid } from 'tauri-plugin-wxx-core/api'
 import MatchesParserWorker from '../workers?worker';
 import { NiumaChartDataType } from '../workers/types';
 
@@ -68,6 +69,14 @@ export const useNiumaChartData = (puuid: string) => {
   const [chartData, setChartData] = useState<NiumaChartDataType | null>(null);
 
   const refresh = useCallback(() => {
+    setPending(true);
+
+    getGamesByPuuid(puuid)
+      .then(buf => invoke<NiumaChartDataType>('analyze', { puuid, matchesBuffer: buf }))
+      .then(setChartData)
+      .finally(() => {
+        setPending(false);
+      })
   }, [puuid]);
 
   useEffect(refresh, []);

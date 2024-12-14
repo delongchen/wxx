@@ -1,7 +1,6 @@
 import { PropsWithChildren } from 'react';
 import type { SummonerInfo } from 'tauri-plugin-wxx-core';
-import { Box, Flex, IconButton, Spacer } from '@chakra-ui/react';
-import { VscClose, VscRefresh, VscStarFull } from 'react-icons/vsc';
+import { Flex, Spacer } from '@chakra-ui/react';
 import PlayerPersona from './PlayerPersona.tsx';
 
 type SummonerCardProps = PropsWithChildren<{
@@ -16,24 +15,11 @@ function SummonerCard({ children, summoner, main, bg = 'white' }: SummonerCardPr
 
   return (
     <Flex p="2" m="4" bg={bg} borderRadius="12px" pos="relative">
-      {!isMainCard && (
-        <Box pos="absolute" right="0" top="0">
-          <IconButton colorPalette="yellow" size="xs" ml="1">
-            <VscStarFull color="yellow" />
-          </IconButton>
-          <IconButton colorPalette="green" size="xs" ml="1">
-            <VscRefresh />
-          </IconButton>
-          <IconButton colorPalette="red" size="xs" ml="1">
-            <VscClose />
-          </IconButton>
-        </Box>
-      )}
       <PlayerPersona
         profileIcon={profileIconId}
         gameName={gameName}
         tagLine={tagLine}
-        nameBadge={isMainCard ? ['green', 'online'] : undefined}
+        nameBadge={isMainCard ? ['green', '当前登录'] : undefined}
       />
       <Spacer>{children}</Spacer>
     </Flex>

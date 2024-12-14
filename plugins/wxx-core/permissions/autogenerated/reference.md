@@ -89,6 +89,32 @@ Denies the query_game command without any pre-configured scope.
 <tr>
 <td>
 
+`wxx-core:allow-query-summoners`
+
+</td>
+<td>
+
+Enables the query_summoners command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:deny-query-summoners`
+
+</td>
+<td>
+
+Denies the query_summoners command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `wxx-core:allow-sync-games-by-puuid`
 
 </td>

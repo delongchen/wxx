@@ -52,14 +52,26 @@ WHERE game_players.puuid = $1
         Ok(result)
     }
 
-    async fn query_available_summoners(&self) -> Result<Vec<SummonerRecord>, AppInternalError> {
-        let sql = sqlx::query_as::<Sqlite, SummonerRecord>(
-            "SELECT * FROM summoners WHERE latest_sync != 0",
-        );
+    async fn fetch_summoners(
+        &self,
+        full_updated: bool,
+    ) -> Result<Vec<SummonerRecord>, AppInternalError> {
+        let mut sql = String::from("SELECT * FROM summoners");
 
-        let result = self.fetch(sql).await?;
+        if full_updated {
+            sql.push_str(" WHERE latest_sync != 0");
+        }
+
+        let result = self.fetch(sqlx::query_as(&sql)).await?;
 
         Ok(result)
+    }
+
+    async fn delete_summoner(&self, puuid: &str) -> Result<(), AppInternalError> {
+        self.execute(sqlx::query("DELETE FROM summoners WHERE puuid = $1").bind(puuid))
+            .await?;
+
+        Ok(())
     }
 
     async fn query_game_creation_by_puuid(

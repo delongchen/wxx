@@ -1,4 +1,5 @@
 import type { Participant, ParticipantIdentity, Stats, Player } from 'tauri-plugin-wxx-core';
+// import type { Participant, ParticipantIdentity, Stats, Player } from 'wxx-protobufs/lcu.matchHistory'
 
 type KeysByValueType<T, V> = {
   [K in keyof T]: T[K] extends V ? K : never;

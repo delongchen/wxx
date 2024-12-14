@@ -1,11 +1,11 @@
 import { Box, Button, Flex, Input, Text } from '@chakra-ui/react';
 import { ChangeEvent, memo, useCallback, useEffect, useState } from 'react';
 import type { SummonerInfo } from 'tauri-plugin-wxx-core';
-import { getSummonerByName } from 'tauri-plugin-wxx-core/lcu-api/summoner';
+// import { getSummonerByName } from 'tauri-plugin-wxx-core/lcu-api/summoner';
+import { getSummoners } from 'tauri-plugin-wxx-core/api'
 import { useNiumaContext } from '@/plugins/wxx-niuma/context/hooks';
 import { Field } from '@/components/ui/field.tsx';
 import CenterBox from '@/plugins/wxx-niuma/components/CenterBox.tsx';
-import { SummonerStore } from '../core/niuma-task-manager';
 import GameSyncTaskCard from '../components/GameSyncTask.tsx';
 
 
@@ -79,34 +79,32 @@ function HistoryFetchPage() {
   const { currentSummoner } = useNiumaContext();
   const [summoners, setSummoners] = useState<SummonerInfo[]>([]);
 
-  useEffect(() => {
-    SummonerStore.syncToLocal();
-    setSummoners(SummonerStore.readAsArray());
-  }, []);
+  const refresh = useCallback(() => {
+    getSummoners(false).then(result => {
+      console.log(result);
+      setSummoners([])
+    })
+  }, [])
 
-  useEffect(() => {
-    if (currentSummoner !== null) {
-      SummonerStore.fetchAndCache(async () => currentSummoner);
-    }
-  }, [currentSummoner]);
+  useEffect(refresh, []);
 
   const handleFinderSubmit = useCallback(async (name: string) => {
-    await SummonerStore.fetchAndCache(() => getSummonerByName({ name }));
-    setSummoners(SummonerStore.readAsArray());
+    console.log(name);
   }, []);
 
   if (currentSummoner === null) return LcuUnusable;
+
+  const cards = summoners
+    .filter(summoner => summoner.puuid !== currentSummoner.puuid)
+    .map(summoner => (
+      <GameSyncTaskCard key={summoner.puuid} summoner={summoner} />
+    ))
 
   return (
     <Box p="2">
       <GameSyncTaskCard summoner={currentSummoner} main={true} />
       <SummonerFinder onNameSubmit={handleFinderSubmit} />
-      {summoners
-        .filter(summoner => summoner.puuid !== currentSummoner.puuid)
-        .map(summoner => (
-          <GameSyncTaskCard key={summoner.puuid} summoner={summoner} />
-        ))
-      }
+      {cards.length !== 0 ? (cards) : (<></>)}
     </Box>
   );
 }

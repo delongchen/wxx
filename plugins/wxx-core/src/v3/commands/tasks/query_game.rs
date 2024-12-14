@@ -4,6 +4,7 @@ use crate::v3::models::db::WxxSqlite;
 use prost::Message;
 use tauri::State;
 use wxx_protobuf::common::BytesList;
+use wxx_protobuf::lcu::summoner::SummonerBaseInfo;
 
 async fn query_games_by_puuid(db: &WxxSqlite, puuid: &str) -> Result<Vec<u8>, CommandError> {
     let data = db
@@ -11,17 +12,6 @@ async fn query_games_by_puuid(db: &WxxSqlite, puuid: &str) -> Result<Vec<u8>, Co
         .await?
         .into_iter()
         .map(|it| it.body)
-        .collect::<Vec<_>>();
-
-    Ok(BytesList { data }.encode_to_vec())
-}
-
-async fn query_full_updated_summoners(db: &WxxSqlite) -> Result<Vec<u8>, CommandError> {
-    let data = db
-        .query_available_summoners()
-        .await?
-        .into_iter()
-        .map(|item| item.body)
         .collect::<Vec<_>>();
 
     Ok(BytesList { data }.encode_to_vec())
@@ -37,11 +27,36 @@ pub async fn query_game(
     Ok(tauri::ipc::Response::new(result))
 }
 
+#[derive(serde::Serialize)]
+pub struct SummonerQueryEntry {
+    summoner: SummonerBaseInfo,
+    latest_sync: i64,
+}
+
 #[tauri::command]
 pub async fn query_summoners(
     db: State<'_, WxxSqlite>,
-) -> Result<tauri::ipc::Response, CommandError> {
-    Ok(tauri::ipc::Response::new(
-        query_full_updated_summoners(&db).await?,
-    ))
+    action: String,
+    puuid: String,
+    full_updated: bool,
+) -> Result<Option<Vec<SummonerQueryEntry>>, CommandError> {
+    match action.as_str() {
+        "get" => {
+            let records = db.fetch_summoners(full_updated).await?;
+            Ok(Some(
+                records
+                    .iter()
+                    .map(|item| SummonerQueryEntry {
+                        summoner: SummonerBaseInfo::decode(item.body.as_slice()).unwrap(),
+                        latest_sync: item.latest_sync,
+                    })
+                    .collect(),
+            ))
+        }
+        "del" => {
+            db.delete_summoner(&puuid).await?;
+            Ok(None)
+        }
+        _ => Ok(None),
+    }
 }

@@ -4,9 +4,11 @@ import type {
   NiumaAnalyzeProps, NiumaChartDataType,
   DataStatistic,
 } from '../types';
-import { parseMatchesBuffer } from '../parse';
+import type { Game } from 'tauri-plugin-wxx-core'
+import { BytesList } from 'wxx-protobufs/common'
+import { Game as GameProto } from 'wxx-protobufs/lcu.matchHistory'
 import { invokeTasks } from './tasks';
-import { MatchAnalyzeHelper } from './analyze-helper.ts';
+import { MatchAnalyzeHelper } from './analyze-helper';
 
 const createAnalyzeContext = (mainPuuid: string, reports: MatchReport[]): NiumaAnalyzeContext => {
   const dataVecMap: Record<string, number[]> = {};
@@ -46,10 +48,30 @@ const createAnalyzeContext = (mainPuuid: string, reports: MatchReport[]): NiumaA
   };
 };
 
+const isGame = (raw: unknown): raw is Game => {
+  return typeof raw === 'object' && raw !== null;
+}
+
+const parseBufferToGames = (buf: ArrayBuffer) => {
+  const { data } = BytesList.decode(new Uint8Array(buf));
+  const result: Game[] = [];
+
+  for (const buf of data) {
+    const game = GameProto.decode(buf)
+    if (isGame(game)) {
+      result.push(game)
+    }
+  }
+
+  return result
+}
+
 export const analyzeMatches = (props: NiumaAnalyzeProps): NiumaChartDataType => {
   const { puuid, matchesBuffer } = props;
-  const rawGames = parseMatchesBuffer(matchesBuffer);
-  const games = rawGames.map(it => new MatchAnalyzeHelper(it));
+
+  const games = parseBufferToGames(matchesBuffer)
+    .map(item => new MatchAnalyzeHelper(item))
+
   const reports = games
     .map(game => game.genMatchReport(puuid))
     .filter(report => report !== null) as MatchReport[];
