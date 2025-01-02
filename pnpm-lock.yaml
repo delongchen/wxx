@@ -164,7 +164,15 @@ importers:
         specifier: ^1.3.4
         version: 1.3.4(@algolia/client-search@5.4.1)(@types/node@22.10.2)(@types/react@18.3.13)(postcss@8.4.49)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass-embedded@1.82.0)(sass@1.79.4)(search-insights@2.17.2)(typescript@5.7.2)
 
-  libs/beat-router: {}
+  libs/beat-router:
+    dependencies:
+      fast-xml-parser:
+        specifier: ^4.5.1
+        version: 4.5.1
+    devDependencies:
+      '@types/node':
+        specifier: ^20.17.10
+        version: 20.17.10
 
   libs/protobufs:
     dependencies:
@@ -2529,6 +2537,10 @@ packages:
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
 
+  fast-xml-parser@4.5.1:
+    resolution: {integrity: sha512-y655CeyUQ+jj7KBbYMc4FG01V8ZQqjN+gDYGJ50RtfsUB8iG9AmwmwoAgeKLJdmueKKMrH1RJ7yXHTSoczdv5w==}
+    hasBin: true
+
   fastq@1.17.1:
     resolution: {integrity: sha512-sRVD3lWVIXWg6By68ZN7vho9a1pQcN/WBFaAAsDDFzlJjvoGx0P8z7V1t72grFJfJhu3YPZBuu25f7Kaw2jN1w==}
 
@@ -3686,6 +3698,9 @@ packages:
   strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
+
+  strnum@1.0.5:
+    resolution: {integrity: sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==}
 
   stylis@4.2.0:
     resolution: {integrity: sha512-Orov6g6BB1sDfYgzWfTHDOxamtX1bE/zo104Dh9e6fqJ3PooipYyfJ0pUmrZO2wAvO8YbEyeFrkV91XTsGMSrw==}
@@ -5202,7 +5217,7 @@ snapshots:
 
   '@types/accepts@1.3.7':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 20.17.10
 
   '@types/babel__core@7.20.5':
     dependencies:
@@ -5228,11 +5243,11 @@ snapshots:
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 22.10.2
+      '@types/node': 20.17.10
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 20.17.10
 
   '@types/content-disposition@0.5.8': {}
 
@@ -5241,7 +5256,7 @@ snapshots:
       '@types/connect': 3.4.38
       '@types/express': 4.17.21
       '@types/keygrip': 1.0.6
-      '@types/node': 22.10.2
+      '@types/node': 20.17.10
 
   '@types/estree@1.0.5': {}
 
@@ -5249,7 +5264,7 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.5':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 20.17.10
       '@types/qs': 6.9.17
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -5286,7 +5301,7 @@ snapshots:
       '@types/http-errors': 2.0.4
       '@types/keygrip': 1.0.6
       '@types/koa-compose': 3.2.8
-      '@types/node': 22.10.2
+      '@types/node': 20.17.10
 
   '@types/koa__router@12.0.4':
     dependencies:
@@ -5314,6 +5329,7 @@ snapshots:
   '@types/node@22.10.2':
     dependencies:
       undici-types: 6.20.0
+    optional: true
 
   '@types/parse-json@4.0.2': {}
 
@@ -5342,12 +5358,12 @@ snapshots:
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 22.10.2
+      '@types/node': 20.17.10
 
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 22.10.2
+      '@types/node': 20.17.10
       '@types/send': 0.17.4
 
   '@types/unist@3.0.3': {}
@@ -5358,7 +5374,7 @@ snapshots:
 
   '@types/ws@8.5.12':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 20.17.10
 
   '@typescript-eslint/eslint-plugin@7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.7.2))(eslint@8.57.1)(typescript@5.7.2)':
     dependencies:
@@ -6853,6 +6869,10 @@ snapshots:
 
   fast-levenshtein@2.0.6: {}
 
+  fast-xml-parser@4.5.1:
+    dependencies:
+      strnum: 1.0.5
+
   fastq@1.17.1:
     dependencies:
       reusify: 1.0.4
@@ -8118,6 +8138,8 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
+  strnum@1.0.5: {}
+
   stylis@4.2.0: {}
 
   superjson@2.2.1:
@@ -8297,7 +8319,8 @@ snapshots:
 
   undici-types@6.19.8: {}
 
-  undici-types@6.20.0: {}
+  undici-types@6.20.0:
+    optional: true
 
   unist-util-is@6.0.0:
     dependencies:

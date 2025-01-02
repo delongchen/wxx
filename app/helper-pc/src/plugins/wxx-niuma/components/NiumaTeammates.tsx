@@ -10,7 +10,7 @@ interface NiumaTeammatesProps {
 
 function NiumaTeammates(props: NiumaTeammatesProps) {
   const { chartData } = props;
-  const teammateTuples = chartData.state['teammates'] as [string, number, number][];
+  const teammateTuples = chartData.state['teammates'] as [string, number, number][] ?? [];
 
   if (teammateTuples.length === 0) {
     return (

@@ -1,12 +1,19 @@
-interface BeatElement {
-  tag: string;
-  key: string;
-  props?: unknown;
+import { XMLParser } from 'fast-xml-parser'
+import { readFile } from 'node:fs/promises'
+
+const main = async () => {
+  const parser = new XMLParser({
+    ignoreAttributes: false,
+    preserveOrder: true,
+    commentPropName: '#comment',
+    attributeNamePrefix: '',
+  })
+
+  const buf = await readFile('../books/wx/index.xml')
+
+  const out = JSON.stringify(parser.parse(buf), null, 2)
+
+  console.log(out);
 }
 
-type BeatComponent = <T>(props?: T) => (BeatElement | BeatElement[] | null);
-
-type Beat = BeatElement | BeatComponent;
-
-const beats: Beat[] = [
-]
+main().catch(console.error)

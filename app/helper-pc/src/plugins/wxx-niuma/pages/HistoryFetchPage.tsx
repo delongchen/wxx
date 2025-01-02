@@ -9,9 +9,14 @@ import CenterBox from '@/plugins/wxx-niuma/components/CenterBox.tsx';
 import GameSyncTaskCard from '../components/GameSyncTask.tsx';
 
 
-const checkTagLine = (tagLine: string): boolean => {
-  return tagLine.length === 5 && ![...tagLine].map(n => +n).some(window.isNaN);
-};
+interface SummonerFinderProps {
+  onNameSubmit: (name: string, tagLine: string) => void
+}
+
+const checkTagLine = (tagLine: string) => (
+  tagLine.length === 5 &&
+  ![...tagLine].map(n => +n).some(window.isNaN)
+)
 
 const LcuUnusable = (
   <CenterBox>
@@ -26,24 +31,29 @@ const LcuUnusable = (
   </CenterBox>
 );
 
-function SummonerFinder(props: { onNameSubmit: (name: string) => void }) {
+const useElementValueCallback = (cb: (value: string) => void) => {
+  return useCallback((ev: ChangeEvent) => {
+    cb(Reflect.get(ev.target, 'value') as string);
+  }, [])
+}
+
+function SummonerFinder({ onNameSubmit }: SummonerFinderProps) {
   const { theme } = useNiumaContext();
 
   const [summonerName, setSummonerName] = useState<string>('');
   const [tagLine, setTagLine] = useState<string>('');
 
-  const handleNameInput = useCallback((ev: ChangeEvent) => {
-    setSummonerName(Reflect.get(ev.target, 'value') as string);
-  }, []);
-
-  const handleTagInput = useCallback((ev: ChangeEvent) => {
-    setTagLine(Reflect.get(ev.target, 'value') as string);
-  }, []);
-
-  const handleCheckClick = () => {
-    props.onNameSubmit(encodeURIComponent(`${summonerName}#${tagLine}`));
+  const handleNameInput = useElementValueCallback(setSummonerName)
+  const handleTagInput = useElementValueCallback(setTagLine)
+  const reset = useCallback(() => {
     setSummonerName('');
     setTagLine('');
+  }, [])
+
+  const handleCheckClick = () => {
+    // encodeURIComponent(`${summonerName}#${tagLine}`)
+    onNameSubmit(summonerName, tagLine);
+    reset();
   };
 
   return (
@@ -75,14 +85,19 @@ function SummonerFinder(props: { onNameSubmit: (name: string) => void }) {
   );
 }
 
+const renderTaskCard = (summoner: SummonerInfo) => {
+  return (
+    <GameSyncTaskCard key={summoner.puuid} summoner={summoner} />
+  )
+}
+
 function HistoryFetchPage() {
   const { currentSummoner } = useNiumaContext();
   const [summoners, setSummoners] = useState<SummonerInfo[]>([]);
 
   const refresh = useCallback(() => {
     getSummoners(false).then(result => {
-      console.log(result);
-      setSummoners([])
+      setSummoners(result.map(it => it.summoner as SummonerInfo))
     })
   }, [])
 
@@ -94,17 +109,19 @@ function HistoryFetchPage() {
 
   if (currentSummoner === null) return LcuUnusable;
 
-  const cards = summoners
-    .filter(summoner => summoner.puuid !== currentSummoner.puuid)
-    .map(summoner => (
-      <GameSyncTaskCard key={summoner.puuid} summoner={summoner} />
-    ))
-
   return (
     <Box p="2">
       <GameSyncTaskCard summoner={currentSummoner} main={true} />
       <SummonerFinder onNameSubmit={handleFinderSubmit} />
-      {cards.length !== 0 ? (cards) : (<></>)}
+      {summoners.length !== 0 ? (
+        summoners
+          .filter(it => it.puuid !== currentSummoner.puuid)
+          .map(renderTaskCard)
+      ) : (
+        <>
+
+        </>
+      )}
     </Box>
   );
 }

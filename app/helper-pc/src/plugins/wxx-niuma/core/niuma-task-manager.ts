@@ -8,7 +8,7 @@ export const enum SyncTaskStatus {
   FetchingGameDetails,
 }
 
-const fmtTime = (time: number) => {
+export const fmtTime = (time: number) => {
   const date = new Date(time);
   const hours = date.getHours();
   const minutes = date.getMinutes();

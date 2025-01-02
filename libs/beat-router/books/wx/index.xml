@@ -1,0 +1,9 @@
+<!-- some comments here -->
+<book
+    :data='json!{ "foo": "bar" }'
+    key="genshin"
+    title="genshin"
+    :desc='vec![the best game in the world, this is another desc]'
+>
+    <component is="" />
+</book>

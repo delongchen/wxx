@@ -10,22 +10,38 @@ import { Game as GameProto } from 'wxx-protobufs/lcu.matchHistory'
 import { invokeTasks } from './tasks';
 import { MatchAnalyzeHelper } from './analyze-helper';
 
-const createAnalyzeContext = (mainPuuid: string, reports: MatchReport[]): NiumaAnalyzeContext => {
-  const dataVecMap: Record<string, number[]> = {};
-  const dataStatisticMap: Record<string, DataStatistic> = {};
+const SetKeysMap = new Map<string, Set<string>>();
 
-  const chartData: NiumaChartDataType = {
-    dataVecMap,
-    state: {},
-    dataStatisticMap,
-  };
+const createRecordAndItsProxy = <T>(key: string) => {
+  const record: Record<string, T> = {}
+  const setKeys = new Set<string>();
+  SetKeysMap.set(key, setKeys)
+
+  const proxy = new Proxy(record, {
+    set(target: Record<string, T>, p: string, newValue: unknown, receiver: unknown): boolean {
+      if (setKeys.has(p)) {
+        console.warn(`${key}: ${p} has been set multi times!`)
+      } else {
+        setKeys.add(p)
+      }
+      return Reflect.set(target, p, newValue, receiver);
+    }
+  });
+
+  return [record, proxy];
+}
+
+const createAnalyzeContext = (mainPuuid: string, reports: MatchReport[]): NiumaAnalyzeContext => {
+  const [dataVecMap, dataVecMapProxy] = createRecordAndItsProxy<number[]>('data-vec-map');
+  const [dataStatisticMap, dataStatisticMapProxy] = createRecordAndItsProxy<DataStatistic>('data-statistic-map');
+  const [chartState, chartStateProxy] = createRecordAndItsProxy<unknown>('chart-state');
 
   const mapReportsAndSave = (to: string, fn: (r: MatchReport) => number) => {
-    dataVecMap[to] = reports.map(fn);
+    dataVecMapProxy[to] = reports.map(fn);
   };
 
   const statistical = (key: string) => {
-    const target = dataVecMap[key];
+    const target = dataVecMapProxy[key];
     if (target === undefined || target.length === 0) return;
 
     let max = -Infinity;
@@ -42,9 +58,16 @@ const createAnalyzeContext = (mainPuuid: string, reports: MatchReport[]): NiumaA
   return {
     mainPuuid,
     reports,
+    state: chartStateProxy,
+    dataVecMap: dataVecMapProxy,
+    dataStatisticMap: dataStatisticMapProxy,
     mapReportsAndSave,
     statistical,
-    result: chartData,
+    result: {
+      dataVecMap,
+      dataStatisticMap,
+      state: chartState,
+    },
   };
 };
 
@@ -66,6 +89,12 @@ const parseBufferToGames = (buf: ArrayBuffer) => {
   return result
 }
 
+const showKeysBeenSet = () => {
+  console.debug([...SetKeysMap].map(([key, setKeys]) => {
+    return [key, [...setKeys]];
+  }))
+}
+
 export const analyzeMatches = (props: NiumaAnalyzeProps): NiumaChartDataType => {
   const { puuid, matchesBuffer } = props;
 
@@ -78,6 +107,8 @@ export const analyzeMatches = (props: NiumaAnalyzeProps): NiumaChartDataType => 
 
   const ctx = createAnalyzeContext(puuid, reports);
   invokeTasks(ctx);
+
+  showKeysBeenSet()
 
   return ctx.result;
 };

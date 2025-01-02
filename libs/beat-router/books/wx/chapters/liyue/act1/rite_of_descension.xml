@@ -1,0 +1,61 @@
+<scene:rite_of_descension xmlns:text="text" xmlns:scene="a">
+    <props>
+        <title>Rite of Descension</title>
+        <desc>
+            In the land of Liyue by the sea, a city
+            sits atop the solid bedrock...
+        </desc>
+    </props>
+    <beat title="Go to Liyue Harbor" />
+    <beat title="Talk to Paimon">
+        <text:paimon>
+            If you wanna find the Geo Archon,
+            this is the only chance you'll get all year.
+        </text:paimon>
+        <text:paimon>
+            Guess it's a good thing Venti brought it up earlier,
+            otherwise we definitely would've missed this year's Rite of Descension.
+        </text:paimon>
+        <select>
+            <option value="Do you know when it is?">
+                <text:paimon>Uhh... might be today, might also be tomorrow...</text:paimon>
+            </option>
+            <option value="Do you know where it is?">
+                <text:paimon>
+                    Well, Venti brought up the time, but Paimon... knows nothing about where it is... Ehe.
+                </text:paimon>
+            </option>
+        </select>
+        <text:paimon>
+            Look, we're already in Liyue so let's go ask some of the locals.
+        </text:paimon>
+        <text:paimon>
+            Oh, right. About the Geo Archon, "Morax..."
+        </text:paimon>
+        <text:paimon>
+            Did you know? The Mora that we use is named after this god.
+        </text:paimon>
+        <text:paimon>
+            But it's seen as impolite for people from outside Liyue to refer to the Geo archon by that name.
+        </text:paimon>
+        <text:paimon>
+            So we should refer to the Geo Archon by the name Rex Lapis, like the people of Liyue do.
+        </text:paimon>
+    </beat>
+    <beat title="Talk to the locals">
+        <select>
+            <option value="Guanhai">
+                <import src="./components/talk_to_guanhai.xml" />
+            </option>
+            <option value="Linlang">
+                <import src="./components/talk_to_linlang.xml" />
+            </option>
+        </select>
+    </beat>
+    <beat title="Go to Yujing Terrace">
+        <text:paimon>
+            Paimon heard that the best time to make a wish is today,
+            during the Rite of Descension. {main.name}, wanna give it a try?
+        </text:paimon>
+    </beat>
+</scene:rite_of_descension>

@@ -3,10 +3,42 @@ import { NiumaContext } from './ctx';
 import { getGamesByPuuid } from 'tauri-plugin-wxx-core/api'
 import MatchesParserWorker from '../workers?worker';
 import { NiumaChartDataType } from '../workers/types';
+import { getVersions, ChampionComplex, getChampions } from '../api/dragon';
 
 export const useNiumaContext = () => {
   return useContext(NiumaContext);
 };
+
+export const useLolChampions = (version: string, lang: 'zh_CN' | 'en_US') => {
+  const [champions, setChampions] = useState<ChampionComplex | null>(null)
+
+  useEffect(() => {
+    getChampions(version, lang)
+      .then(setChampions)
+      .catch(() => {
+        setChampions(null);
+      })
+  }, []);
+
+  return champions;
+}
+
+export const useLolLatestVersion = () => {
+  const [latestVersion, setLatestVersion] = useState('14.24.1')
+
+  useEffect(() => {
+    getVersions()
+      .then(versions => {
+        if (versions.length > 0) {
+          setLatestVersion(versions[0])
+        }
+      })
+  }, []);
+
+  return {
+    latestVersion,
+  }
+}
 
 type TaskHandler<T = unknown> = [(value: T | Promise<T>) => void, (reason?: unknown) => void];
 
@@ -63,6 +95,40 @@ export const useMatchesParserWorker = () => {
   };
 };
 
+interface ChartDataExt extends NiumaChartDataType {
+  showUsage?: () => void
+}
+
+/**
+ * for development
+ * show path that is using
+ */
+const createChartDataProxy = (raw: NiumaChartDataType) => {
+  const topLevelEntries = Object.entries(raw) as [string, Record<string, unknown>][];
+  const pathSet = new Set<string>();
+  const usedPathSet = new Set<string>();
+
+  for (const [key, record] of topLevelEntries) {
+    for (const subKey of Object.keys(record)) {
+      pathSet.add(`${key}.${subKey}`);
+    }
+
+    Reflect.set(raw, key, new Proxy(record, {
+      get(target: Record<string, unknown>, p: string, receiver: unknown): unknown {
+        usedPathSet.add(`${key}.${p}`)
+        return Reflect.get(target, p, receiver);
+      }
+    }))
+  }
+
+  Reflect.set(raw, 'showUsage', () => {
+    console.log('used path set: ', [...usedPathSet]);
+    console.log('unused path set: ', [...pathSet].filter(it => !usedPathSet.has(it)));
+  })
+
+  return raw
+}
+
 export const useNiumaChartData = (puuid: string) => {
   const { invoke } = useNiumaContext();
   const [pending, setPending] = useState(false);
@@ -73,6 +139,7 @@ export const useNiumaChartData = (puuid: string) => {
 
     getGamesByPuuid(puuid)
       .then(buf => invoke<NiumaChartDataType>('analyze', { puuid, matchesBuffer: buf }))
+      .then(createChartDataProxy)
       .then(setChartData)
       .finally(() => {
         setPending(false);
@@ -80,6 +147,13 @@ export const useNiumaChartData = (puuid: string) => {
   }, [puuid]);
 
   useEffect(refresh, []);
+
+  useEffect(() => {
+    if (chartData !== null) {
+      const data = chartData as ChartDataExt
+      data.showUsage && data.showUsage();
+    }
+  }, [chartData]);
 
   return {
     pending,

@@ -9,6 +9,14 @@ const gatherBaseInfo: AnalyzeTask = ctx => {
   ctx.mapReportsAndSave('creation', report => report.gameCreation);
   ctx.mapReportsAndSave('win', report => report.win ? 1 : 0);
   ctx.mapReportsAndSave('champion', report => report.championId);
+  ctx.mapReportsAndSave('gameId', report => report.gameId)
+  ctx.mapReportsAndSave('kda', report => {
+    const k = report.gameDataRaw['kills']
+    const d = report.gameDataRaw['deaths']
+    const a = report.gameDataRaw['assists']
+
+    return ((100 * ((k + a) / 3 * d)) << 0) / 100
+  })
 
   for (const key of TeamStatsKeys) {
     ctx.mapReportsAndSave(key, report => report.gameDataRaw[key]);
@@ -17,18 +25,18 @@ const gatherBaseInfo: AnalyzeTask = ctx => {
 };
 
 const countChampions: AnalyzeTask = ctx => {
-  const { state, dataVecMap } = ctx.result;
+  const { state, dataVecMap } = ctx;
 
   state['championUsage'] = countMatch(
     dataVecMap['champion'],
     dataVecMap['win'],
     it => it,
-    true,
+    false,
   );
 };
 
 const countTeammates: AnalyzeTask = ctx => {
-  const { state, dataVecMap } = ctx.result;
+  const { state, dataVecMap } = ctx;
   const teammatesVec = ctx.reports.map(report => report.teammates);
 
   state['teammates'] = countMatch(
@@ -40,7 +48,7 @@ const countTeammates: AnalyzeTask = ctx => {
 };
 
 const countGamesByDay: AnalyzeTask = ctx => {
-  const { state, dataVecMap } = ctx.result;
+  const { state, dataVecMap } = ctx;
 
   state['daily'] = countMatch(
     dataVecMap['creation'],
@@ -50,7 +58,7 @@ const countGamesByDay: AnalyzeTask = ctx => {
 };
 
 const countItems: AnalyzeTask = ctx => {
-  const { reports, result } = ctx;
+  const { reports } = ctx;
 
   const globalMap: Map<number, number> = new Map();
   const versionMap: Map<string, Map<number, number>> = new Map();
@@ -87,12 +95,11 @@ const countItems: AnalyzeTask = ctx => {
     .map<[string, [number, number][]]>(([version, map]) => [
       version,
       [...map]
-        .map((kv) => kv)
         .filter(filterBaseItem)
         .sort((a, b) => b[1] - a[1]),
     ]);
 
-  result.state['items'] = {
+  ctx.state['items'] = {
     versions,
     all: [...globalMap]
       .filter(filterBaseItem)
@@ -101,8 +108,7 @@ const countItems: AnalyzeTask = ctx => {
 };
 
 const reducePlayers: AnalyzeTask = ctx => {
-  const { reports } = ctx;
-  const { state } = ctx.result;
+  const { reports, state } = ctx;
   const playerMap: Map<string, Player> = new Map;
 
   for (const { teammates } of reports) {

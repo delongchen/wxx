@@ -17,5 +17,9 @@
     "README.md"
   ],
   "devDependencies": {
+    "@types/node": "^20.17.10"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.5.1"
   }
 }

@@ -40,7 +40,7 @@ export const TeamStatsKeys: GameNumStatsKey[] = [
   /** Total Damage */
   'totalDamageDealtToChampions',
   // 'totalDamageDealt',
-  // 'totalDamageTaken',
+  'totalDamageTaken',
 
   /** Other */
   'totalHeal',
@@ -61,7 +61,7 @@ export interface NiumaChartDataType {
   dataStatisticMap: Record<string, DataStatistic>;
 }
 
-export interface NiumaAnalyzeContext {
+export interface NiumaAnalyzeContext extends NiumaChartDataType {
   mainPuuid: string;
   reports: MatchReport[];
   result: NiumaChartDataType;
