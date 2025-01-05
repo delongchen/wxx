@@ -1,7 +1,6 @@
 import { Box, Button, Flex, Input, Text } from '@chakra-ui/react';
 import { ChangeEvent, memo, useCallback, useEffect, useState } from 'react';
 import type { SummonerInfo } from 'tauri-plugin-wxx-core';
-// import { getSummonerByName } from 'tauri-plugin-wxx-core/lcu-api/summoner';
 import { getSummoners } from 'tauri-plugin-wxx-core/api'
 import { useNiumaContext } from '@/plugins/wxx-niuma/context/hooks';
 import { Field } from '@/components/ui/field.tsx';
@@ -96,15 +95,16 @@ function HistoryFetchPage() {
   const [summoners, setSummoners] = useState<SummonerInfo[]>([]);
 
   const refresh = useCallback(() => {
-    getSummoners(false).then(result => {
-      setSummoners(result.map(it => it.summoner as SummonerInfo))
-    })
+    getSummoners(false)
+      .then(result => {
+        setSummoners(result.map(it => it.summoner as SummonerInfo))
+      })
   }, [])
 
   useEffect(refresh, []);
 
-  const handleFinderSubmit = useCallback(async (name: string) => {
-    console.log(name);
+  const handleFinderSubmit = useCallback(async (name: string, tagLine: string) => {
+    console.log(name, tagLine);
   }, []);
 
   if (currentSummoner === null) return LcuUnusable;
@@ -113,13 +113,13 @@ function HistoryFetchPage() {
     <Box p="2">
       <GameSyncTaskCard summoner={currentSummoner} main={true} />
       <SummonerFinder onNameSubmit={handleFinderSubmit} />
-      {summoners.length !== 0 ? (
+      {summoners.length > 0 ? (
         summoners
           .filter(it => it.puuid !== currentSummoner.puuid)
           .map(renderTaskCard)
       ) : (
         <>
-
+          <p>nothing to show</p>
         </>
       )}
     </Box>

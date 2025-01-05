@@ -18,13 +18,7 @@ const render = () => {
   root.render(
     <ChakraProvider value={defaultSystem}>
       <ReactReduxProvider store={store}>
-        <BrowserRouter
-          future={{
-            v7_startTransition: true,
-          }}
-        >
-          <App />
-        </BrowserRouter>
+        <BrowserRouter><App /></BrowserRouter>
       </ReactReduxProvider>
     </ChakraProvider>,
   );

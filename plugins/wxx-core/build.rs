@@ -3,7 +3,7 @@ const COMMANDS: &[&str] = &[
     "sync_games_by_puuid",
     "fetch_game_history",
     "query_game",
-    "query_summoners"
+    "query_summoners",
 ];
 
 fn main() {

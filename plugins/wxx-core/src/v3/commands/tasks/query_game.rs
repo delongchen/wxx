@@ -43,6 +43,7 @@ pub async fn query_summoners(
     match action.as_str() {
         "get" => {
             let records = db.fetch_summoners(full_updated).await?;
+
             Ok(Some(
                 records
                     .iter()
