@@ -1,8 +1,8 @@
 import type { NiumaChartDataType } from '../workers/types';
-import { useNiumaContext } from '../context/hooks';
 import { ChampionComplex, LolChampionRaw } from '../api/dragon';
-import { memo } from 'react';
+import { memo, use, Suspense } from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
+import { LolContext } from '../context/lol'
 
 interface NiumaChampionUsageProps {
   chartData: NiumaChartDataType;
@@ -64,12 +64,6 @@ const ChampionCard = ({ champion, title, subTitle }: ChampionCardProps) => {
 }
 
 function NiumaChampionUsage({ chartData }: NiumaChampionUsageProps) {
-  const { champions } = useNiumaContext();
-
-  if (champions === null) {
-    return null
-  }
-
   const { state } = chartData
   const championUsage = (state['championUsage'] as [number, number, number][])
     .filter(it => it[1] > 2)
@@ -79,6 +73,9 @@ function NiumaChampionUsage({ chartData }: NiumaChampionUsageProps) {
       <></>
     )
   }
+
+  const { championsPromise } = use(LolContext)
+  const champions = use(championsPromise)
 
   const championMap = makeChampionIndex(champions)
   const [maxTotal, minTotal] = sortAndMostLeast(championUsage.map(it => it[1]), (a, b) => b - a)
@@ -94,18 +91,22 @@ function NiumaChampionUsage({ chartData }: NiumaChampionUsageProps) {
     const sub = `${(100 * tuple[2] / tuple[1]) << 0}% / ${tuple[1]}场次`
 
     return (
-      <ChampionCard champion={champion} title={title} subTitle={sub} />
+      <ChampionCard
+        champion={champion}
+        title={title}
+        subTitle={sub}
+      />
     )
   }
 
   return (
-    <>
+    <Suspense fallback={null}>
       <Flex justifyContent="space-around">
         {renderCard(mostSelected, '最爱英雄')}
         {renderCard(mostValue, '最有价值英雄')}
         {renderCard(leastValue, '最废英雄')}
       </Flex>
-    </>
+    </Suspense>
   )
 }
 

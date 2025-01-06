@@ -1,8 +1,8 @@
 import { Box, Button, Flex, Input, Text } from '@chakra-ui/react';
-import { ChangeEvent, memo, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, memo, useCallback, useEffect, useState, use } from 'react';
+import { NiumaContext } from '../context/niuma'
 import type { SummonerInfo } from 'tauri-plugin-wxx-core';
 import { getSummoners } from 'tauri-plugin-wxx-core/api'
-import { useNiumaContext } from '@/plugins/wxx-niuma/context/hooks';
 import { Field } from '@/components/ui/field.tsx';
 import CenterBox from '@/plugins/wxx-niuma/components/CenterBox.tsx';
 import GameSyncTaskCard from '../components/GameSyncTask.tsx';
@@ -37,7 +37,7 @@ const useElementValueCallback = (cb: (value: string) => void) => {
 }
 
 function SummonerFinder({ onNameSubmit }: SummonerFinderProps) {
-  const { theme } = useNiumaContext();
+  const { theme } = use(NiumaContext);
 
   const [summonerName, setSummonerName] = useState<string>('');
   const [tagLine, setTagLine] = useState<string>('');
@@ -91,7 +91,7 @@ const renderTaskCard = (summoner: SummonerInfo) => {
 }
 
 function HistoryFetchPage() {
-  const { currentSummoner } = useNiumaContext();
+  const { currentSummoner } = use(NiumaContext);
   const [summoners, setSummoners] = useState<SummonerInfo[]>([]);
 
   const refresh = useCallback(() => {

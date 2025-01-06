@@ -1,6 +1,7 @@
 import { HStack, Stack, Text, Flex, Badge } from '@chakra-ui/react';
 import { Avatar } from '@/components/ui/avatar';
-import { useNiumaContext } from '../context/hooks'
+import { use } from 'react'
+import { LolContext } from '../context/lol'
 
 interface PlayerPersonaProps {
   profileIcon: number;
@@ -9,11 +10,14 @@ interface PlayerPersonaProps {
   nameBadge?: [string, string];
 }
 
-function PlayerPersona(props: PlayerPersonaProps) {
-  const { profileIcon, gameName, tagLine, nameBadge } = props;
-  const { latestVersion } = useNiumaContext();
+// const getAvatarPNGSrc = () => {}
 
-  const avatarPNGSrc = `https://ddragon.leagueoflegends.com/cdn/${latestVersion}/img/profileicon/${profileIcon}.png`
+function PlayerPersona(
+  { profileIcon, gameName, tagLine, nameBadge }: PlayerPersonaProps,
+) {
+  const { championsPromise } = use(LolContext);
+  const { version } = use(championsPromise);
+  const avatarPNGSrc = `https://ddragon.leagueoflegends.com/cdn/${version}/img/profileicon/${profileIcon}.png`
 
   return (
     <HStack gap="4" p="2">

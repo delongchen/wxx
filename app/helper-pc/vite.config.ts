@@ -5,13 +5,6 @@ import * as path from 'node:path'
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
   plugins: [react()],
-  css: {
-    preprocessorOptions: {
-      sass: {
-        api: 'modern-compiler',
-      }
-    }
-  },
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //

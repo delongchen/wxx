@@ -46,6 +46,8 @@ export interface LolChampionRaw {
   }
 }
 
+type AllowLang = 'zh_CN' | 'en_US'
+
 export interface ChampionComplex {
   version: string;
   data: Record<string, LolChampionRaw>;
@@ -54,14 +56,14 @@ export interface ChampionComplex {
 export const getVersions = async () => {
   return await fetch('https://ddragon.leagueoflegends.com/api/versions.json')
     .then(res => res.json() as Promise<string[]>)
-    .catch(() => [] as string[]);
 }
 
-export const getChampions = async (
-  version: string,
-  lang: 'zh_CN' | 'en_US',
-): Promise<ChampionComplex | null> => {
+export const getChampions = async (version: string, lang: AllowLang): Promise<ChampionComplex> => {
   return await fetch(`https://ddragon.leagueoflegends.com/cdn/${version}/data/${lang}/champion.json`)
     .then(res => res.json() as Promise<ChampionComplex>)
-    .catch(() => null)
+}
+
+export const getLatestChampions = async (lang: AllowLang) => {
+  return await getVersions()
+    .then(versions => getChampions(versions[0], lang))
 }

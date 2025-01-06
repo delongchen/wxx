@@ -1,5 +1,5 @@
 import type { WxxPluginPageInfo } from '@/app/plugin/types';
-import { NiumaContextProvider } from './context/provider.tsx';
+import { NiumaProvider } from './context/provider.tsx';
 import NiumaMainLayout from './components/NiumaMainLayout.tsx';
 import NiumaPage from './pages/NiumaPage/index.tsx';
 import HistoryFetchPage from './pages/HistoryFetchPage.tsx';
@@ -26,10 +26,12 @@ export const mainPage: WxxPluginPageInfo = {
   name: 'niuma-page',
   icon: () => '牛马',
   fullPage: true,
-  component: () => (
-    <NiumaContextProvider>
-      <NiumaMainLayout />
-    </NiumaContextProvider>
-  ),
+  component: () => {
+    return (
+      <NiumaProvider>
+        <NiumaMainLayout />
+      </NiumaProvider>
+    )
+  },
   children: mainPageChildren,
 };

@@ -1,27 +1,27 @@
 import { PropsWithChildren } from 'react';
 import { useAppTheme } from '@/app/context/app-context.tsx';
-import { NiumaContext } from './ctx';
+import { NiumaContext } from './niuma';
+import { LolContext } from './lol'
+import { getLatestChampions } from '../api/dragon'
 import { useCurrentSummoner } from 'tauri-plugin-wxx-core/hooks';
-import { useMatchesParserWorker, useLolLatestVersion, useLolChampions } from './hooks';
 
-export function NiumaContextProvider({ children }: PropsWithChildren) {
+type NiumaProviderProps = PropsWithChildren
+
+export function NiumaProvider({ children }: NiumaProviderProps) {
   const theme = useAppTheme();
   const currentSummoner = useCurrentSummoner();
-  const { invoke } = useMatchesParserWorker();
-  const { latestVersion } = useLolLatestVersion();
-  const champions = useLolChampions(latestVersion, 'zh_CN')
+  const championsPromise = getLatestChampions('zh_CN')
 
   return (
-    <NiumaContext.Provider
+    <NiumaContext
       value={{
         theme,
-        invoke,
         currentSummoner,
-        latestVersion,
-        champions,
       }}
     >
-      {children}
-    </NiumaContext.Provider>
+      <LolContext value={{ championsPromise }}>
+        {children}
+      </LolContext>
+    </NiumaContext>
   );
 }

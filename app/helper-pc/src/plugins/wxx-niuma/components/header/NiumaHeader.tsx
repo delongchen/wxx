@@ -1,12 +1,13 @@
 import { Flex, IconButton, Spacer, Button, Group } from '@chakra-ui/react';
-import { useNiumaContext } from '../../context/hooks';
 import { VscArrowLeft } from 'react-icons/vsc';
 import { useLocation, useNavigate } from 'react-router-dom';
 import OptionsMenu from './OptionsMenu.tsx';
 import { mainPageChildren } from '../../routes';
+import { use } from 'react'
+import { NiumaContext } from '../../context/niuma'
 
 function CenterButtonGroup() {
-  const { theme } = useNiumaContext();
+  const { theme } = use(NiumaContext);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -41,7 +42,7 @@ function CenterButtonGroup() {
 }
 
 function NiumaHeader() {
-  const { theme } = useNiumaContext();
+  const { theme } = use(NiumaContext);
 
   const bg = [theme, 400].join('.');
   const navigate = useNavigate();

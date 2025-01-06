@@ -1,13 +1,13 @@
-import { useNiumaContext } from '@/plugins/wxx-niuma/context/hooks.ts';
 import { SyncTaskStatus, useSyncGameHistoryTask } from '@/plugins/wxx-niuma/core/niuma-task-manager.ts';
 import { Button, Flex, HStack, Text } from '@chakra-ui/react';
 import { ProgressBar, ProgressLabel, ProgressRoot, ProgressValueText } from '@/components/ui/progress.tsx';
-import { memo } from 'react';
+import { memo, use } from 'react';
+import { NiumaContext } from '../context/niuma'
 import type { SummonerInfo } from 'tauri-plugin-wxx-core';
 import SummonerCard from '@/plugins/wxx-niuma/components/SummonerCard.tsx';
 
 const GameSyncTask = memo(function GameSyncTask({ puuid }: { puuid: string }) {
-  const { theme } = useNiumaContext();
+  const { theme } = use(NiumaContext);
   const { status, start, data, tip } = useSyncGameHistoryTask(puuid);
 
   if (status === SyncTaskStatus.Ready) {
@@ -61,7 +61,7 @@ const GameSyncTask = memo(function GameSyncTask({ puuid }: { puuid: string }) {
 });
 
 function GameSyncTaskCard({ summoner, main }: { summoner: SummonerInfo, main?: boolean }) {
-  const { theme } = useNiumaContext();
+  const { theme } = use(NiumaContext);
 
   return (
     <SummonerCard summoner={summoner} main={main} bg={[theme, 200].join('.')}>

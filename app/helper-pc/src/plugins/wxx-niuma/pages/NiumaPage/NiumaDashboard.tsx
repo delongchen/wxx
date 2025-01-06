@@ -1,7 +1,7 @@
-import { memo, PropsWithChildren } from 'react';
-import { Box, Text, Flex } from '@chakra-ui/react';
+import { memo, PropsWithChildren, use } from 'react';
+import { Text, Flex } from '@chakra-ui/react';
 import type { SummonerInfoWithoutReRoll } from 'tauri-plugin-wxx-core';
-import { useNiumaChartData } from '../../context/hooks';
+import type { NiumaChartDataType } from '../../workers/types'
 import DailyGameChart from '../../components/charts/DailyGameChart.tsx';
 import NiumaOverview from '../../components/NiumaOverview.tsx';
 import NiumaTeammates from '../../components/NiumaTeammates.tsx';
@@ -13,6 +13,7 @@ import NiumaChampionUsage from '../../components/NiumaChampionUsage.tsx'
 
 interface NiumaDashboardProps {
   summoner: SummonerInfoWithoutReRoll;
+  chartDataPromise: Promise<NiumaChartDataType>;
 }
 
 type ComponentTitleProps = PropsWithChildren<{
@@ -35,17 +36,8 @@ const ComponentTitle = ({ text, sub }: ComponentTitleProps) => {
   );
 };
 
-function NiumaDashboard({ summoner }: NiumaDashboardProps) {
-  const { puuid } = summoner;
-  const { pending, chartData } = useNiumaChartData(puuid);
-
-  if (pending) return (
-    <div>pending</div>
-  );
-
-  if (chartData === null) return (
-    <Box>no data</Box>
-  );
+function NiumaDashboard({ summoner, chartDataPromise }: NiumaDashboardProps) {
+  const chartData = use(chartDataPromise)
 
   return (
     <>

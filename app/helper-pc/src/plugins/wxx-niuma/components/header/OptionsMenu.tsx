@@ -1,7 +1,8 @@
-import { useNiumaContext } from '../../context/hooks';
+import { NiumaContext } from '../../context/niuma'
+import { use } from 'react'
 
 function OptionsMenu() {
-  const { theme } = useNiumaContext();
+  const { theme } = use(NiumaContext);
 
   return (
     <div>{theme}</div>

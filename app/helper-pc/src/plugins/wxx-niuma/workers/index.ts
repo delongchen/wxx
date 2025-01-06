@@ -1,53 +1,64 @@
-import { analyzeMatches } from './analyze';
+import { useEffect, useMemo } from 'react';
+import NiumaWorker from './main?worker';
 
-const handlers: Record<string, (payload: unknown) => Promise<unknown> | unknown> = {};
+type TaskHandler<T = unknown> = [(value: T | Promise<T>) => void, (reason?: unknown) => void];
 
-const timeout = (ms: number) => new Promise((_, reject) => {
-  setTimeout(() => {
-    reject(new Error('Timeout'));
-  }, ms);
-});
+const createWorker = () => {
+  console.log('createWorker');
 
-const postResult = (id: number, ok: boolean, data: unknown) => {
-  self.postMessage({ id, ok, data });
-};
-
-const handleIncomingMessage = async (
-  message: MessageEvent<{
-    id: number,
-    cmd: string,
-    payload: unknown
-  }>,
-) => {
-  const {
-    data: { id, cmd, payload },
-  } = message;
-
-  const resolve = (data: unknown) => {
-    postResult(id, true, data);
+  let TaskID = 0;
+  const TaskMap: Map<number, TaskHandler> = new Map;
+  const handleWorkerMessage = (msg: MessageEvent<{ id: number, data: unknown, ok: boolean }>) => {
+    const { data: { id, data, ok } } = msg;
+    const existHandler = TaskMap.get(id);
+    if (existHandler !== undefined) {
+      const [resolve, reject] = existHandler;
+      (ok ? resolve : reject)(data);
+      TaskMap.delete(id);
+    }
   };
 
-  const reject = (err: unknown) => {
-    postResult(id, false, err);
-  };
+  const worker = new NiumaWorker();
+  worker.onmessage = handleWorkerMessage;
 
-  const handler = handlers[cmd];
-  if (handler === undefined) {
-    reject(new Error(`Unknown command ${cmd}`));
-    return;
+  const invoke = <T, P = unknown>(cmd: string, payload?: P) => {
+    return new Promise<T>((resolve, reject) => {
+      const taskID = TaskID++;
+
+      TaskMap.set(taskID, [resolve, reject] as TaskHandler);
+
+      worker.postMessage({
+        cmd,
+        payload,
+        id: taskID,
+      });
+    })
   }
 
-  try {
-    const result = await Promise.race([
-      handler(payload),
-      timeout(5000),
-    ]);
-    resolve(result);
-  } catch (error) {
-    reject(error);
+  const cleanup = () => {
+    worker.terminate();
+
+    for (const [, reject] of TaskMap.values()) {
+      reject()
+    }
+
+    TaskMap.clear();
   }
+
+  return {
+    invoke,
+    cleanup,
+  }
+}
+
+export const useNiumaWorker = () => {
+  const worker = useMemo(createWorker, [])
+
+  useEffect(() => {
+    return () => {
+      worker.cleanup()
+    };
+  }, []);
+
+  return worker;
 };
-
-self.onmessage = handleIncomingMessage;
-
-Reflect.set(handlers, 'analyze', analyzeMatches);

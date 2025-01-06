@@ -1,5 +1,4 @@
-import { useNiumaContext } from '@/plugins/wxx-niuma/context/hooks';
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState, memo, use } from 'react';
 import { Flex, Grid, Text, Badge } from '@chakra-ui/react';
 import { Button } from '@/components/ui/button.tsx';
 import PlayerPersona from '../../components/PlayerPersona';
@@ -7,13 +6,14 @@ import ContentCard from '../../components/ContentCard.tsx';
 import CenterBox from '../../components/CenterBox';
 import { SummonerInfoWithoutReRoll } from 'tauri-plugin-wxx-core';
 import { getSummoners } from 'tauri-plugin-wxx-core/api'
+import { NiumaContext } from '../../context/niuma'
 
 interface NiumaSelectorProps {
   onPuuidClick?: (summoner: SummonerInfoWithoutReRoll) => void;
 }
 
 function NiumaSelector({ onPuuidClick }: NiumaSelectorProps) {
-  const { theme, currentSummoner } = useNiumaContext();
+  const { theme, currentSummoner } = use(NiumaContext);
   const [localSummoners, setLocalSummoners] = useState<SummonerInfoWithoutReRoll[]>([]);
 
   useEffect(() => {
