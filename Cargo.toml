@@ -1,5 +1,5 @@
 [workspace]
-members = ["app/helper-pc/src-tauri", "plugins/*"]
+members = ["app/helper-pc/src-tauri", "libs/protobufs", "plugins/wxx-core"]
 resolver = "2"
 
 [workspace.package]

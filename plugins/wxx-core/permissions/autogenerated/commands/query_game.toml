@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-query-game"
+description = "Enables the query_game command without any pre-configured scope."
+commands.allow = ["query_game"]
+
+[[permission]]
+identifier = "deny-query-game"
+description = "Denies the query_game command without any pre-configured scope."
+commands.deny = ["query_game"]

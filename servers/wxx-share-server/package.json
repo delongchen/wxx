@@ -1,0 +1,28 @@
+{
+  "name": "wxx-power-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c && node ./gen-package-json.cjs"
+  },
+  "private": true,
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.0.0",
+    "@koa/router": "^12.0.1",
+    "koa": "^2.15.3",
+    "redis": "^4.7.0",
+    "sharp": "^0.33.5",
+    "ws": "^8.18.0",
+    "wxx-protobufs": "workspace:*"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@types/koa": "^2.15.0",
+    "@types/koa__router": "^12.0.4",
+    "@types/ws": "^8.5.12"
+  }
+}

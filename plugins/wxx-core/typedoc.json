@@ -1,0 +1,12 @@
+{
+  "out": "docs",
+  "name": "LCU Types",
+  "disableGit": true,
+  "disableSources": true,
+  "plugin": ["typedoc-plugin-markdown"],
+  "excludeNotDocumented": false,
+  "excludePrivate": false,
+  "excludeProtected": false,
+  "excludeInternal": false,
+  "excludeReferences": false
+}

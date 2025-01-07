@@ -16,19 +16,29 @@
       "icons/icon.ico"
     ]
   },
-  "productName": "lol_helper",
-  "version": "0.0.0",
-  "identifier": "com.tauri.dev",
+  "productName": "wxx",
+  "version": "0.0.4",
+  "identifier": "wxsb",
   "plugins": {},
   "app": {
     "security": {
-      "csp": null
+      "headers": {
+        "Cross-Origin-Opener-Policy": "same-origin",
+        "Cross-Origin-Embedder-Policy": "require-corp"
+      },
+      "csp": null,
+      "capabilities": [
+        "fs",
+        "default",
+        "wxx-core"
+      ]
     },
     "windows": [
       {
-        "title": "lol_helper",
-        "width": 800,
-        "height": 600
+        "title": "WXX",
+        "width": 1280,
+        "height": 720,
+        "resizable": false
       }
     ]
   }

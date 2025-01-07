@@ -1,0 +1,30 @@
+<box xmlns:text="text">
+    <text>Rite of Descension... Oh yeah, that reminds me, isn't that today?</text>
+    <text>Once a year, Rex Lapis bestows upon us his divine prediction, guiding us on how to run Liyue for the coming year.</text>
+    <text>Last year it was the Yuheng of the Liyue Qixing that was given the honor of asking for the divine prediction.</text>
+    <select>
+        <option value="Liyue Qixing?" />
+        <option value="Yuheng?" />
+    </select>
+    <text:paimon>Ooh! Paimon knows this one!</text:paimon>
+    <text:paimon>
+        Mondstadt is to freedom as Liyue is to contracts. Liyue has a strong focus on business and trade.
+    </text:paimon>
+    <text:paimon>
+        The Liyue Qixing - the seven leaders of the seven enterprises of Liyue - hold true control over Liyue.
+    </text:paimon>
+    <text>That is what outlanders always say.</text>
+    <text>But true control over Liyue will always be held by Rex Lapis.</text>
+    <text>
+        The Qixing is comprised of mere mortals.
+        Rex Lapis is a god.
+        Mondstadt's god is nowhere to be seen, whilst our god is forever with us.
+    </text>
+    <text>Stay in Liyue long enough and you'll see...</text>
+    <text>
+        Given that you just left your godless city,
+        it's time you experienced what it's like to be in a city whose god has walked with it through all of history.
+    </text>
+    <text:paimon>Great! Then we can start out experience off with the Rite of Descension.</text:paimon>
+    <text>Good choice. Then get going. To the high ground.</text>
+</box>

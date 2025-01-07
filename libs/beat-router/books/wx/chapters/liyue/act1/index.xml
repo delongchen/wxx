@@ -1,0 +1,7 @@
+<act key="of_the_land_amidst_monoliths">
+    <props>
+        <title>Of the Land Amidst Monoliths</title>
+        <desc>Liyue Chapter I: Act I</desc>
+    </props>
+    <import src="./rite_of_descension.xml" />
+</act>

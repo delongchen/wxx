@@ -1,0 +1,7 @@
+<chapter key="liyue">
+    <props>
+        <title>Liyue</title>
+        <desc>li yue</desc>
+    </props>
+    <import src="./act1" />
+</chapter>

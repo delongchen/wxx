@@ -1,0 +1,33 @@
+{
+  "name": "wxx-protobufs",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "./lib_js/index.js",
+  "exports": {
+    ".": {
+      "types": "./lib_js/index.ts",
+      "import": "./lib_js/index.js"
+    },
+    "./*": {
+      "types": "./lib_js/index.*.ts",
+      "import": "./lib_js/index.*.js"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "buf generate"
+  },
+  "keywords": [],
+  "author": "JohnC",
+  "license": "ISC",
+  "dependencies": {
+    "@bufbuild/buf": "^1.36.0",
+    "@bufbuild/protobuf": "^2.0.0",
+    "@bufbuild/protoc-gen-es": "^2.0.0"
+    
+  },
+  "devDependencies": {
+    "ts-proto": "^2.0.2"
+  }
+}

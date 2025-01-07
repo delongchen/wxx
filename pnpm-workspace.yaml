@@ -2,3 +2,6 @@ prefer-workspace-packages: true
 packages:
   - 'app/*'
   - 'plugins/*'
+  - 'servers/*'
+  - 'libs/*'
+  - 'docs'

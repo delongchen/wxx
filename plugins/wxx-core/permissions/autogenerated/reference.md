@@ -1,14 +1,140 @@
-| Permission | Description |
-|------|-----|
-|`allow-connect-lcu-client`|Enables the connect_lcu_client command without any pre-configured scope.|
-|`deny-connect-lcu-client`|Denies the connect_lcu_client command without any pre-configured scope.|
-|`allow-execute`|Enables the execute command without any pre-configured scope.|
-|`deny-execute`|Denies the execute command without any pre-configured scope.|
-|`allow-handle-get-request`|Enables the handle_get_request command without any pre-configured scope.|
-|`deny-handle-get-request`|Denies the handle_get_request command without any pre-configured scope.|
-|`allow-handle-post-request`|Enables the handle_post_request command without any pre-configured scope.|
-|`deny-handle-post-request`|Denies the handle_post_request command without any pre-configured scope.|
-|`allow-ping`|Enables the ping command without any pre-configured scope.|
-|`deny-ping`|Denies the ping command without any pre-configured scope.|
-|`allow-start-listen-lcu-event`|Enables the start_listen_lcu_event command without any pre-configured scope.|
-|`deny-start-listen-lcu-event`|Denies the start_listen_lcu_event command without any pre-configured scope.|
+
+## Permission Table
+
+<table>
+<tr>
+<th>Identifier</th>
+<th>Description</th>
+</tr>
+
+
+<tr>
+<td>
+
+`wxx-core:allow-fetch-game-history`
+
+</td>
+<td>
+
+Enables the fetch_game_history command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:deny-fetch-game-history`
+
+</td>
+<td>
+
+Denies the fetch_game_history command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:allow-lcu-fetch`
+
+</td>
+<td>
+
+Enables the lcu_fetch command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:deny-lcu-fetch`
+
+</td>
+<td>
+
+Denies the lcu_fetch command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:allow-query-game`
+
+</td>
+<td>
+
+Enables the query_game command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:deny-query-game`
+
+</td>
+<td>
+
+Denies the query_game command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:allow-query-summoners`
+
+</td>
+<td>
+
+Enables the query_summoners command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:deny-query-summoners`
+
+</td>
+<td>
+
+Denies the query_summoners command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:allow-sync-games-by-puuid`
+
+</td>
+<td>
+
+Enables the sync_games_by_puuid command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`wxx-core:deny-sync-games-by-puuid`
+
+</td>
+<td>
+
+Denies the sync_games_by_puuid command without any pre-configured scope.
+
+</td>
+</tr>
+</table>

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package rest.user;
+
+import "lcu/summoner.proto";
+import "lcu/gameflow.proto";
+
+message SummonerState {
+  lcu.gameflow.GameflowPhaseEnum phase = 1;
+  lcu.summoner.SummonerInfoRaw info = 2;
+}
+
+message SummonerStates {
+  repeated SummonerState states = 1;
+}

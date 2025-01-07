@@ -1,0 +1,17 @@
+[package]
+name = "wxx-protobuf"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+include = ["/src_rs/**/*", "Cargo.toml"]
+
+[lib]
+path = "lib_rs/lib.rs"
+
+[dependencies]
+prost = "0.13.3"
+serde.workspace = true
+
+[build-dependencies]
+prost-build = "0.13.3"

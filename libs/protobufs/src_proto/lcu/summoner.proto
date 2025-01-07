@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package lcu.summoner;
+
+message RerollPoints {
+  int32 currentPoints = 1;
+  int32 maxRolls = 2;
+  int32 numberOfRolls = 3;
+  int32 pointsCostToRoll = 4;
+  int32 pointsToReroll = 5;
+}
+
+message SummonerBaseInfo {
+  bool unnamed = 1;
+  bool nameChangeFlag = 2;
+  int64 accountId = 3;
+  int32 percentCompleteForNextLevel = 4;
+  int32 profileIconId = 5;
+  int64 summonerId = 6;
+  int32 summonerLevel = 7;
+  int64 xpSinceLastLevel = 8;
+  int64 xpUntilNextLevel = 9;
+  string displayName = 10;
+  string gameName = 11;
+  string internalName = 12;
+  string privacy = 13;
+  string puuid = 14;
+  string tagLine = 15;
+}
+
+message SummonerInfoRaw {
+  SummonerBaseInfo base = 1;
+  RerollPoints rerollPoints = 2;
+}
+
+service SummonerSharing {}

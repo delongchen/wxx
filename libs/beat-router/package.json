@@ -1,0 +1,25 @@
+{
+  "name": "beat-router",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "keywords": [],
+  "author": "JohnC",
+  "license": "ISC",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.17.10"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.5.1"
+  }
+}

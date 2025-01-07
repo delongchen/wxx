@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2021",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "ESNext",
     "moduleResolution": "bundler",
     "skipLibCheck": true,
     "strict": true,
@@ -9,6 +9,6 @@
     "noImplicitAny": true,
     "noEmit": true
   },
-  "include": ["guest-js/*.ts"],
+  "include": ["guest-js/**/*.ts", "guest-js/types/lcu-api/*.ts"],
   "exclude": ["dist-js", "node_modules"]
 }

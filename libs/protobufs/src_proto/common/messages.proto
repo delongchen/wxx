@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package common;
+
+message BytesList {
+    repeated bytes data = 1;
+}
+
+message MessageHeader {
+    string endpoint = 1;
+}
+
+message BasicMessage {
+    MessageHeader header = 1;
+    bytes body = 2;
+}

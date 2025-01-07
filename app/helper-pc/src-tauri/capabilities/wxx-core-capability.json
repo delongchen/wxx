@@ -1,0 +1,15 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "wxx-core",
+  "description": "Capabilities of wxx-core",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "wxx-core:allow-lcu-fetch",
+    "wxx-core:allow-sync-games-by-puuid",
+    "wxx-core:allow-fetch-game-history",
+    "wxx-core:allow-query-game",
+    "wxx-core:allow-query-summoners"
+  ]
+}

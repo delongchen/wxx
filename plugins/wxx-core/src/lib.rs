@@ -3,22 +3,26 @@ use tauri::{
     Manager, Runtime,
 };
 
-pub mod commands;
-pub mod utils;
-use commands::{handle_get_request, handle_post_request};
-use utils::{listen::start_listen_lcu, store::LcuManager};
+mod config;
+mod consts;
+mod v3;
 
 //  Initializes the plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("wxx-core")
         .invoke_handler(tauri::generate_handler![
-            handle_get_request,
-            handle_post_request,
+            v3::commands::core::lcu_fetch,
+            v3::commands::tasks::sync_game_history::sync_games_by_puuid,
+            v3::commands::tasks::query_game::query_game,
+            v3::commands::tasks::query_game::query_summoners,
         ])
         .setup(|app, _api| {
-            // manage state so it is accessible by the commands
-            app.manage(LcuManager::default());
-            start_listen_lcu(app.clone());
+            app.manage(v3::models::app::states::AppState::default());
+
+            v3::init::init_plugin(app);
+
+            v3::services::start_services(app);
+
             Ok(())
         })
         .build()

@@ -1,0 +1,209 @@
+syntax = "proto3";
+
+package lcu.matchHistory;
+
+message MatchHistory {
+  uint64 accountId = 1;
+  string platformId = 2;
+  Games games = 3;
+}
+
+message Games {
+  uint32 gameCount = 1;
+  uint32 gameIndexBegin = 2;
+  uint32 gameIndexEnd = 3;
+  string gameBeginDate = 4;
+  string gameEndDate = 5;
+  repeated Game games = 6;
+}
+
+message Game {
+  uint32 gameDuration = 1;
+  uint32 mapId = 2;
+  uint32 queueId = 3;
+  uint32 seasonId = 4;
+  uint64 gameId = 5;
+  uint64 gameCreation = 6;
+  string gameCreationDate = 7;
+  string gameVersion = 8;
+  string gameMode = 9;
+  string gameType = 10;
+  string platformId = 11;
+  string endOfGameResult = 12;
+  repeated ParticipantIdentity participantIdentities = 13;
+  repeated Participant participants = 14;
+  repeated Team teams = 15;
+}
+
+message GameExt {
+  Game raw = 1;
+  repeated ParticipantIdentityTuple idTuples = 2;
+}
+
+message Team {
+  bool firstBlood = 1;
+  bool firstTower = 2;
+  bool firstInhibitor = 3;
+  bool firstBaron = 4;
+  bool firstDargon = 5; // Keep typo for consistency
+  uint32 teamId = 6;
+  uint32 towerKills = 7;
+  uint32 inhibitorKills = 8;
+  uint32 baronKills = 9;
+  uint32 dragonKills = 10;
+  uint32 riftHeraldKills = 11;
+  uint32 vilemawKills = 12;
+  uint32 dominionVictoryScore = 13;
+  string win = 14;
+  // bytes bans = 15;
+}
+
+message Participant {
+  uint32 participantId = 1;
+  uint32 teamId = 2;
+  uint32 championId = 3;
+  uint32 spell1Id = 4;
+  uint32 spell2Id = 5;
+  string highestAchievedSeasonTier = 6;
+  Stats stats = 7;
+  // Timeline timeline = 8;
+}
+
+message Stats {
+  bool causedEarlySurrender = 1;
+  bool earlySurrenderAccomplice = 2;
+  bool firstBloodAssist = 3;
+  bool firstBloodKill = 4;
+  bool firstInhibitorAssist = 5;
+  bool firstInhibitorKill = 6;
+  bool firstTowerAssist = 7;
+  bool firstTowerKill = 8;
+  bool gameEndedInEarlySurrender = 9;
+  bool gameEndedInSurrender = 10;
+  bool teamEarlySurrendered = 11;
+  bool win = 12;
+  uint32 assists = 13;
+  uint32 champLevel = 14;
+  uint32 combatPlayerScore = 15;
+  uint32 damageDealtToObjectives = 16;
+  uint32 damageDealtToTurrets = 17;
+  uint32 damageSelfMitigated = 18;
+  uint32 deaths = 19;
+  uint32 doubleKills = 20;
+  uint32 goldEarned = 21;
+  uint32 goldSpent = 22;
+  uint32 inhibitorKills = 23;
+  uint32 item0 = 24;
+  uint32 item1 = 25;
+  uint32 item2 = 26;
+  uint32 item3 = 27;
+  uint32 item4 = 28;
+  uint32 item5 = 29;
+  uint32 item6 = 30;
+  uint32 killingSprees = 31;
+  uint32 kills = 32;
+  uint32 largestCriticalStrike = 33;
+  uint32 largestKillingSpree = 34;
+  uint32 largestMultiKill = 35;
+  uint32 longestTimeSpentLiving = 36;
+  uint32 magicDamageDealt = 37;
+  uint32 magicDamageDealtToChampions = 38;
+  uint32 magicalDamageTaken = 39;
+  uint32 neutralMinionsKilled = 40;
+  uint32 neutralMinionsKilledEnemyJungle = 41;
+  uint32 neutralMinionsKilledTeamJungle = 42;
+  uint32 objectivePlayerScore = 43;
+  uint32 participantId = 44;
+  uint32 pentaKills = 45;
+  uint32 perk0 = 46;
+  uint32 perk1 = 47;
+  uint32 perk2 = 48;
+  uint32 perk3 = 49;
+  uint32 perk4 = 50;
+  uint32 perk5 = 51;
+  uint32 perkPrimaryStyle = 52;
+  uint32 perkSubStyle = 53;
+  uint32 physicalDamageDealt = 54;
+  uint32 physicalDamageDealtToChampions = 55;
+  uint32 physicalDamageTaken = 56;
+  uint32 playerScore0 = 57;
+  uint32 playerScore1 = 58;
+  uint32 playerScore2 = 59;
+  uint32 playerScore3 = 60;
+  uint32 playerScore4 = 61;
+  uint32 playerScore5 = 62;
+  uint32 playerScore6 = 63;
+  uint32 playerScore7 = 64;
+  uint32 playerScore8 = 65;
+  uint32 playerScore9 = 66;
+  uint32 quadraKills = 67;
+  uint32 sightWardsBoughtInGame = 68;
+  uint32 subteamPlacement = 69;
+  uint32 timeCCingOthers = 70;
+  uint32 totalDamageDealt = 71;
+  uint32 totalDamageDealtToChampions = 72;
+  uint32 totalDamageTaken = 73;
+  uint32 totalHeal = 74;
+  uint32 totalMinionsKilled = 75;
+  uint32 totalPlayerScore = 76;
+  uint32 totalScoreRank = 77;
+  uint32 totalTimeCrowdControlDealt = 78;
+  uint32 totalUnitsHealed = 79;
+  uint32 tripleKills = 80;
+  uint32 trueDamageDealt = 81;
+  uint32 trueDamageDealtToChampions = 82;
+  uint32 trueDamageTaken = 83;
+  uint32 turretKills = 84;
+  uint32 unrealKills = 85;
+  uint32 visionScore = 86;
+  uint32 visionWardsBoughtInGame = 87;
+  uint32 wardsKilled = 88;
+  uint32 wardsPlaced = 89;
+  uint32 playerAugment1 = 90;
+  uint32 playerAugment2 = 91;
+  uint32 playerAugment3 = 92;
+  uint32 playerAugment4 = 93;
+  uint32 playerAugment5 = 94;
+  uint32 playerAugment6 = 95;
+}
+
+message ParticipantIdentity {
+  uint32 participantId = 1;
+  Player player = 2;
+}
+
+message ParticipantIdentityTuple {
+  uint32 participantId = 1;
+  string puuid = 2;
+}
+
+message Player {
+  uint32 profileIcon = 1;
+  uint64 accountId = 2;
+  uint64 currentAccountId = 3;
+  uint64 summonerId = 4;
+  string currentPlatformId = 5;
+  string platformId = 6;
+  string matchHistoryUri = 7;
+  string puuid = 8;
+  string gameName = 9;
+  string tagLine = 10;
+  string summonerName = 11;
+}
+
+message Players {
+  repeated Player players = 1;
+}
+
+message Timeline {
+  uint32 participantId = 1;
+  string lane = 2;
+  string role = 3;
+  map<string, float> creepsPerMinDeltas = 4;
+  map<string, float> csDiffPerMinDeltas = 5;
+  map<string, float> damageTakenDiffPerMinDeltas = 6;
+  map<string, float> damageTakenPerMinDeltas = 7;
+  map<string, float> goldPerMinDeltas = 8;
+  map<string, float> xpDiffPerMinDeltas = 9;
+  map<string, float> xpPerMinDeltas = 10;
+}
