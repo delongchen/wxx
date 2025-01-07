@@ -9,7 +9,7 @@ const WxxLifeGame: WxxPluginRaw = {
   async install({ page, AppContext }) {
     page({
       name: 'life-game-index',
-      icon: () => 'life',
+      icon: () => 'LIFE',
       fullPage: true,
       component: () => {
         const { theme } = use(AppContext);

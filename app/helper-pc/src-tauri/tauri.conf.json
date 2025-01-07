@@ -22,16 +22,16 @@
   "plugins": {},
   "app": {
     "security": {
+      "headers": {
+        "Cross-Origin-Opener-Policy": "same-origin",
+        "Cross-Origin-Embedder-Policy": "require-corp"
+      },
       "csp": null,
       "capabilities": [
         "fs",
         "default",
         "wxx-core"
-      ],
-      "assetProtocol": {
-        "enable": true,
-        "scope": []
-      }
+      ]
     },
     "windows": [
       {
