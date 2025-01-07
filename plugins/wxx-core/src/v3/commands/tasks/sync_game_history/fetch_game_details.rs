@@ -4,7 +4,6 @@ use crate::v3::utils::LcuEndpoints;
 use futures_util::{stream, StreamExt};
 use serde_json::json;
 use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::Arc;
 use wxx_protobuf::lcu::match_history::Game;
 
 pub async fn fetch_game_details(
@@ -14,8 +13,8 @@ pub async fn fetch_game_details(
     buffer_size: usize,
 ) -> (Vec<Game>, bool) {
     let tasks_len = game_id_vec.len();
-    let success_count = Arc::new(AtomicUsize::new(0));
-    let temp_count = Arc::new(AtomicUsize::new(0));
+    let success_count = &AtomicUsize::new(0);
+    let temp_count = &AtomicUsize::new(0);
 
     sender.fetching_detail(0, None);
 
@@ -27,10 +26,7 @@ pub async fn fetch_game_details(
         })
         .buffer_unordered(buffer_size)
         .filter_map(|response| {
-            let success_count = Arc::clone(&success_count);
-            let temp_count = Arc::clone(&temp_count);
-
-            async move {
+            async {
                 if let Ok(response) = response {
                     success_count.fetch_add(1, Ordering::Relaxed);
                     temp_count.fetch_add(1, Ordering::Relaxed);

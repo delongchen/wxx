@@ -5,8 +5,8 @@ import PlayerPersona from '../../components/PlayerPersona';
 import ContentCard from '../../components/ContentCard.tsx';
 import CenterBox from '../../components/CenterBox';
 import { SummonerInfoWithoutReRoll } from 'tauri-plugin-wxx-core';
-import { getSummoners } from 'tauri-plugin-wxx-core/api'
-import { NiumaContext } from '../../context/niuma'
+import { getSummoners } from 'tauri-plugin-wxx-core/api';
+import { NiumaContext } from '../../context/niuma';
 
 interface NiumaSelectorProps {
   onPuuidClick?: (summoner: SummonerInfoWithoutReRoll) => void;
@@ -18,8 +18,8 @@ function NiumaSelector({ onPuuidClick }: NiumaSelectorProps) {
 
   useEffect(() => {
     getSummoners(true).then(value => {
-      setLocalSummoners(value.map(it => it.summoner))
-    })
+      setLocalSummoners(value.map(it => it.summoner));
+    });
   }, []);
 
   if (localSummoners.length === 0) {

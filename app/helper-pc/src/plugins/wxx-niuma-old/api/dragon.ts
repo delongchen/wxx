@@ -55,15 +55,15 @@ export interface ChampionComplex {
 
 export const getVersions = async () => {
   return await fetch('https://ddragon.leagueoflegends.com/api/versions.json')
-    .then(res => res.json() as Promise<string[]>)
-}
+    .then(res => res.json() as Promise<string[]>);
+};
 
 export const getChampions = async (version: string, lang: AllowLang): Promise<ChampionComplex> => {
   return await fetch(`https://ddragon.leagueoflegends.com/cdn/${version}/data/${lang}/champion.json`)
-    .then(res => res.json() as Promise<ChampionComplex>)
-}
+    .then(res => res.json() as Promise<ChampionComplex>);
+};
 
 export const getLatestChampions = async (lang: AllowLang) => {
   return await getVersions()
-    .then(versions => getChampions(versions[0], lang))
-}
+    .then(versions => getChampions(versions[0], lang));
+};

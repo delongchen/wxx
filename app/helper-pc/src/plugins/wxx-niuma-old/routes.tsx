@@ -31,7 +31,7 @@ export const mainPage: WxxPluginPageInfo = {
       <NiumaProvider>
         <NiumaMainLayout />
       </NiumaProvider>
-    )
+    );
   },
   children: mainPageChildren,
 };

@@ -4,8 +4,6 @@ import NiumaWorker from './main?worker';
 type TaskHandler<T = unknown> = [(value: T | Promise<T>) => void, (reason?: unknown) => void];
 
 const createWorker = () => {
-  console.log('createWorker');
-
   let TaskID = 0;
   const TaskMap: Map<number, TaskHandler> = new Map;
   const handleWorkerMessage = (msg: MessageEvent<{ id: number, data: unknown, ok: boolean }>) => {
@@ -32,31 +30,31 @@ const createWorker = () => {
         payload,
         id: taskID,
       });
-    })
-  }
+    });
+  };
 
   const cleanup = () => {
     worker.terminate();
 
     for (const [, reject] of TaskMap.values()) {
-      reject()
+      reject();
     }
 
     TaskMap.clear();
-  }
+  };
 
   return {
     invoke,
     cleanup,
-  }
-}
+  };
+};
 
 export const useNiumaWorker = () => {
-  const worker = useMemo(createWorker, [])
+  const worker = useMemo(createWorker, []);
 
   useEffect(() => {
     return () => {
-      worker.cleanup()
+      worker.cleanup();
     };
   }, []);
 

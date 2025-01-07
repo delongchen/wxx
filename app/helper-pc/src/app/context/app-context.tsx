@@ -1,12 +1,14 @@
-import { PropsWithChildren, createContext, useContext, useEffect } from 'react';
+import { PropsWithChildren, createContext, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { fetchLocalConfig, selectGlobal } from '@/store/modules/global';
 
-interface AppContextType {
+export interface AppContextType {
   theme: string;
 }
 
-const AppContext = createContext<AppContextType | undefined>(undefined);
+export const AppContext = createContext<AppContextType>({
+  theme: 'gray',
+});
 
 export function AppProvider({ children }: PropsWithChildren) {
   const { theme } = useAppSelector(selectGlobal);
@@ -16,21 +18,7 @@ export function AppProvider({ children }: PropsWithChildren) {
     dispatch(fetchLocalConfig());
   }, []);
 
-  return <AppContext.Provider value={{ theme }}>{children}</AppContext.Provider>;
+  return (
+    <AppContext value={{ theme }}>{children}</AppContext>
+  );
 }
-
-export const useAppCtx = () => {
-  const ctx = useContext(AppContext);
-  if (ctx === undefined) {
-    throw new Error('useApp must be used within an AppProvider');
-  }
-  return ctx;
-};
-
-export const useAppTheme = () => {
-  const ctx = useContext(AppContext);
-  if (ctx === undefined) {
-    throw new Error('useAppTheme must be used within an AppProvider');
-  }
-  return ctx.theme;
-};

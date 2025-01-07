@@ -1,12 +1,12 @@
-import { ChampionComplex } from '../api/dragon'
-import { createContext } from 'react'
+import { ChampionComplex } from '../api/dragon';
+import { createContext } from 'react';
 
 interface LolContextType {
-  championsPromise: Promise<ChampionComplex>
+  championsPromise: Promise<ChampionComplex>;
 }
 
 const defaultContext: LolContextType = {
   championsPromise: Promise.reject(),
-}
+};
 
-export const LolContext = createContext<LolContextType>(defaultContext)
+export const LolContext = createContext<LolContextType>(defaultContext);

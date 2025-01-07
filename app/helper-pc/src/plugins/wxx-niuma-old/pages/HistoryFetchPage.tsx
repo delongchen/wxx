@@ -1,21 +1,21 @@
 import { Box, Button, Flex, Input, Text } from '@chakra-ui/react';
 import { ChangeEvent, memo, useCallback, useEffect, useState, use } from 'react';
-import { NiumaContext } from '../context/niuma'
+import { NiumaContext } from '../context/niuma';
 import type { SummonerInfo } from 'tauri-plugin-wxx-core';
-import { getSummoners } from 'tauri-plugin-wxx-core/api'
+import { getSummoners } from 'tauri-plugin-wxx-core/api';
 import { Field } from '@/components/ui/field.tsx';
 import CenterBox from '@/plugins/wxx-niuma/components/CenterBox.tsx';
 import GameSyncTaskCard from '../components/GameSyncTask.tsx';
 
 
 interface SummonerFinderProps {
-  onNameSubmit: (name: string, tagLine: string) => void
+  onNameSubmit: (name: string, tagLine: string) => void;
 }
 
 const checkTagLine = (tagLine: string) => (
   tagLine.length === 5 &&
   ![...tagLine].map(n => +n).some(window.isNaN)
-)
+);
 
 const LcuUnusable = (
   <CenterBox>
@@ -33,8 +33,8 @@ const LcuUnusable = (
 const useElementValueCallback = (cb: (value: string) => void) => {
   return useCallback((ev: ChangeEvent) => {
     cb(Reflect.get(ev.target, 'value') as string);
-  }, [])
-}
+  }, []);
+};
 
 function SummonerFinder({ onNameSubmit }: SummonerFinderProps) {
   const { theme } = use(NiumaContext);
@@ -42,12 +42,12 @@ function SummonerFinder({ onNameSubmit }: SummonerFinderProps) {
   const [summonerName, setSummonerName] = useState<string>('');
   const [tagLine, setTagLine] = useState<string>('');
 
-  const handleNameInput = useElementValueCallback(setSummonerName)
-  const handleTagInput = useElementValueCallback(setTagLine)
+  const handleNameInput = useElementValueCallback(setSummonerName);
+  const handleTagInput = useElementValueCallback(setTagLine);
   const reset = useCallback(() => {
     setSummonerName('');
     setTagLine('');
-  }, [])
+  }, []);
 
   const handleCheckClick = () => {
     // encodeURIComponent(`${summonerName}#${tagLine}`)
@@ -87,8 +87,8 @@ function SummonerFinder({ onNameSubmit }: SummonerFinderProps) {
 const renderTaskCard = (summoner: SummonerInfo) => {
   return (
     <GameSyncTaskCard key={summoner.puuid} summoner={summoner} />
-  )
-}
+  );
+};
 
 function HistoryFetchPage() {
   const { currentSummoner } = use(NiumaContext);
@@ -97,9 +97,9 @@ function HistoryFetchPage() {
   const refresh = useCallback(() => {
     getSummoners(false)
       .then(result => {
-        setSummoners(result.map(it => it.summoner as SummonerInfo))
-      })
-  }, [])
+        setSummoners(result.map(it => it.summoner as SummonerInfo));
+      });
+  }, []);
 
   useEffect(refresh, []);
 

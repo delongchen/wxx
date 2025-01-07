@@ -1,6 +1,6 @@
 import type { NiumaChartDataType } from '../workers/types';
-import { memo } from 'react'
-import { Flex } from '@chakra-ui/react'
+import { memo } from 'react';
+import { Flex } from '@chakra-ui/react';
 
 
 interface NiumaHighlightsProps {
@@ -15,7 +15,7 @@ function NiumaHighlights({ chartData }: NiumaHighlightsProps) {
       alignItems="center"
     >
     </Flex>
-  )
+  );
 }
 
-export default memo(NiumaHighlights)
+export default memo(NiumaHighlights);

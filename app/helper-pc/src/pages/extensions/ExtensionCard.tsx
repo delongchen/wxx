@@ -1,5 +1,5 @@
 import { WxxPluginContext, WxxPluginStatus } from '@/app/plugin/types';
-import { useAppTheme } from '@/app/context/app-context.tsx';
+import { AppContext } from '@/app/context/app-context.tsx';
 import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,7 +10,7 @@ import {
   Text,
   Group,
 } from '@chakra-ui/react';
-import { memo, useState } from 'react';
+import { memo, useState, use } from 'react';
 import { useSubscribe } from 'tauri-plugin-wxx-core/hooks';
 
 interface ExtensionCardProp {
@@ -28,13 +28,13 @@ const mapPluginStatus = (status: WxxPluginStatus): [string, string] => {
   }
 };
 
-function ExtensionCard(props: ExtensionCardProp) {
-  const theme = useAppTheme();
-  const { ctx } = props;
+function ExtensionCard({ ctx }: ExtensionCardProp) {
+  const { theme } = use(AppContext);
   const { version, cover, description } = ctx.getInfo();
   const { statusSubject, start, shutdown, restart } = ctx;
 
   const [pluginStatus, setPluginStatus] = useState<WxxPluginStatus>(statusSubject.getValue());
+
   useSubscribe(statusSubject, setPluginStatus);
 
   const [badgeColor, badgeText] = mapPluginStatus(pluginStatus);

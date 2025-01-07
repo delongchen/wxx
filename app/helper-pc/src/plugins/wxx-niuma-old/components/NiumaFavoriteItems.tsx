@@ -2,8 +2,8 @@ import type { SummonerInfoWithoutReRoll } from 'tauri-plugin-wxx-core';
 import type { NiumaChartDataType } from '@/plugins/wxx-niuma/workers/types';
 import { Avatar } from '@/components/ui/avatar';
 import { Flex, Text } from '@chakra-ui/react';
-import { Suspense, use } from 'react'
-import { LolContext } from '../context/lol'
+import { Suspense, use } from 'react';
+import { LolContext } from '../context/lol';
 
 interface NiumaFavoriteItemsProps {
   mainSummoner: SummonerInfoWithoutReRoll;
@@ -15,7 +15,7 @@ const getItemPNGSrc = (id: number, version: string = '14.22.1') => {
 };
 
 function NiumaFavoriteItems({ chartData }: NiumaFavoriteItemsProps) {
-  const { championsPromise } = use(LolContext)
+  const { championsPromise } = use(LolContext);
   const { version } = use(championsPromise);
   const matchLen = chartData.dataVecMap['creation'].length;
   const { all } = chartData.state['items'] as {

@@ -1,5 +1,6 @@
-import { FC } from 'react';
+import { FC, Context } from 'react';
 import { BehaviorSubject } from 'rxjs';
+import { AppContextType } from '../context/app-context';
 
 export interface WxxPluginInfo {
   version: string;
@@ -19,7 +20,7 @@ export type PluginQuitTask = () => Promise<void>;
 export interface WxxPluginRaw<T = void> {
   name: string;
   install: (
-    ctx: Pick<WxxPluginContext<T>, 'page' | 'statusBar' | 'quit'>,
+    ctx: Pick<WxxPluginContext<T>, 'page' | 'statusBar' | 'quit'> & { AppContext: Context<AppContextType> },
     options?: T,
   ) => Promise<void>;
   version?: string;

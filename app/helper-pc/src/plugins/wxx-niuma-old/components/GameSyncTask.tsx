@@ -2,7 +2,7 @@ import { SyncTaskStatus, useSyncGameHistoryTask } from '@/plugins/wxx-niuma/core
 import { Button, Flex, HStack, Text } from '@chakra-ui/react';
 import { ProgressBar, ProgressLabel, ProgressRoot, ProgressValueText } from '@/components/ui/progress.tsx';
 import { memo, use } from 'react';
-import { NiumaContext } from '../context/niuma'
+import { NiumaContext } from '../context/niuma';
 import type { SummonerInfo } from 'tauri-plugin-wxx-core';
 import SummonerCard from '@/plugins/wxx-niuma/components/SummonerCard.tsx';
 

@@ -2,44 +2,44 @@ import type { NiumaChartDataType } from '../workers/types';
 import { ChampionComplex, LolChampionRaw } from '../api/dragon';
 import { memo, use, Suspense } from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
-import { LolContext } from '../context/lol'
+import { LolContext } from '../context/lol';
 
 interface NiumaChampionUsageProps {
   chartData: NiumaChartDataType;
 }
 
 interface ChampionCardProps {
-  champion: LolChampionRaw
-  title?: string
-  subTitle?: string
+  champion: LolChampionRaw;
+  title?: string;
+  subTitle?: string;
 }
 
 type ChampionUsageTuple = [number, number, number]
 
 const makeChampionIndex = ({ data }: ChampionComplex) => {
-  const result: Record<number, LolChampionRaw> = {}
+  const result: Record<number, LolChampionRaw> = {};
 
   for (const champion of Object.values(data)) {
     result[+champion.key] = champion;
   }
 
   return result;
-}
+};
 
 function sortAndMostLeast<T>(tuples: T[], compareFn: (a: T, b: T) => number): [T, T, T[]] {
-  tuples.sort(compareFn)
+  tuples.sort(compareFn);
 
-  return [tuples[0], tuples[tuples.length - 1], tuples]
+  return [tuples[0], tuples[tuples.length - 1], tuples];
 }
 
 const calculateValue = ([, total, win]: ChampionUsageTuple, maxTotal: number, minTotal: number): number => {
-  const rate = win / total
-  const normalizedTotal = (total - minTotal) / (maxTotal - minTotal)
-  return 0.35 * normalizedTotal + 0.65 * rate
-}
+  const rate = win / total;
+  const normalizedTotal = (total - minTotal) / (maxTotal - minTotal);
+  return 0.35 * normalizedTotal + 0.65 * rate;
+};
 
 const ChampionCard = ({ champion, title, subTitle }: ChampionCardProps) => {
-  const imgUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/loading/${champion.id}_0.jpg`
+  const imgUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/loading/${champion.id}_0.jpg`;
   return (
     <Box position="relative">
       <img src={imgUrl} alt={champion.name} />
@@ -51,44 +51,44 @@ const ChampionCard = ({ champion, title, subTitle }: ChampionCardProps) => {
         flexDirection="column"
         alignItems="center"
       >
-        <Text color='white'>{champion.name}</Text>
+        <Text color="white">{champion.name}</Text>
         {title && (
-          <Text textStyle='2xl' color='white'>{title}</Text>
+          <Text textStyle="2xl" color="white">{title}</Text>
         )}
         {subTitle && (
-          <Text color='fg.subtle'>{subTitle}</Text>
+          <Text color="fg.subtle">{subTitle}</Text>
         )}
       </Flex>
     </Box>
-  )
-}
+  );
+};
 
 function NiumaChampionUsage({ chartData }: NiumaChampionUsageProps) {
-  const { state } = chartData
+  const { state } = chartData;
   const championUsage = (state['championUsage'] as [number, number, number][])
-    .filter(it => it[1] > 2)
+    .filter(it => it[1] > 2);
 
   if (championUsage.length === 0) {
     return (
       <></>
-    )
+    );
   }
 
-  const { championsPromise } = use(LolContext)
-  const champions = use(championsPromise)
+  const { championsPromise } = use(LolContext);
+  const champions = use(championsPromise);
 
-  const championMap = makeChampionIndex(champions)
-  const [maxTotal, minTotal] = sortAndMostLeast(championUsage.map(it => it[1]), (a, b) => b - a)
-  const [mostSelected] = sortAndMostLeast(championUsage, (a, b) => b[1] - a[1])
+  const championMap = makeChampionIndex(champions);
+  const [maxTotal, minTotal] = sortAndMostLeast(championUsage.map(it => it[1]), (a, b) => b - a);
+  const [mostSelected] = sortAndMostLeast(championUsage, (a, b) => b[1] - a[1]);
   const [mostValue, leastValue] = sortAndMostLeast(championUsage, (a, b) => {
-    return calculateValue(b, maxTotal, minTotal) - calculateValue(a, maxTotal, minTotal)
-  })
+    return calculateValue(b, maxTotal, minTotal) - calculateValue(a, maxTotal, minTotal);
+  });
 
   const renderCard = (tuple: ChampionUsageTuple, title: string) => {
-    const champion = championMap[tuple[0]]
-    if (champion === undefined) return null
+    const champion = championMap[tuple[0]];
+    if (champion === undefined) return null;
 
-    const sub = `${(100 * tuple[2] / tuple[1]) << 0}% / ${tuple[1]}场次`
+    const sub = `${(100 * tuple[2] / tuple[1]) << 0}% / ${tuple[1]}场次`;
 
     return (
       <ChampionCard
@@ -96,8 +96,8 @@ function NiumaChampionUsage({ chartData }: NiumaChampionUsageProps) {
         title={title}
         subTitle={sub}
       />
-    )
-  }
+    );
+  };
 
   return (
     <Suspense fallback={null}>
@@ -107,7 +107,7 @@ function NiumaChampionUsage({ chartData }: NiumaChampionUsageProps) {
         {renderCard(leastValue, '最废英雄')}
       </Flex>
     </Suspense>
-  )
+  );
 }
 
 export default memo(NiumaChampionUsage);

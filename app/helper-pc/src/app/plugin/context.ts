@@ -3,6 +3,7 @@ import { WxxRoute } from '@/types/router';
 import { BehaviorSubject } from 'rxjs';
 import { emitRoutesChange, registerRoute, unregisterRoute } from '@/router';
 import { addBarItem, removeBarItem } from '@/app/status-bar';
+import { AppContext } from '../context/app-context';
 import {
   PluginQuitTask,
   WxxPluginContext,
@@ -106,7 +107,7 @@ export const createWxxPluginContext = <T>(raw: WxxPluginRaw<T>): WxxPluginContex
     statusSubject.next(WxxPluginStatus.Starting);
 
     try {
-      await installer({ page, statusBar, quit }, options);
+      await installer({ page, statusBar, quit, AppContext }, options);
     } catch (e: unknown) {
       await shutdown();
       throw e;

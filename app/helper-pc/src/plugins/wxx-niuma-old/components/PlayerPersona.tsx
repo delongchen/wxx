@@ -1,7 +1,7 @@
 import { HStack, Stack, Text, Flex, Badge } from '@chakra-ui/react';
 import { Avatar } from '@/components/ui/avatar';
-import { use } from 'react'
-import { LolContext } from '../context/lol'
+import { use } from 'react';
+import { LolContext } from '../context/lol';
 
 interface PlayerPersonaProps {
   profileIcon: number;
@@ -17,7 +17,7 @@ function PlayerPersona(
 ) {
   const { championsPromise } = use(LolContext);
   const { version } = use(championsPromise);
-  const avatarPNGSrc = `https://ddragon.leagueoflegends.com/cdn/${version}/img/profileicon/${profileIcon}.png`
+  const avatarPNGSrc = `https://ddragon.leagueoflegends.com/cdn/${version}/img/profileicon/${profileIcon}.png`;
 
   return (
     <HStack gap="4" p="2">

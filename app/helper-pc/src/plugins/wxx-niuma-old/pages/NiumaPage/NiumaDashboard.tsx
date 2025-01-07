@@ -1,14 +1,14 @@
 import { memo, PropsWithChildren, use } from 'react';
 import { Text, Flex } from '@chakra-ui/react';
 import type { SummonerInfoWithoutReRoll } from 'tauri-plugin-wxx-core';
-import type { NiumaChartDataType } from '../../workers/types'
+import type { NiumaChartDataType } from '../../workers/types';
 import DailyGameChart from '../../components/charts/DailyGameChart.tsx';
 import NiumaOverview from '../../components/NiumaOverview.tsx';
 import NiumaTeammates from '../../components/NiumaTeammates.tsx';
 import NiumaFavoriteItems from '../../components/NiumaFavoriteItems.tsx';
 import NiumaHighlights from '../../components/NiumaHighlights.tsx';
 import ContentCard from '../../components/ContentCard.tsx';
-import NiumaChampionUsage from '../../components/NiumaChampionUsage.tsx'
+import NiumaChampionUsage from '../../components/NiumaChampionUsage.tsx';
 
 
 interface NiumaDashboardProps {
@@ -24,20 +24,20 @@ type ComponentTitleProps = PropsWithChildren<{
 const ComponentTitle = ({ text, sub }: ComponentTitleProps) => {
   return (
     <Flex
-      mt='16'
-      flexDirection='column'
-      alignItems='center'
+      mt="16"
+      flexDirection="column"
+      alignItems="center"
     >
-      <Text textStyle='2xl'>{text}</Text>
+      <Text textStyle="2xl">{text}</Text>
       {sub && (
-        <Text textStyle='xl' color="fg.muted">{sub}</Text>
+        <Text textStyle="xl" color="fg.muted">{sub}</Text>
       )}
     </Flex>
   );
 };
 
 function NiumaDashboard({ summoner, chartDataPromise }: NiumaDashboardProps) {
-  const chartData = use(chartDataPromise)
+  const chartData = use(chartDataPromise);
 
   return (
     <>
@@ -58,12 +58,12 @@ function NiumaDashboard({ summoner, chartDataPromise }: NiumaDashboardProps) {
         <NiumaFavoriteItems mainSummoner={summoner} chartData={chartData} />
       </ContentCard>
 
-      <ComponentTitle text="牛马英雄榜" sub='sssssss'/>
+      <ComponentTitle text="牛马英雄榜" sub="sssssss" />
       <ContentCard>
         <NiumaChampionUsage chartData={chartData} />
       </ContentCard>
 
-      <ComponentTitle text='牛马高光时刻' sub='和最摆时刻' />
+      <ComponentTitle text="牛马高光时刻" sub="和最摆时刻" />
       <ContentCard>
         <NiumaHighlights chartData={chartData} />
       </ContentCard>

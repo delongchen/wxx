@@ -9,14 +9,14 @@ const gatherBaseInfo: AnalyzeTask = ctx => {
   ctx.mapReportsAndSave('creation', report => report.gameCreation);
   ctx.mapReportsAndSave('win', report => report.win ? 1 : 0);
   ctx.mapReportsAndSave('champion', report => report.championId);
-  ctx.mapReportsAndSave('gameId', report => report.gameId)
+  ctx.mapReportsAndSave('gameId', report => report.gameId);
   ctx.mapReportsAndSave('kda', report => {
-    const k = report.gameDataRaw['kills']
-    const d = report.gameDataRaw['deaths']
-    const a = report.gameDataRaw['assists']
+    const k = report.gameDataRaw['kills'];
+    const d = report.gameDataRaw['deaths'];
+    const a = report.gameDataRaw['assists'];
 
-    return ((100 * ((k + a) / 3 * d)) << 0) / 100
-  })
+    return ((100 * ((k + a) / 3 * d)) << 0) / 100;
+  });
 
   for (const key of TeamStatsKeys) {
     ctx.mapReportsAndSave(key, report => report.gameDataRaw[key]);

@@ -4,32 +4,32 @@ import type {
   NiumaAnalyzeProps, NiumaChartDataType,
   DataStatistic,
 } from '../types';
-import type { Game } from 'tauri-plugin-wxx-core'
-import { BytesList } from 'wxx-protobufs/common'
-import { Game as GameProto } from 'wxx-protobufs/lcu.matchHistory'
+import type { Game } from 'tauri-plugin-wxx-core';
+import { BytesList } from 'wxx-protobufs/common';
+import { Game as GameProto } from 'wxx-protobufs/lcu.matchHistory';
 import { invokeTasks } from './tasks';
 import { MatchAnalyzeHelper } from './analyze-helper';
 
 const SetKeysMap = new Map<string, Set<string>>();
 
 const createRecordAndItsProxy = <T>(key: string) => {
-  const record: Record<string, T> = {}
+  const record: Record<string, T> = {};
   const setKeys = new Set<string>();
-  SetKeysMap.set(key, setKeys)
+  SetKeysMap.set(key, setKeys);
 
   const proxy = new Proxy(record, {
     set(target: Record<string, T>, p: string, newValue: unknown, receiver: unknown): boolean {
       if (setKeys.has(p)) {
-        console.warn(`${key}: ${p} has been set multi times!`)
+        console.warn(`${key}: ${p} has been set multi times!`);
       } else {
-        setKeys.add(p)
+        setKeys.add(p);
       }
       return Reflect.set(target, p, newValue, receiver);
-    }
+    },
   });
 
   return [record, proxy];
-}
+};
 
 const createAnalyzeContext = (mainPuuid: string, reports: MatchReport[]): NiumaAnalyzeContext => {
   const [dataVecMap, dataVecMapProxy] = createRecordAndItsProxy<number[]>('data-vec-map');
@@ -73,33 +73,33 @@ const createAnalyzeContext = (mainPuuid: string, reports: MatchReport[]): NiumaA
 
 const isGame = (raw: unknown): raw is Game => {
   return typeof raw === 'object' && raw !== null;
-}
+};
 
 const parseBufferToGames = (buf: ArrayBuffer) => {
   const { data } = BytesList.decode(new Uint8Array(buf));
   const result: Game[] = [];
 
   for (const buf of data) {
-    const game = GameProto.decode(buf)
+    const game = GameProto.decode(buf);
     if (isGame(game)) {
-      result.push(game)
+      result.push(game);
     }
   }
 
-  return result
-}
+  return result;
+};
 
 const showKeysBeenSet = () => {
   console.debug([...SetKeysMap].map(([key, setKeys]) => {
     return [key, [...setKeys]];
-  }))
-}
+  }));
+};
 
 export const analyzeMatches = (props: NiumaAnalyzeProps): NiumaChartDataType => {
   const { puuid, matchesBuffer } = props;
 
   const games = parseBufferToGames(matchesBuffer)
-    .map(item => new MatchAnalyzeHelper(item))
+    .map(item => new MatchAnalyzeHelper(item));
 
   const reports = games
     .map(game => game.genMatchReport(puuid))
@@ -108,7 +108,7 @@ export const analyzeMatches = (props: NiumaAnalyzeProps): NiumaChartDataType => 
   const ctx = createAnalyzeContext(puuid, reports);
   invokeTasks(ctx);
 
-  showKeysBeenSet()
+  showKeysBeenSet();
 
   return ctx.result;
 };

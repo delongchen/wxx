@@ -21,7 +21,8 @@ export const useSyncGameHistoryTask = (puuid: string) => {
   const [data, setData] = useState<number[]>([]);
   const [tip, setTip] = useState<string>('');
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+  }, []);
 
   const reset = useCallback(() => {
     setStatus(SyncTaskStatus.Ready);

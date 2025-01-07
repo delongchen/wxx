@@ -9,6 +9,7 @@ import App from '@/App.tsx';
 import './styles/index.css';
 
 import WxxPower from '@/plugins/wxx-power';
+import WxxLifeGame from '@/plugins/wxx-life-game';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
@@ -23,8 +24,8 @@ const render = () => {
 };
 
 const main = async () => {
-  await use(WxxPower);
-  // await use(WxxNiuma);
+  use(WxxPower);
+  use(WxxLifeGame);
 
   render();
 };

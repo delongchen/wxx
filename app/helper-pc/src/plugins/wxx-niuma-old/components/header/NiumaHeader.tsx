@@ -3,8 +3,8 @@ import { VscArrowLeft } from 'react-icons/vsc';
 import { useLocation, useNavigate } from 'react-router-dom';
 import OptionsMenu from './OptionsMenu.tsx';
 import { mainPageChildren } from '../../routes';
-import { use } from 'react'
-import { NiumaContext } from '../../context/niuma'
+import { use } from 'react';
+import { NiumaContext } from '../../context/niuma';
 
 function CenterButtonGroup() {
   const { theme } = use(NiumaContext);
