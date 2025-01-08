@@ -4,11 +4,11 @@ type IncomingMessageType = MessageEvent<{
 }>
 
 const handleIncomingMessage = async (message: IncomingMessageType) => {
-  const { theme, buf } = message.data
+  const { theme, buf } = message.data;
   self.postMessage({
     theme,
     len: buf.byteLength,
-  })
-}
+  });
+};
 
 self.onmessage = handleIncomingMessage;

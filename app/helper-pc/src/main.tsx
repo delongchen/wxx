@@ -10,6 +10,7 @@ import './styles/index.css';
 
 import WxxPower from '@/plugins/wxx-power';
 import WxxLifeGame from '@/plugins/wxx-life-game';
+import { WxxNiuma } from '@/plugins/wxx-niuma';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
@@ -26,6 +27,7 @@ const render = () => {
 const main = async () => {
   use(WxxPower);
   use(WxxLifeGame);
+  use(WxxNiuma);
 
   render();
 };
