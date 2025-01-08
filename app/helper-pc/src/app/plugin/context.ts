@@ -12,6 +12,14 @@ import {
   WxxPluginRaw,
   WxxPluginStatus,
 } from './types';
+import { createConfigHelper } from '@/utils/config-helper'
+
+
+const config = createConfigHelper('app')
+const { transaction } = config.open<Record<string, boolean>>('enable-plugin', () => ({}))
+export const getEnabledPlugins = async () => {
+  return await transaction(({ peek }) => peek())
+}
 
 export const createWxxPluginContext = <T>(raw: WxxPluginRaw<T>): WxxPluginContext<T> => {
   const statusSubject = new BehaviorSubject<WxxPluginStatus>(WxxPluginStatus.Stopped);
@@ -20,7 +28,6 @@ export const createWxxPluginContext = <T>(raw: WxxPluginRaw<T>): WxxPluginContex
   const pageMap: Map<string, WxxRoute> = new Map();
   const barItemMap: Map<string, FC> = new Map();
 
-  const installer = raw.install;
   const pluginName = raw.name;
   const { version = '', description = [], cover = '' } = raw;
 
@@ -79,7 +86,15 @@ export const createWxxPluginContext = <T>(raw: WxxPluginRaw<T>): WxxPluginContex
     barItemMap.set(`${pluginName}/${name}`, component);
   };
 
-  const shutdown = async () => {
+  const setEnable = async (enable: boolean) => {
+    await transaction(({ add }) => {
+      add({ [pluginName]: enable });
+    })
+  }
+
+  const shutdown = async (sync: boolean = true) => {
+    if (sync) await setEnable(false)
+
     statusSubject.next(WxxPluginStatus.Stopping);
 
     if (quitTasks.length > 0) {
@@ -98,18 +113,20 @@ export const createWxxPluginContext = <T>(raw: WxxPluginRaw<T>): WxxPluginContex
 
   const restart = async (options?: T) => {
     if (statusSubject.getValue() === WxxPluginStatus.Started) {
-      await shutdown();
+      await shutdown(false);
     }
-    await start(options);
+    await start(options, false);
   };
 
-  const start = async (options?: T) => {
+  const start = async (options?: T, sync: boolean = true) => {
+    if (sync) await setEnable(true)
+
     statusSubject.next(WxxPluginStatus.Starting);
 
     try {
-      await installer({ page, statusBar, quit, AppContext }, options);
+      await raw.install({ page, statusBar, quit, AppContext }, options);
     } catch (e: unknown) {
-      await shutdown();
+      await shutdown(false);
       throw e;
     }
 

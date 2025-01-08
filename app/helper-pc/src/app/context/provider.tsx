@@ -1,16 +1,9 @@
-import { PropsWithChildren, createContext, useEffect } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { fetchLocalConfig, selectGlobal } from '@/store/modules/global';
+import { AppContext } from './app-context.ts';
 
-export interface AppContextType {
-  theme: string;
-}
-
-export const AppContext = createContext<AppContextType>({
-  theme: 'gray',
-});
-
-export function AppProvider({ children }: PropsWithChildren) {
+function AppProvider({ children }: PropsWithChildren) {
   const { theme } = useAppSelector(selectGlobal);
   const dispatch = useAppDispatch();
 
@@ -22,3 +15,5 @@ export function AppProvider({ children }: PropsWithChildren) {
     <AppContext value={{ theme }}>{children}</AppContext>
   );
 }
+
+export default AppProvider;

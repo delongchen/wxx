@@ -4,7 +4,7 @@ import { NiumaWorker } from './workers';
 import { SummonerInfo } from 'tauri-plugin-wxx-core';
 
 
-interface WxxNiumaContextType {
+export interface WxxNiumaContextType {
   theme: string,
   championSummaries: LolChampionSummaries,
   currentSummoner: SummonerInfo | null,

@@ -2,9 +2,8 @@ import { Flex, IconButton, Spacer } from '@chakra-ui/react';
 import Style from './wxx.module.sass';
 import type { WxxRoute } from '@/types/router';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { memo } from 'react';
-import { useAppSelector } from '@/store';
-import { selectGlobal } from '@/store/modules/global';
+import { memo, use } from 'react';
+import { AppContext } from '../../app/context/app-context.ts'
 
 const renderMenuItems = (routes: WxxRoute[], theme: string) => {
   const navigate = useNavigate();
@@ -54,8 +53,7 @@ function WxxSideMenu(props: { routes: WxxRoute[] }) {
     (route.isOuter === true ? outer : internal).push(route);
   }
 
-  const globalState = useAppSelector(selectGlobal);
-  const theme = globalState.theme;
+  const { theme } = use(AppContext);
   const bg = [theme, 400].join('.');
 
   return (

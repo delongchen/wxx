@@ -1,6 +1,6 @@
 import { FC, Context } from 'react';
 import { BehaviorSubject } from 'rxjs';
-import { AppContextType } from '../context/app-context';
+import { AppContextType } from '../context/app-context.ts';
 
 export interface WxxPluginInfo {
   version: string;
@@ -45,8 +45,8 @@ export interface WxxPluginContext<T> {
   page: (info: WxxPluginPageInfo) => void;
   statusBar: (name: string, component: FC) => void;
   quit: (...tasks: PluginQuitTask[]) => void;
-  start: (options?: T) => Promise<void>;
+  start: (options?: T, sync?: boolean) => Promise<void>;
   restart: (options?: T) => Promise<void>;
-  shutdown: () => Promise<void>;
+  shutdown: (sync?: boolean) => Promise<void>;
   getInfo: () => WxxPluginInfo;
 }

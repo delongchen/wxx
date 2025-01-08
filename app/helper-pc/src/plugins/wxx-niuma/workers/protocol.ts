@@ -12,9 +12,9 @@ type CmdMessageType<T> = {
 
 export type TaskHandlerTuple<T = unknown> = [(value: T | Promise<T>) => void, (reason?: unknown) => void];
 
-const rejectAfter = (ms: number) => new Promise((_, reject) => {
+const rejectAfter = (ms: number, data: unknown) => new Promise((_, reject) => {
   setTimeout(() => {
-    reject({ msg: `timeout: ${ms}` });
+    reject(data);
   }, ms);
 });
 
@@ -47,7 +47,7 @@ export const createCmdMessageHandler = (
     try {
       const result = await Promise.race([
         onCmd(cmd, payload),
-        rejectAfter(maxPending),
+        rejectAfter(maxPending, { cmd, msg: 'timeout' }),
       ]);
       ok(id, result);
     } catch (e: unknown) {

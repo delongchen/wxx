@@ -3,7 +3,7 @@ import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
 import { Provider as ReactReduxProvider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import store from './store';
-import { use } from './app/plugin/manager';
+import { use as usePlugin, loadPlugins } from './app/plugin/manager';
 import App from '@/App.tsx';
 
 import './styles/index.css';
@@ -25,9 +25,11 @@ const render = () => {
 };
 
 const main = async () => {
-  use(WxxPower);
-  use(WxxLifeGame);
-  use(WxxNiuma);
+  usePlugin(WxxPower);
+  usePlugin(WxxLifeGame);
+  usePlugin(WxxNiuma);
+
+  await loadPlugins();
 
   render();
 };

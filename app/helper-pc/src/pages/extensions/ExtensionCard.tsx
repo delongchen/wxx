@@ -1,5 +1,5 @@
 import { WxxPluginContext, WxxPluginStatus } from '@/app/plugin/types';
-import { AppContext } from '@/app/context/app-context.tsx';
+import { AppContext } from '@/app/context/app-context.ts';
 import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {

@@ -16,7 +16,7 @@ import {
 import { VscMenu } from 'react-icons/vsc';
 import { GameflowPhaseEnum } from 'wxx-protobufs/lcu.gameflow';
 import { SummonerState } from 'wxx-protobufs/rest.user';
-import { useAppTheme } from '@/app/context/app-context.tsx';
+import { useAppTheme } from '@/app/context/app-context.ts';
 
 interface PhaseInfo {
   text: string;

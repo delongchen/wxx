@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { useAppTheme } from '@/app/context/app-context.tsx';
+import { useAppTheme } from '@/app/context/app-context.ts';
 import { NiumaContext } from './niuma';
 import { LolContext } from './lol';
 import { getLatestChampions } from '../api/dragon';

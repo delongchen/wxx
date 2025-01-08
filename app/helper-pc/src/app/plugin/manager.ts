@@ -1,12 +1,33 @@
 import { WxxPluginRaw, WxxPluginContext } from './types';
-import { createWxxPluginContext } from './context';
+import { createWxxPluginContext, getEnabledPlugins } from './context';
 
-const pluginMap: Map<string, WxxPluginContext<unknown>> = new Map();
+const pluginMap: Map<string, [WxxPluginContext<unknown>, unknown]> = new Map();
 
 export const use = <T>(plugin: WxxPluginRaw<T>, options?: T) => {
   const ctx = createWxxPluginContext(plugin);
-  pluginMap.set(ctx.name, ctx as WxxPluginContext<unknown>);
-  ctx.start(options).catch(console.error);
+  pluginMap.set(ctx.name, [ctx as WxxPluginContext<unknown>, options]);
+  // ctx.start(options).catch(console.error);
 };
 
-export const getPlugins = () => [...pluginMap.values()];
+export const loadPlugins = async () => {
+  const pluginEnableRecord = await getEnabledPlugins();
+
+  for (const [pluginCtx, options] of pluginMap.values()) {
+    const enable = pluginEnableRecord[pluginCtx.name];
+    if (enable === undefined) {
+      pluginCtx
+        .start(options)
+        .catch(console.error);
+    } else {
+      if (enable) {
+        pluginCtx
+          .start(options, false)
+          .catch(console.error);
+      }
+    }
+  }
+}
+
+export const getPlugins = () => (
+  [...pluginMap.values()].map(it => it[0])
+);

@@ -51,7 +51,7 @@ export interface LolChampionSummaries {
   data: Record<string, LolChampionSummary>;
 }
 
-type AllowedLang = 'zh_CN' | 'en_US'
+type AllowedLang = 'ar_AE' | 'en_US' | 'cs_CZ' | 'de_DE' | 'el_GR' | 'en_AU' | 'en_GB' | 'en_PH' | 'en_SG' | 'es_AR' | 'es_ES' | 'es_MX' | 'fr_FR' | 'hu_HU' | 'it_IT' | 'ja_JP' | 'ko_KR' | 'pl_PL' | 'pt_BR' | 'ro_RO' | 'ru_RU' | 'th_TH' | 'tr_TR' | 'vi_VN' | 'zh_CN' | 'zh_MY' | 'zh_TW'
 
 export const fetchVersions = async () => {
   return await fetch('https://ddragon.leagueoflegends.com/api/versions.json')

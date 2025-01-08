@@ -48,6 +48,8 @@ export const createConfigHelper = (namespace: string) => {
       task({ peek, add, replace });
 
       if (changed) await commit();
+
+      return stage;
     };
 
     return {
