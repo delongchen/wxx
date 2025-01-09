@@ -3,7 +3,7 @@ import Style from './wxx.module.sass';
 import type { WxxRoute } from '@/types/router';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { memo, use } from 'react';
-import { AppContext } from '../../app/context/app-context.ts'
+import { AppContext } from '@/app/context/app-context'
 
 const renderMenuItems = (routes: WxxRoute[], theme: string) => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const renderMenuItems = (routes: WxxRoute[], theme: string) => {
           colorPalette={theme}
           variant={active ? 'solid' : 'ghost'}
           aria-label={path}
-          onClick={() => navigate(path)}
+          onClick={() => { navigate(path) }}
         >
           <Icon />
         </IconButton>

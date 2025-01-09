@@ -42,7 +42,7 @@ export const createWxxPluginContext = <T>(raw: WxxPluginRaw<T>): WxxPluginContex
   const mapPageInfo = (info: WxxPluginPageInfo, isRoot: boolean = false): WxxRoute => {
     const { name, component, icon, fullPage, children, isIndexPage } = info;
 
-    const path = isRoot ? `/${pluginName}/${name}` : name;
+    const path = isRoot ? `/plugin/${pluginName}/${name}` : name;
     let childrenPage: WxxRoute[] | undefined = undefined;
 
     if (children !== undefined && children.length > 0) {

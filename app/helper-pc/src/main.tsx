@@ -29,9 +29,8 @@ const main = async () => {
   usePlugin(WxxLifeGame);
   usePlugin(WxxNiuma);
 
-  await loadPlugins();
-
   render();
+  await loadPlugins();
 };
 
 main().catch(console.error);

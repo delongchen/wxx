@@ -1,7 +1,6 @@
-import { memo, Suspense } from 'react';
+import { memo } from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { WxxRoute } from '@/types/router';
-import { Box } from '@chakra-ui/react';
 import AppPage from '@/layouts/AppLayout/AppPage.tsx';
 
 const renderChildrenRoutes = (routes: WxxRoute[]) => {
@@ -88,9 +87,7 @@ const renderRootLevelRoutes = (routes: WxxRoute[]) =>
 
 function AppContent(props: { routes: WxxRoute[] }) {
   return (
-    <Suspense fallback={<Box>loading</Box>}>
-      <Routes>{renderRootLevelRoutes(props.routes)}</Routes>
-    </Suspense>
+    <Routes>{renderRootLevelRoutes(props.routes)}</Routes>
   );
 }
 
